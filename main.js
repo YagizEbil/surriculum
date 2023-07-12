@@ -261,6 +261,8 @@ function SUrriculum(major_chosen_by_user)
         {limits = ["4.0", "125", "240","41","26", "34", "9","15","60","90"]}
         else if(major_chosen_by_user == 'BIO')
         {limits = ["4.0", "125", "240","41","31", "29", "9","15","0","0"]}
+        else if(major_chosen_by_user == 'ME')
+        {limits = ["4.0", "125", "240","41","39", "21", "9","15","60","90"]}
         
 
         for (let i = 0; i < 10; i++)

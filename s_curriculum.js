@@ -230,7 +230,7 @@ function s_curriculum()
                 if (core < 21) return 26; //CHANGE
                 else
                 {
-                    area = area + (core - 29);
+                    area = area + (core - 21);
                     if (area < 9) return 7;
                     else
                     {
