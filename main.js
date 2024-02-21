@@ -292,6 +292,41 @@ function SUrriculum(major_chosen_by_user)
     //createSemeter(false, ["MATH101","MATH102","MATH201","MATH203","IF100","TLL101"], curriculum, course_data)
     //createSemeter(false, ["NS101","SPS101","SPS102","AL102","TLL102","HIST192","PROJ201", "NS102", "HIST191", "CIP101N", "CS210", "MATH306", "CS201", "CS204", "MATH204"], curriculum, course_data)
 
+    // Get from transcript:
+    function handleParseButtonClick (){
+        const pdfInput = document.getElementById('pdfInput');
+
+        if (pdfInput.files.length > 0) {
+            const pdfFile = pdfInput.files[0];
+            const downloadedFile = new File([pdfFile], "t.pdf", { type: pdfFile.type });
+            const pdfUrl = URL.createObjectURL(downloadedFile);
+            pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
+                let textContent = "";
+                for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+                pdfDoc.getPage(pageNum).then(function(page) {
+                    return page.getTextContent();
+                }).then(function(content) {
+                    textContent += content.items.map(item => item.str).join(' ');
+            
+                    const pattern = /\b([A-Z]+\s*\d{3,}[A-Z]?)\b/g;
+                    let courseCodes = textContent.match(pattern) || [];
+                    
+                    courseCodes = courseCodes.map(str => str.replace(/\s/g, ''));
+                    createSemeter(false, courseCodes, curriculum, course_data);
+                });
+                }
+            });
+        }
+        else {
+            alert('Please select a PDF file.');
+        }
+    }
+    document.getElementById('parsePDF').onclick = handleParseButtonClick;
+
+
+
+
+
 
     //END OF PROGRAM
     })
