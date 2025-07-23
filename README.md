@@ -8,6 +8,7 @@ The website is built using HTML, CSS, and JavaScript, and is designed to be a co
 ## Getting Started
 
 To get started with the Surriculum website, you can clone this repository and open the `index.html` file in your web browser. You can also view the live version of the website at:
+https://beficent.github.io/surriculum/
 
 ## Credit and Contribution
 
