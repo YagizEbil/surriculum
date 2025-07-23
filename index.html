@@ -13,7 +13,8 @@
     <script src="s_curriculum.js"></script>
     <script src="create_semester.js"></script>
     <script src="click.js"></script>
-    <script src="parse_pdf.js"></script>
+    <script src="graduation_check.js"></script>
+    <script src="academic_records_parser.js"></script>
     <script src="https://unpkg.com/pdfjs-dist@2.10.377/build/pdf.js"></script>
     <script>
       // Specify the path to the worker script
@@ -27,8 +28,25 @@
     <div class="title">
         SUrriculum
         
-        <input type="file" id="pdfInput" accept=".pdf">
-        <button id="parsePDF">Process PDF</button>
+        <div class="import-container">
+            <button class="import-toggle btn">
+                <p>Import Academic Records</p>
+            </button>
+            <div class="import-section" style="display: none;">
+                <div class="import-description">
+                    <p>Import your courses from Academic Records Summary:</p>
+                    <ol>
+                        <li>Go to SIS and view your Academic Records Summary</li>
+                        <li>Save the page as HTML (right-click → Save as... → HTML only)</li>
+                        <li>Upload the saved HTML file below</li>
+                    </ol>
+                </div>
+                <div class="import-controls">
+                    <input type="file" id="academicRecordsInput" accept=".html,.htm">
+                    <button id="importAcademicRecords" class="btn">Import</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="board">
         <div class="overlay"></div>

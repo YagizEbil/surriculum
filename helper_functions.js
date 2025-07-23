@@ -27,16 +27,35 @@ function extractNumericValue(string) {
 //terms list & date_list_InnerHTML:
 let currentDate = new Date();
 let currentYear = currentDate.getFullYear();
-var date_list_InnerHTML = ''
-var terms = []
-for(let i = (currentYear-6); i < (currentYear + 6); i++)
-{
-    date_list_InnerHTML = date_list_InnerHTML + "<option value='" + 'SPRING ' + i + "'>";
-    date_list_InnerHTML = date_list_InnerHTML + "<option value='" + 'SUMMER ' + i + "'>";
-    date_list_InnerHTML = date_list_InnerHTML + "<option value='" + 'FALL ' + i + "'>";
-    terms.push('SPRING ' + i)
-    terms.push('SUMMER ' + i)
-    terms.push('FALL ' + i)
+let currentMonth = currentDate.getMonth(); // 0-11, where 0 is January
+
+var date_list_InnerHTML = '';
+var terms = [];
+
+// Determine the current academic year
+let academicYear;
+// If we're in the second half of the calendar year (after July), we're in the Fall semester of academicYear/academicYear+1
+// Otherwise, we're in the Spring semester of academicYear-1/academicYear
+if (currentMonth >= 7) { // August or later
+    academicYear = currentYear;
+} else {
+    academicYear = currentYear - 1;
+}
+
+// Generate terms for 6 years in the past and 6 years in the future
+for (let i = (academicYear - 6); i <= (academicYear + 6); i++) {
+    // Create academic year string (e.g., "2022-2023")
+    let yearRange = i + "-" + (i + 1);
+
+    // Add Spring, Fall, and optionally Summer to the list
+    date_list_InnerHTML += "<option value='" + yearRange + " Spring'>";
+    date_list_InnerHTML += "<option value='" + yearRange + " Fall'>";
+    date_list_InnerHTML += "<option value='" + yearRange + " Summer'>";
+
+    // Add to terms array in chronological order: Fall, Spring, Summer
+    terms.push(yearRange + " Fall");
+    terms.push(yearRange + " Spring");
+    terms.push(yearRange + " Summer");
 }
 
 var grade_list_InnerHTML = '';

@@ -34,6 +34,79 @@ body
     margin: 0px;
     padding-left: 10px;
     z-index: 2;
+    position: relative;
+}
+
+.import-container {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.import-toggle {
+    width: auto !important;
+    height: 30px;
+    margin: 0 !important;
+    padding: 0 15px;
+}
+
+.import-section {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 350px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    color: #333;
+    z-index: 100;
+    padding: 15px;
+}
+
+.import-description {
+    margin-bottom: 15px;
+}
+
+.import-description p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #444;
+}
+
+.import-description ol {
+    margin: 8px 0;
+    padding-left: 25px;
+}
+
+.import-description li {
+    font-size: 13px;
+    margin: 5px 0;
+    color: #555;
+}
+
+.import-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#academicRecordsInput {
+    max-width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#importAcademicRecords {
+    height: 30px;
+    margin: 0 !important;
+    padding: 0 15px;
+    width: auto !important;
 }
 
 .board

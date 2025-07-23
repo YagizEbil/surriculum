@@ -41,7 +41,59 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
     date.classList.add("date");
 
     //DATE DEFAULT:
-    if(!date_custom) {date.innerHTML = '<p>' + terms[(16 + parseInt(curriculum.container_id))] + '</p>';}
+    if(!date_custom) {
+        // Find next logical semester to add
+        let nextTermIndex = 0;
+
+        // Get all existing semesters to determine the next logical one
+        const existingSemesters = document.querySelectorAll('.date p');
+        if (existingSemesters.length > 0) {
+            // Find the latest semester
+            let latestSemester = '';
+            existingSemesters.forEach(semElem => {
+                const semText = semElem.textContent;
+                if (semText > latestSemester) {
+                    latestSemester = semText;
+                }
+            });
+
+            // Find this semester in the terms array
+            const currentIndex = terms.indexOf(latestSemester);
+
+            if (currentIndex !== -1) {
+                // Determine the next logical term index
+                // By default, we'll use the next non-summer term in sequence
+                for (let i = 1; i < terms.length; i++) {
+                    const nextCandidate = terms[(currentIndex + i) % terms.length];
+                    if (!nextCandidate.includes("Summer")) {
+                        nextTermIndex = (currentIndex + i) % terms.length;
+                        break;
+                    }
+                }
+            } else {
+                // If we can't find the current term, use a fallback
+                // Find the current academic year in terms array
+                const currentDate = new Date();
+                const currentMonth = currentDate.getMonth();
+                let termToUse;
+
+                if (currentMonth >= 7) { // August-December: Fall semester
+                    const currentYear = currentDate.getFullYear();
+                    termToUse = currentYear + "-" + (currentYear + 1) + " Fall";
+                } else if (currentMonth >= 0 && currentMonth < 5) { // January-May: Spring semester
+                    const currentYear = currentDate.getFullYear();
+                    termToUse = (currentYear - 1) + "-" + currentYear + " Spring";
+                } else { // June-July: Summer
+                    const currentYear = currentDate.getFullYear();
+                    termToUse = (currentYear - 1) + "-" + currentYear + " Summer";
+                }
+
+                nextTermIndex = terms.indexOf(termToUse) !== -1 ? terms.indexOf(termToUse) : 0;
+            }
+        }
+
+        date.innerHTML = '<p>' + terms[nextTermIndex] + '</p>';
+    }
     //DATE CUSTOM:
     else 
     {
