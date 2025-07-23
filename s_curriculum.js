@@ -245,27 +245,64 @@ function s_curriculum()
         {
             if(total < 125) return 1;
             else if (university < 41) return 2;
-            else if (required < 18) return 27; //CHANGE
+            else if (required < 30) return 27; // Updated to 30 SU credits
             else if (science < 60) return 11;
             else if (engineering < 90) return 12;
             else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("ECON300"))  return 28; //CHANGE
+            else if (!this.hasCourse("ECON300"))  return 28;
             else if (!this.hasCourse("SPS303")) return 9;
             else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
             else if (ects < 240) return 13;
             else if (!(this.hasCourse("HUM304") || this.hasCourse("HUM311") || this.hasCourse("HUM312") || this.hasCourse("HUM317") || this.hasCourse("HUM321") || this.hasCourse("HUM324") || this.hasCourse("HUM371"))) return 32;
             else
             {
-                if (core < 12) return 29; //CHANGE
+                if (core < 27) return 29; // Updated to 27 SU credits
                 else
                 {
-                    area = area + (core - 12);
-                    if (area < 18) return 30; //CHANGE
+                    area = area + (core - 27);
+                    if (area < 12) return 30; // Updated to 12 SU credits
                     else
                     {
-                        free = free + (area - 18); 
-                        if(free<30) return 31; //CHANGE
+                        free = free + (area - 12);
+                        if(free < 15) return 31; // Updated to 15 SU credits
                         else return 0;
+                    }
+                }
+            }
+        }
+        else if(this.major == 'DSA')
+        {
+            if(total < 125) return 1;
+            else if (university < 41) return 2;
+            else if (required < 30) return 33; // DSA required courses - 30 SU credits
+            else if ( !this.hasCourse("CIP101N")) return 4;
+            else if (!this.hasCourse("SPS303")) return 9;
+            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
+            else if (ects < 240) return 13;
+            else
+            {
+                if (core < 27) return 34; // DSA core electives - 27 SU credits
+                else
+                {
+                    area = area + (core - 27);
+                    if (area < 12) return 35; // DSA area electives - 12 SU credits
+                    else
+                    {
+                        free = free + (area - 12);
+                        if(free < 15) return 36; // DSA free electives - 15 SU credits
+                        else {
+                            // Check if student has at least 5 faculty courses
+                            let facultyCoursesCount = 0;
+                            for(let i = 0; i < this.semesters.length; i++) {
+                                for(let a = 0; a < this.semesters[i].courses.length; a++) {
+                                    if(this.semesters[i].courses[a].faculty && this.semesters[i].courses[a].faculty.trim() !== '') {
+                                        facultyCoursesCount++;
+                                    }
+                                }
+                            }
+                            if(facultyCoursesCount < 5) return 37; // DSA faculty courses requirement - at least 5 courses
+                            else return 0;
+                        }
                     }
                 }
             }

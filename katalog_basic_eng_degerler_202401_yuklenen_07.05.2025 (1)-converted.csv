@@ -1,0 +1,374 @@
+"""ATTENTION! The ECTS credits and ""Basic Science and Engineering"" distribution of the courses may change depending on the semester the course is taken. This list shows the current version. Please check your credits achievements via the degree evaluation form. """
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+BIO,301,BIO301,Introduction to Molecular Biology,FENS,7.0,0.0,7.0,-,8,0.0,8.0
+BIO,302,BIO302,Techniques in Molecular Bio.,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+BIO,303,BIO303,Genetics,FENS,7.0,2.0,5.0,-,6,1.7,4.3
+BIO,304,BIO304,Biological Function and Structure,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+BIO,306,BIO306,Microbiology,FENS,7.0,0.0,7.0,-,8,0.0,8.0
+BIO,308,BIO308,Plant Physiology,FENS,7.0,0.0,7.0,-,6,0.0,6.0
+BIO,310,BIO310,Introduction to Bioinformatics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+BIO,321,BIO321,Biochemistry I,FENS,7.0,0.0,7.0,-,8,0.0,8.0
+BIO,322,BIO322,Biochemistry II,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+BIO,330,BIO330,Environmental Plant Biology,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+BIO,332,BIO332,Cell Biology,FENS,7.0,0.0,7.0,-,6,0.0,6.0
+BIO,335,BIO335,Analytical Techniques,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+BIO,363,BIO363,Ecology,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+BIO,366,BIO366,Biophysics: Molecules and Sys.,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+BIO,370,BIO370,Mammalian Cell Culture,FENS,7.0,0.0,7.0,-,6,0.0,6.0
+BIO,395,BIO395,Internship Project,FENS,5.0,5.0,0.0,-,2.0,2.0,0.0
+BIO,401,BIO401,General Biotechnology,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+BIO,403,BIO403,Plant Pathology,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+BIO,404,BIO404,Plant Biotechnology,FENS,5.0,2.0,3.0,-,6,2.4,3.6
+BIO,406,BIO406,Protein Engineering,FENS,6.0,3.0,3.0,-,8,4.0,4.0
+BIO,407,BIO407,Multicellular Organization,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+BIO,409,BIO409,Mod&Simul.of Biomolecular Proc,FENS,5.0,2.5,2.5,-,6,3.0,3.0
+BIO,410,BIO410,Evolution and Ecology,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+BIO,415,BIO415,Plant Nutrition,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+BIO,421,BIO421,Tissue Engineering,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+BIO,423,BIO423,Neurobiology,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+BIO,432,BIO432,Analytical Techniques,FENS,6.0,0.0,0.0,-,0,0.0,0.0
+BIO,436,BIO436,Cancer Biology,FENS,6.0,2.0,4.0,,6,2.0,4.0
+BIO,444,BIO444,Bioengineering,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+BIO,445,BIO445,Plant Tissue Culture Techniques,FENS,7.0,3.0,4.0,-,6,2.6,3.4
+BIO,446,BIO446,Biology of Aging,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+BIO,447,BIO447,Plant Breeding,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+BIO,452,BIO452,Immunology,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+BIO,466,BIO466,Biophysics: Molecules and Systems,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+BIO,467,BIO467,Signal Transduction,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+BIO,468,BIO468,Gene Regulation and Disease,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+BIO,480,BIO480,Spc.Top.in Bio.Sci.&Bioeng.,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+BIO,481,BIO481,Spc.Top.in Bio.Sci.&Bioeng.II,FENS,5.0,2.5,2.5,-,6,3.0,3.0
+BIO,48006,BIO48006,Special Topics in BIO: Gene Regulation and Disease,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+CHEM,202,CHEM202,Chemical Kinetics,FENS,7.0,2.0,5.0,MAT202,7,2.0,5.0
+CHEM,301,CHEM301,Inorganic Chemistry,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+CHEM,302,CHEM302,Analytical Chemistry,FENS,7.0,2.0,5.0,-,8,2.3,5.7
+CHEM,369,CHEM369,Chem. of Transformable Mtrls.,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+CHEM,405,CHEM405,Electrochemistry,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+CS,201,CS201,Introduction to Computing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,202,CS202,Data Structures,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,204,CS204,Advanced Programming,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+DSA,210,DSA210,Introduction to Data Science,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+CS,300,CS300,Data Structures,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+CS,301,CS301,Algorithms,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+CS,302,CS302,Formal Languages and Automata Theory,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+CS,303,CS303,Logic and Digital System Design,FENS,7.0,6.0,1.0,-,8,6.9,1.1
+CS,305,CS305,Programming Languages,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,306,CS306,Database Systems,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,307,CS307,Operating Systems,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,308,CS308,Software Engineering,FENS,7.0,7.0,0.0,-,8,8.0,0.0
+CS,395,CS395,Internship Project,FENS,5.0,5.0,0.0,-,2.0,2.0,0.0
+CS,310,CS310,Mobile Computing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,400,CS400,Logic in Computer Science,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+CS,401,CS401,Computer Architectures,FENS,6.0,6.0,0.0,-,8,8.0,0.0
+CS,402,CS402,Compiler Design,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,403,CS403,Distributed Systems,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,404,CS404,Artificial Intelligence,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+CS,405,CS405,Computer Graphics,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+CS,406,CS406,Parallel Computing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,407,CS407,Theory of Computation,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+CS,408,CS408,Computer Networks,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,411,CS411,Cryptography,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,412,CS412,Machine Learning,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+CS,414,CS414,Network Science,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,415,CS415,Introduction to deep learning,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,419,CS419,Digital Image and Video Analysis,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,432,CS432,Computer and Network Security,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,436,CS436,Cloud Computing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,437,CS437,Cybersecurity Practices and Applications,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,438,CS438,Blockchain: Security and Applications,FENS,6.0,6.0,0.0,,6,6.0,0.0
+CS,439,CS439,Software Verification and Validation,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,442,CS442,Software Design Patterns,FENS,6.0,6.0,0.0,,6,6.0,0.0
+CS,445,CS445,Natural Language Processing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,447,CS447,Immersive Systems Development,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+CS,449,CS449,Human Computer Interaction,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,450,CS450,Arts and Computing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,455,CS455,Large Language Models: Theoretical Foundations and PracticalApplications,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,460,CS460,Automated Debugging,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+CS,48000,CS48000,Special Topics in CS: Software Design Patterns,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,48001,CS48001,Special Topics in CS: Blockchain: Security and Applications,FENS,6.0,6.0,0.0,-,6.0,6.0,0.0
+CS,48002,CS48002,Special Topics in CS: Network Science,FENS,6.0,6.0,0.0,-,6.0,6.0,0.0
+CS,48003,CS48003,Special Topics in CS: Parallel Computer Architectures,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,48004,CS48004,Special Topics in CS: Agile Software Development,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,48006,CS48006,Special Topics in CS: Decentralized Finance,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,48007,CS48007,Special Topics in CS: Internet of Things Sensing System,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,48008,CS48008,Special Topics in CS: Malware Analysis andSDpeetecciatiloTnopics in CS: Performance Analysis,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,48010,CS48010,and Engineering,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+CS,512,CS512,Machine Learning,FENS,10.0,6.0,0.0,-,10,6.0,0.0
+DSA,201,DSA201,Advanced Programming for Data Science,FENS,6.0,3.0,3.0,-,6.0,3.0,3.0
+DSA,301,DSA301,Data Visualization,FENS,6.0,3.0,0.0,-,6.0,3.0,0.0
+DSA,428,DSA428,Big Data Processing,FENS,6.0,6.0,0.0,-,6.0,6.0,0.0
+DSA,395,DSA395,Internship Project,FENS,5.0,5.0,0.0,-,5.0,5.0,0.0
+DSA,440,DSA440,Data and Artificial Intelligence (AI) Ethics,FENS,6.0,6.0,0.0,,6.0,6.0,0.0
+DSA,473,DSA473,Time Series and Forecasting Models,FENS,6.0,4.0,2.0,-,6.0,4.0,2.0
+DSA,492,DSA492,Graduation Project,FENS,5.0,0.0,0.0,-,5,0.0,0.0
+EE,200,EE200,Electronic Circuit Implementations,FENS,2.0,2.0,0.0,-,2,2.0,0.0
+EE,202,EE202,Electronic Circuits II,FENS,6.0,6.0,0.0,EL202,8,8.0,0.0
+EE,301,EE301,Electromagnetics II,FENS,6.0,6.0,0.0,TE305,6,6.0,0.0
+EE,302,EE302,Digital Integrated Circuits,FENS,6.0,6.0,0.0,EL302,8,8.0,0.0
+EE,303,EE303,Analog Integrated Circuits,FENS,6.0,6.0,0.0,EL303,6,6.0,0.0
+EE,306,EE306,Intr.to Radio Freq&Microw Des.,FENS,6.0,6.0,0.0,EL306,6,6.0,0.0
+EE,307,EE307,Semiconductor Physics and Devices,FENS,6.0,4.0,2.0,EL204,6,4.0,2.0
+EE,308,EE308,Microcomputer Based Sys Design,FENS,7.0,7.0,0.0,EL308,8,8.0,0.0
+EE,310,EE310,HW Description Languages,FENS,6.0,6.0,0.0,EL310,8,8.0,0.0
+EE,311,EE311,Introduction to Signal Processing and Information Systems,FENS,6.0,5.0,1.0,TE301,6,5.0,1.0
+EE,312,EE312,Discrete Signals & Systems,FENS,6.0,5.0,1.0,TE302,6,5.0,1.0
+EE,313,EE313,Introduction to Communication Systems,FENS,6.0,5.0,1.0,TE303,6,5.0,1.0
+EE,314,EE314,Digital Communications,FENS,6.0,4.0,2.0,TE304,6,4.0,2.0
+EE,395,EE395,Internship Project,FENS,5.0,5.0,0.0,-,2.0,2.0,0.0
+EE,401,EE401,VLSI Systems Design I,FENS,6.0,6.0,0.0,EL401,8,8.0,0.0
+EE,402,EE402,VLSI Systems Design II,FENS,6.0,6.0,0.0,EL402,6,6.0,0.0
+EE,403,EE403,Optoelectronics,FENS,6.0,4.0,2.0,EL305,6,4.0,2.0
+EE,404,EE404,Int. to Microelectromech. Sys.,FENS,6.0,6.0,0.0,EL404,6,6.0,0.0
+EE,405,EE405,Communication Circuits Design,FENS,6.0,6.0,0.0,EL405,6,6.0,0.0
+EE,406,EE406,Anten.&Propag.for Wireless Com,FENS,6.0,6.0,0.0,TE402,8,8.0,0.0
+EE,407,EE407,Microelectronic Fabrication,FENS,6.0,6.0,0.0,EL407,6,6.0,0.0
+EE,408,EE408,Modeling of Semicond. Devices,FENS,6.0,4.0,2.0,EL304,6,4.0,2.0
+EE,409,EE409,Microwaves,FENS,6.0,6.0,0.0,TE401,6,6.0,0.0
+EE,410,EE410,Information and Coding Theory,FENS,6.0,5.0,1.0,TE410,6,5.0,1.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+EE,411,EE411,RF Integrated Circuits,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+EE,413,EE413,Wireless Communications,FENS,6.0,4.0,2.0,TE412,6,4.0,2.0
+EE,414,EE414,Multimedia Communication,FENS,6.0,6.0,0.0,TE404,6,6.0,0.0
+EE,415,EE415,Digital Speech&Audio Process.,FENS,6.0,6.0,0.0,TE405,6,6.0,0.0
+EE,417,EE417,Computer Vision,FENS,6.0,5.0,1.0,TE407,8,6.7,1.3
+EE,419,EE419,Signal Processing Design and Implementation,FENS,6.0,4.0,2.0,TE409,8,5.3,2.7
+EE,440,EE440,Mixed-Signal Integrated Circuits,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+EE,444,EE444,Optics,FENS,6.0,5.0,1.0,EL444,6,5.0,1.0
+EE,473,EE473,Biomedical Instrumentation,FENS,6.0,4.0,2.0,EL473,6,4.0,2.0
+EE,48001,EE48001,Special Topics in EE: Nanoscale Integrated Circuit Design,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+EE,48002,EE48002,Special Topics in EE: Sensor Networks,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+EE,48004,EE48004,Special Topics in EE: Power Systems Analysis,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+EE,48008,EE48008,Special Topics in EE: Heterogeneous Computing and System-on-ChipDesign,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+EE,48009,EE48009,Special Topics in EE: Machine Learning forCommunication Systems,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENRG,322,ENRG322,Battery Science and Engineering,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ENRG,420,ENRG420,Energy Systems Optimization,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENRG,423,ENRG423,"Electric Power Systems: Operation, Technology and Economics",FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENRG,424,ENRG424,"Cell Design, Modelling and Battery PackDevelopment",FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ENRG,426,ENRG426,Battery Management Systems,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ENS,201,ENS201,Electromagnetics I,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ENS,202,ENS202,Thermodynamics,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ENS,203,ENS203,Electronic Circuits I,FENS,6.0,6.0,0.0,-,8,8.0,0.0
+ENS,204,ENS204,Mechanics,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ENS,205,ENS205,Introduction to Materials Science I,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ENS,206,ENS206,Systems Modeling and Control,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ENS,207,ENS207,Introduction to Energy Systems,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ENS,208,ENS208,Introduction to Manufacturing Systems,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENS,209,ENS209,Introduction to Computer Aided Drafting and Solid Modeling,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ENS,210,ENS210,Computational Biology,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ENS,211,ENS211,Signals,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ENS,214,ENS214,Dynamics,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ENS,216,ENS216,Information Systems: A Historical Perspective,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENS,222,ENS222,Intr.to:Bio.Cir.&Molec.Machin,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+ENRG,301,ENRG301,Energy Sys&Environment,FENS,6.0,3.0,3.0,ENS 301,6,3.0,3.0
+ENS,302,ENS302,Technology and Society,FENS,5.0,5.0,0.0,-,6,6.0,0.0
+ENS,303,ENS303,Introduction to Space Technology,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ENS,309,ENS309,Computer Aided Engineering,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENRG,315,ENRG315,Energy,FENS,5.0,2.0,3.0,ENS 315,6,2.4,3.6
+ENS,409,ENS409,Numerical Analysis,FENS,6.0,4.0,2.0,CS409,6,4.0,2.0
+ENS,410,ENS410,Advanced Solid Modeling Techniques,FENS,6.0,6.0,0.0,,6,6.0,0.0
+ENS,413,ENS413,Experimental Methods in Nanoscience I,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+ENS,414,ENS414,Experimental Methods in Nanoscience II,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+ENS,416,ENS416,Intr.to Scanning Probe Microsc,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ENS,48000,ENS48000,"Special Topics in FENS: Energy, Supply Chain, Economics angGeopolitics",FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENS,48001,ENS48001,Special Topics in FENS: Materials Selection in Product Design,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENS,48002,ENS48002,Special Topics in FENS: Analysis of Social Networks,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENS,4803,ENS4803,Special Topics in FENS: Nanobiotechnology,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ENS,491,ENS491,Graduation Project (Design),FENS,2.0,2.0,0.0,-,2,2.0,0.0
+ENS,492,ENS492,Graduation Project(Implement.),FENS,5.0,5.0,0.0,-,2,2.0,0.0
+IE,303,IE303,Decision Economics,FENS,6.0,6.0,0.0,MS303,6,6.0,0.0
+IE,304,IE304,Product.& Serv.Sys Plan&Design,FENS,6.0,6.0,0.0,MS304,6,6.0,0.0
+IE,305,IE305,Simulation,FENS,6.0,5.0,1.0,MS305,6,5.0,1.0
+IE,306,IE306,Ergonomics,FENS,5.0,5.0,0.0,MS306,6,6.0,0.0
+IE,307,IE307,Work Analysis & Design,FENS,5.0,5.0,0.0,MS307,6,6.0,0.0
+IE,309,IE309,Manufacturing Processes I,FENS,6.0,5.0,1.0,MS309,6,5.0,1.0
+IE,311,IE311,Operations Research I,FENS,6.0,4.0,2.0,IE301,8,5,3
+IE,398,IE398,Integrated Manufacturing Systems- Special Studies,FENS,1.0,1.0,0.0,-,1.0,1.0,0.0
+IE,395,IE395,Internship Project,FENS,5.0,5.0,0.0,-,2.0,2.0,0.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+ENS,511,ENS511,Engineering Optimization,FENS,10.0,4.0,2.0,-,10,4.0,2.0
+IE,312,IE312,Operations Research II,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+IE,313,IE313,Operations Research III,FENS,6.0,4.0,2.0,IE302,8,5.0,3.0
+IE,401,IE401,Produc.&Service Sys.Operations,FENS,6.0,6.0,0.0,MS401,6,6.0,0.0
+IE,402,IE402,Integrated Manufacturing Sys.,FENS,6.0,6.0,0.0,MS402,8,8.0,0.0
+IE,403,IE403,Quality Planning & Control,FENS,6.0,6.0,0.0,MS403,6,6.0,0.0
+IE,404,IE404,Digital Transformation,FENS,6.0,5.0,1.0,,6.0,5.0,1.0
+IE,405,IE405,Decision Analysis,FENS,6.0,6.0,0.0,MS405,6,6.0,0.0
+IE,407,IE407,Investment Decision Making,FENS,6.0,6.0,0.0,MS407,6,6.0,0.0
+IE,408,IE408,Reliability&Maintenance Analy.,FENS,6.0,6.0,0.0,MS408,6,6.0,0.0
+IE,409,IE409,Project Scheduling & Managemen,FENS,6.0,6.0,0.0,MS409,6,6.0,0.0
+IE,411,IE411,Modeling&Analysis of Large Sys,FENS,6.0,6.0,0.0,MS411,6,6.0,0.0
+IE,412,IE412,Financial Engineering,FENS,6.0,6.0,0.0,MS412,6,6.0,0.0
+IE,413,IE413,Informations Systems,FENS,5.0,5.0,0.0,MS413,6,6.0,0.0
+IE,414,IE414,Manufacturing Strategies,FENS,6.0,6.0,0.0,MS414,6,6.0,0.0
+IE,415,IE415,Decision Support Systems,FENS,6.0,6.0,0.0,MS415,6,6.0,0.0
+IE,416,IE416,Additive Manufacturing,FENS,7.0,7.0,0.0,-,6,6.0,0.0
+IE,417,IE417,Facilit.&Material Handling Des,FENS,6.0,6.0,0.0,MS417,6,6.0,0.0
+IE,418,IE418,Manufacturing Processes II,FENS,6.0,6.0,0.0,MS418,6,6.0,0.0
+IE,419,IE419,Total Quality Management,FENS,5.0,5.0,0.0,MS419,6,6.0,0.0
+IE,420,IE420,Storage & Distribution Systems,FENS,6.0,6.0,0.0,MS420,6,6.0,0.0
+IE,430,IE430,Logistics Sys&Plan. and Design,FENS,6.0,6.0,0.0,MS430,6,6.0,0.0
+IE,432,IE432,Stochastic Models in Finance,FENS,6.0,4.0,2.0,MS432,6,4.0,2.0
+IE,436,IE436,Monte Carlo Methods in Finance,FENS,6.0,4.0,2.0,MS433,6,4.0,2.0
+IE,451,IE451,Data Visualization&Analysis,FENS,6.0,6.0,0.0,MS451,6,6.0,0.0
+IE,454,IE454,Supply Chain Analysis,FENS,6.0,6.0,0.0,MS454,6,6.0,0.0
+IE,471,IE471,Supply Chain Practice,FENS,5.0,5.0,0.0,-,5,5.0,0.0
+IE,472,IE472,Strategic Decision Making Practice,FENS,5.0,5.0,0.0,-,5,5.0,0.0
+IE,480,IE480,Spc.Top.Industrial Eng.,FENS,5.0,5.0,0.0,MS480,6,6.0,0.0
+IE,481,IE481,Spc.Top.Industrial Eng.II,FENS,5.0,5.0,0.0,MS481,6,6.0,0.0
+IE,482,IE482,Spc.Top.Industrial Eng.III,FENS,5.0,5.0,0.0,MS482,6,6.0,0.0
+IE,48001,IE48001,Special Topics in IE: Managing New Product Development,FENS,5.0,5.0,0.0,-,5,5.0,0.0
+IE,48002,IE48002,Special Topics in IE: Advanced statistics with R,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+IE,48003,IE48003,Special Topics in IE: Multi-axis Machining,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+IE,48004,IE48004,Special Topics in IE: Computer-Aided Biomodeling and Fabrication,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+IE,48005,IE48005,Special Topics in IE: Digital Manufacturing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+IF,100,IF100,Computational Approaches to Problem Solving,FENS,5.0,5.0,0.0,-,5,5.0,0.0
+IF,200,IF200,"Fantasy,Reality,Sci.&Society",FENS,6.0,0.0,0.0,-,6,0.0,0.0
+ENRG,401,ENRG401,"Energy: Supply Chain, Economics and Geopolitics",FENS,6.0,3.0,0.0,IF 401,6,3.0,0.0
+IF,301,IF301,Gender in Science and Technology,FENS,6.0,0.0,0.0,-,6,0.0,0.0
+IF,333,IF333,"Creativity, Innovation and Entrepreneurship",FENS,6.0,0.0,0.0,-,6,0.0,0.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+IF,467,IF467,"Decision, Psychology and Brain",FENS,6.0,5.0,1.0,-,6,5.0,1.0
+IF,402,IF402,Sustainability and Circularity in Materials,FENS,6.0,2.0,0.0,,6.0,2.0,0.0
+MAT,204,MAT204,"Electrical, Optical and Magnetic Properties of Materials",FENS,6.0,2.0,4.0,-,6,2.0,4.0
+MAT,206,MAT206,Kinetics of Materials,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+MAT,302,MAT302,Polymer Synthesis,FENS,7.0,2.0,5.0,-,8,2.3,5.7
+MAT,304,MAT304,Biopolymers,FENS,5.0,2.5,2.5,-,6,3.0,3.0
+MAT,305,MAT305,Polymer Engineering I,FENS,5.0,4.0,1.0,-,6,4.8,1.2
+MAT,306,MAT306,Computational Techniques for Materials Science,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+MAT,307,MAT307,Composite Materials,FENS,7.0,7.0,0.0,-,6,6.0,0.0
+MAT,308,MAT308,Phase Equilibria,FENS,5.0,4.0,1.0,-,6,4.8,1.2
+MAT,309,MAT309,Transport Phenomena in Materials Processing,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+MAT,310,MAT310,Chemical Processes for New Materials,FENS,5.0,4.0,1.0,-,6,4.8,1.2
+MAT,312,MAT312,Materials Characterization,FENS,7.0,7.0,0.0,-,8,8.0,0.0
+MAT,314,MAT314,Mechanical Properties of Materials,FENS,5.0,4.0,1.0,-,6,4.8,1.2
+MAT,395,MAT395,Internship Project,FENS,5.0,5.0,0.0,-,2.0,2.0,0.0
+MAT,401,MAT401,Surface Chemistry,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+MAT,402,MAT402,Polymer Engineering II,FENS,6.0,5.0,1.0,-,6,4.8,1.2
+MAT,403,MAT403,Polymer Processes,FENS,5.0,4.0,1.0,-,6,4.8,1.2
+MAT,404,MAT404,Polymer Physics,FENS,5.0,1.0,4.0,-,6,4.8,1.2
+MAT,405,MAT405,Advanced Materials Characterization,FENS,7.0,2.0,5.0,-,8,2.3,5.7
+MAT,406,MAT406,Introduction to Nanoscience,FENS,5.0,5.0,0.0,-,6,6.0,0.0
+MAT,408,MAT408,Introduction to Ceramics,FENS,5.0,4.0,1.0,-,6,4.8,1.2
+MAT,416,MAT416,Biomaterials Science and Biocompatibility,FENS,5.0,2.0,3.0,-,6,2.4,3.6
+MAT,422,MAT422,Glass Science and Engineering,FENS,6.0,5.0,1.0,-,10,5.0,5.0
+MAT,423,MAT423,Cement Chemistry and Technology,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+MAT,424,MAT424,Materials Selection in Product Design,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+MAT,480,MAT480,Spc.Top.in Mat.Scien&Eng.,FENS,5.0,5.0,0.0,-,6,6.0,0.0
+MAT,481,MAT481,Spc.Top.in Mat.Scien&Eng.II,FENS,5.0,5.0,0.0,-,6,6.0,0.0
+MAT,48000,MAT48000,Special Topics in Materials Science and Nanoengineering: AdhesionScience and Engineering,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+MAT,48003,MAT48003,Special Topics in MAT: Failure Analysis,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+MAT,48004,MAT48004,Special Topics in MAT: Polymer Matrix Composites,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+MAT,48005,MAT48005,Special Topics in MAT: Polymer Engineering/ Processing Fundamentals,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+MATH,101,MATH101,Calculus I,FENS,6.0,0.0,6.0,-,5,0.0,5.0
+MATH,102,MATH102,Calculus II,FENS,6.0,0.0,6.0,-,5,0.0,5.0
+MATH,201,MATH201,Linear Algebra,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,202,MATH202,Differential Equations,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,203,MATH203,Introduction to Probability,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,204,MATH204,Discrete Mathematics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,206,MATH206,Vector Calculus,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,221,MATH221,History of Mathematics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,301,MATH301,Introduction to Mathematical Analysis,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+MATH,302,MATH302,Integration,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,305,MATH305,Complex Calculus,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,306,MATH306,Statistical Modelling,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,307,MATH307,Dynamical Systems,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,311,MATH311,Introduction to Algebra,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,317,MATH317,Elementary Number Theory,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,318,MATH318,Introduction to Combinatorics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,322,MATH322,Partial Differential Equations,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,401,MATH401,Introduction to Functional Analysis,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,402,MATH402,Hilbert Space Techniques,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,405,MATH405,Numerical Methods,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+MATH,409,MATH409,Proofs from the Notebook,FENS,6.0,0.0,6.0,-,10,0.0,10.0
+MATH,410,MATH410,Introduction to Stochastic Calculus,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,414,MATH414,Finite Fields and Applications,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,479,MATH479,Calculus of Variations,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,480,MATH480,Spc.Top.in Mathematics,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+MATH,481,MATH481,Special Topics in Advanced Linear Algebra,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+MATH,484,MATH484,Mathematical Introduction to Quantum Algorithms and Post-QuantumCryptography,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ME,301,ME301,Mechanical Systems I,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ME,302,ME302,Mechanical Systems II,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,303,ME303,Control System Design,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,304,ME304,Motion Control Systems,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,305,ME305,Power Electronics,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,307,ME307,Fluid Dynamics,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ME,308,ME308,Industrial Control,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,309,ME309,Heat and Mass Transfer,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ME,310,ME310,Computer Aided Design,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+ME,312,ME312,Analysis and Synthesis of Mechanisms,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,395,ME395,Internship Project,FENS,5.0,5.0,0.0,-,2.0,2.0,0.0
+ME,402,ME402,Plasmonics,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ME,403,ME403,Introduction to Robotics,FENS,7.0,6.0,1.0,-,7,6.0,1.0
+ME,405,ME405,Mechanical Vibrations,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,406,ME406,Robotics Systems Application,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+ME,407,ME407,Embedded Systems,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ME,408,ME408,Mechatronics System Design,FENS,6.0,6.0,0.0,-,8,8.0,0.0
+ME,409,ME409,Foundations of Microsystems,FENS,7.0,5.0,2.0,-,6,4.3,1.7
+ME,410,ME410,Computer Aided Engineering,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ME,411,ME411,Mechanical System Design,FENS,6.0,5.0,1.0,-,8,6.7,1.3
+ME,412,ME412,Introduction to the Finite Element Method,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ME,415,ME415,Computational Analysis and Simulation,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ME,420,ME420,Renewable and Sustainable Energy Systems,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+ME,425,ME425,Autonomous Mobile Robotics,FENS,6.0,5.0,1.0,-,6,5.0,1.0
+ME,435,ME435,Scaling in Engineering Systems,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ME,437,ME437,Biomechatronics,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ME,441,ME441,Advanced Vehicle Systems,FENS,6.0,6.0,0.0,-,6,6.0,0.0
+ME,480,ME480,Spc.Top.Manufact.Sys.Eng.,FENS,5.0,5.0,0.0,-,6,6.0,0.0
+ME,480,ME480,Spc.Top.in Mechatronics I,FENS,6.0,4.0,2.0,-,6,4.0,2.0
+ME,481,ME481,Spc.Top.Manufact.Sys.Eng.II,FENS,5.0,5.0,0.0,-,6,6.0,0.0
+ME,481,ME481,Spc.Top.in Mechatronics II,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+ME,482,ME482,Spc.Top.Manufact.Sys.Eng.III,FENS,5.0,5.0,0.0,-,6,6.0,0.0
+NS,101,NS101,Science of Nature I,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+NS,102,NS102,Science of Nature II,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+NS,200,NS200,Einstein's Relativity,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+NS,201,NS201,Discovering Life,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+NS,202,NS202,Biochemistry I,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+NS,204,NS204,Quantum Physics,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+NS,205,NS205,Dynamics of the Cell,FENS,0.0,0.0,0.0,-,0,0.0,0.0
+NS,206,NS206,What is There in the Universe: Inside the Milky Way?,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+NS,207,NS207,Organic Chemistry,FENS,7.0,2.0,5.0,-,8,2.7,5.3
+NS,208,NS208,General Biotechnology,FENS,5.0,2.0,3.0,-,6,2.4,3.6
+NS,209,NS209,"What is there in the Universe: ""Beyond the Milky Way""",FENS,5.0,0.0,5.0,-,6,0.0,6.0
+NS,210,NS210,"Water: Its Physics, Nanophysics, Chemistry and Geopolitics",FENS,5.0,0.0,5.0,-,6,0.0,6.0
+NS,212,NS212,"Volcanoes, Earthquakes, Rocks ( Understanding the Earth)",FENS,5.0,0.0,5.0,-,5,0.0,5.0
+NS,213,NS213,Basic Concepts of Physics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+NS,214,NS214,"Oscillations, Waves and Optics",FENS,6.0,0.0,6.0,-,6,0.0,6.0
+NS,216,NS216,Life on Earth,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+NS,218,NS218,Fundamentals of Nanoscience,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+ENRG,220,ENRG220,World Energy Outlook: The Coming Year,FENS,6.0,3.0,0.0,NS 220,6,3.0,0.0
+NS,222,NS222,Planetary Systems and Extrasolar Planets,FENS,5.0,0.0,5.0,-,6,0.0,6.0
+NS,223,NS223,Environmental Science,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+NS,224,NS224,Urban Agriculture,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+NS,48000,NS48000,Special Topics in NS: Astrobiology Fundamentals and ContemporaryResearch Topics,FENS,6.0,2.0,4.0,-,6,2.0,4.0
+PHYS,211,PHYS211,Modern Physics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,302,PHYS302,Solid State Physics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,303,PHYS303,Quantum Mechanics I,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,304,PHYS304,Quantum Mechanics II,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,312,PHYS312,Classical Mechanics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,313,PHYS313,Quantum Mechanics Laboratory,FENS,6.0,3.0,3.0,-,6,3.0,3.0
+PHYS,322,PHYS322,Concepts of Modern Physics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,401,PHYS401,Classical Mechanics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,411,PHYS411,Electromagnetic Theory I,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,412,PHYS412,Statistical Mechanics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+Subject,No,Code,Title,Faculty,First Admit Term,Previous Code,First Admit Term
+After 2013-2014 ECTS TOTAL,After 2013-2014ECTS Engineering,After 2013-2014 ECTSBasic Science,Before 2013-2014 ECTS TOTAL,Before 2013-2014 ECTSEngineering,Before 2013-2014 ECTSBasic Science
+PHYS,438,PHYS438,Phase Transitions and Renormalization-Group Theory,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PHYS,484,PHYS484,Quantum Computation and Quantum Information,FENS,6.0,1.0,5.0,-,6,1.0,5.0
+PHYS,492,PHYS492,Modern Topics in Condensed Matter Physics,FENS,6.0,0.0,6.0,-,6,0.0,6.0
+PROJ,102,PROJ102,Project Course,FENS,2.0,1.0,1.0,-,6,3.0,3.0
+PROJ,201,PROJ201,Project Course,FENS,1.0,1.0,0.0,-,1,1.0,0.0
+PROJ,302,PROJ302,Summer Project,FENS,5.0,5.0,0.0,-,2,2.0,0.0

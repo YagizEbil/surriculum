@@ -69,6 +69,7 @@ function SUrriculum(major_chosen_by_user)
                 datalist.innerHTML +=  "<option value='" + 'MAT' + "'>";
                 datalist.innerHTML +=  "<option value='" + 'ME' + "'>";
                 datalist.innerHTML +=  "<option value='" + 'ECON' + "'>";
+                datalist.innerHTML +=  "<option value='" + 'DSA' + "'>";
                 datalist.id = 'datalist_majors';
                 change_major_element.appendChild(input_major);
                 change_major_element.appendChild(datalist);
@@ -200,6 +201,11 @@ function SUrriculum(major_chosen_by_user)
         else if (flag == 30){message = ("You cannot graduate: Your area electives credit is less than 18!");}
         else if (flag == 31){message = ("You cannot graduate: Your free electives credit is less than 30!");}
         else if (flag == 32){message = ("You cannot graduate: You have not taken a HUM3XX class!");}
+        else if (flag == 33){message = ("You cannot graduate: Your required courses credit is less than 30!");}
+        else if (flag == 34){message = ("You cannot graduate: Your core electives credit is less than 27!");}
+        else if (flag == 35){message = ("You cannot graduate: Your area electives credit is less than 12!");}
+        else if (flag == 36){message = ("You cannot graduate: Your free electives credit is less than 15!");}
+        else if (flag == 37){message = ("You cannot graduate: You need at least 5 faculty courses!");}
 
         graduation_modal.innerHTML = '<div>'+ message +'</div>'
         
@@ -263,7 +269,9 @@ function SUrriculum(major_chosen_by_user)
         {limits = ["4.0", "125", "240","41","31", "29", "9","15","0","0"]}
         else if(major_chosen_by_user == 'ME')
         {limits = ["4.0", "125", "240","41","39", "21", "9","15","60","90"]}
-        
+        else if(major_chosen_by_user == 'DSA')
+        {limits = ["4.0", "125", "240","41","30", "27", "12","15","60","90"]}
+
 
         for (let i = 0; i < 10; i++)
         {

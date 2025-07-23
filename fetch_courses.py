@@ -3,6 +3,7 @@ import json
 import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
+import subprocess
 
 BASE = 'https://suis.sabanciuniv.edu/prod/'
 LIST_URL = BASE + 'SU_DEGREE.p_list_degree?P_LEVEL=UG&P_LANG=EN&P_PRG_TYPE='
@@ -15,6 +16,7 @@ PROGRAM_FILES = {
     'BSMS': 'IE.json',
     'BSMAT': 'MAT.json',
     'BSME': 'ME.json',
+    'BSDSA': 'DSA.json',  # Adding Data Science and Analytics program
 }
 
 
@@ -41,9 +43,9 @@ def get_latest_term(code):
 
 def map_category(title):
     t = title.lower()
-    if 'university' in t:
+    if 'university' in t and 'courses' in t:
         return 'university'
-    if 'required' in t:
+    if 'required' in t and 'courses' in t:
         return 'required'
     if 'core' in t and 'elective' in t:
         return 'core'
@@ -53,8 +55,9 @@ def map_category(title):
         return 'free'
     if 'faculty courses' in t:
         return 'free'
-    return 'free'
-
+    if t == 'total':
+        return 'university'  # Easy fix for university course problem, they are miss detected as total
+    return 'unknown'  # Default to if no match
 
 def parse_table(table, category):
     rows = []
@@ -98,18 +101,137 @@ def crawl_program(code, term):
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, 'lxml')
     results = []
-    for a in soup.select('p > a[name]'):
-        category_title = a.parent.get_text(strip=True)
-        el_type = map_category(category_title)
-        table = a.find_parent('table').find_next('table')
-        while table and not table.find('th', string='Course'):
-            table = table.find_next('table')
+    seen_courses = set()  # Track seen courses to avoid duplicates
+
+    # First, try to extract category information from the name attribute
+    for a in soup.select('a[name]'):
+        name_attr = a.get('name', '')
+        # Skip non-category anchors with improved pattern matching
+        if not (name_attr.endswith('_CEL') or name_attr.endswith('_REQ') or
+                name_attr.endswith('_AEL') or name_attr.endswith('_FEL') or
+                name_attr == 'UC_FENS' or name_attr == 'FC_FENS' or
+                'BASIC_SCIE' in name_attr or 'ENG_SCIE' in name_attr or
+                name_attr.startswith('main')):  # Sometimes 'main' is used for categories
+            continue
+
+        # Get the category title from the parent element's text or the next bold text
+        category_title = ""
+        if a.parent and a.parent.find('b'):
+            category_title = a.parent.find('b').get_text(strip=True)
+        elif a.find_next('b'):
+            category_title = a.find_next('b').get_text(strip=True)
+
+        # Determine the category type based on the name attribute or title
+        el_type = None
+        if name_attr.endswith('_CEL'):
+            el_type = 'core'
+        elif name_attr.endswith('_REQ'):
+            el_type = 'required'
+        elif name_attr.endswith('_AEL'):
+            el_type = 'area'
+        elif name_attr.endswith('_FEL'):
+            el_type = 'free'
+        elif name_attr == 'UC_FENS':
+            el_type = 'university'
+        elif name_attr == 'FC_FENS':
+            el_type = 'faculty'
+        elif 'BASIC_SCIE' in name_attr:
+            el_type = 'basic_science'
+        elif 'ENG_SCIE' in name_attr:
+            el_type = 'engineering'
+        else:
+            # If we can't determine from the name attribute, use the title text
+            el_type = map_category(category_title)
+
+        # Find the corresponding table with course information - improved table finding
+        table = None
+        # First try the standard way
+        parent_table = a.find_parent('table')
+        if parent_table:
+            table = parent_table.find_next('table')
+            attempts = 0
+            # Look through several next tables to find one with course headers
+            while table and attempts < 3 and not table.find('th', string=lambda s: s and ('Course' in s or 'Name' in s)):
+                table = table.find_next('table')
+                attempts += 1
+
         if table:
-            results.extend(parse_table(table, el_type))
-        link = a.find_parent('table').find_next('a', href=lambda h: h and 'p_list_courses' in h)
-        if link:
+            new_rows = parse_table(table, el_type)
+            for row in new_rows:
+                course_id = f"{row['Major']}{row['Code']}"
+                if course_id not in seen_courses:
+                    results.append(row)
+                    seen_courses.add(course_id)
+
+        # Check for a link to additional courses in this category
+        links = []
+        if a.find_parent('table'):
+            links = a.find_parent('table').find_all('a', href=lambda h: h and 'p_list_courses' in h)
+
+        # If no links found, try a broader search in nearby elements
+        if not links and a.parent:
+            # Look in following siblings and their children
+            for sibling in a.parent.find_next_siblings():
+                links.extend(sibling.find_all('a', href=lambda h: h and 'p_list_courses' in h))
+
+        for link in links:
+            # Extract category from the link URL to double-check
+            area_match = re.search(r'P_AREA=([^&]+)', link['href'])
+            if area_match:
+                area_code = area_match.group(1)
+                # Override el_type if we have a more specific area code from the URL
+                if '_CEL' in area_code:
+                    el_type = 'core'
+                elif '_REQ' in area_code:
+                    el_type = 'required'
+                elif '_AEL' in area_code:
+                    el_type = 'area'
+                elif '_FEL' in area_code:
+                    el_type = 'free'
+                elif 'UC_' in area_code:
+                    el_type = 'university'
+                elif 'FC_' in area_code:
+                    el_type = 'faculty'
+
             list_url = urljoin(BASE, link['href'])
-            results.extend(crawl_list(list_url, el_type))
+            new_rows = crawl_list(list_url, el_type)
+            for row in new_rows:
+                course_id = f"{row['Major']}{row['Code']}"
+                if course_id not in seen_courses:
+                    results.append(row)
+                    seen_courses.add(course_id)
+
+    # Add a fallback method to catch links that might have been missed
+    # Look for all "Click" links throughout the page
+    for click_link in soup.find_all('a', href=lambda h: h and 'p_list_courses' in h):
+        area_match = re.search(r'P_AREA=([^&]+)', click_link['href'])
+        if area_match:
+            area_code = area_match.group(1)
+            # Determine category from area code
+            if '_CEL' in area_code:
+                el_type = 'core'
+            elif '_REQ' in area_code:
+                el_type = 'required'
+            elif '_AEL' in area_code:
+                el_type = 'area'
+            elif '_FEL' in area_code:
+                el_type = 'free'
+            elif 'UC_' in area_code:
+                el_type = 'university'
+            elif 'FC_' in area_code:
+                el_type = 'faculty'
+            else:
+                # Default to free if unknown
+                el_type = 'free'
+
+            list_url = urljoin(BASE, click_link['href'])
+            new_rows = crawl_list(list_url, el_type)
+            for row in new_rows:
+                course_id = f"{row['Major']}{row['Code']}"
+                if course_id not in seen_courses:
+                    results.append(row)
+                    seen_courses.add(course_id)
+
     return results
 
 
@@ -125,6 +247,10 @@ def main():
         with open(fname, 'w') as f:
             json.dump(data, f, indent=2)
         print(f'Updated {fname} with {len(data)} records')
+
+    # Optionally run update_credits.py after updating course files
+    print("\nRunning update_credits.py to update credits in JSON files...\n")
+    subprocess.run(['python', 'update_credits.py'], check=True)
 
 
 if __name__ == '__main__':
