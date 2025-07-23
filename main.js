@@ -208,6 +208,20 @@ function SUrriculum(major_chosen_by_user)
         else if (flag == 37){message = ("You cannot graduate: You need at least 5 faculty courses!");}
         else if (flag == 38){message = ("You cannot graduate: You need at least 9 credits from 400-level EE courses!");}
         else if (flag == 39){message = ("You cannot graduate: You need at least one course from CS300, CS401, CS412, ME303, PHYS302, PHYS303, or EE48XXX special topics!");}
+        else if (flag == 40){message = ("You cannot graduate: You need to complete your Mathematics requirement (MATH201, MATH202, or MATH204)!");}
+        else if (flag == 41){message = ("You cannot graduate: You need at least 5 faculty courses!");}
+        else if (flag == 42){message = ("You cannot graduate: You need at least 3 FASS faculty courses!");}
+        else if (flag == 43){message = ("You cannot graduate: Your faculty courses must span at least 3 different areas!");}
+        else if (flag == 44){message = ("You cannot graduate: You need at least 5 faculty courses!");}
+        else if (flag == 45){message = ("You cannot graduate: You need at least 2 MATH courses!");}
+        else if (flag == 46){message = ("You cannot graduate: You need at least 3 FENS faculty courses!");}
+        else if (flag == 47){message = ("You cannot graduate: You have not taken DSA395!");}
+        else if (flag == 48){message = ("You cannot graduate: You need at least 1 FENS faculty course!");}
+        else if (flag == 49){message = ("You cannot graduate: You need at least 1 FASS faculty course!");}
+        else if (flag == 50){message = ("You cannot graduate: You need at least 1 SBS faculty course!");}
+        else if (flag == 51){message = ("You cannot graduate: You need at least 3 FENS courses in your core electives!");}
+        else if (flag == 52){message = ("You cannot graduate: You need at least 3 FASS courses in your core electives!");}
+        else if (flag == 53){message = ("You cannot graduate: You need at least 3 SBS courses in your core electives!");}
 
         graduation_modal.innerHTML = '<div>'+ message +'</div>'
         
