@@ -206,6 +206,8 @@ function SUrriculum(major_chosen_by_user)
         else if (flag == 35){message = ("You cannot graduate: Your area electives credit is less than 12!");}
         else if (flag == 36){message = ("You cannot graduate: Your free electives credit is less than 15!");}
         else if (flag == 37){message = ("You cannot graduate: You need at least 5 faculty courses!");}
+        else if (flag == 38){message = ("You cannot graduate: You need at least 9 credits from 400-level EE courses!");}
+        else if (flag == 39){message = ("You cannot graduate: You need at least one course from CS300, CS401, CS412, ME303, PHYS302, PHYS303, or EE48XXX special topics!");}
 
         graduation_modal.innerHTML = '<div>'+ message +'</div>'
         

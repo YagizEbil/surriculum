@@ -145,10 +145,44 @@ function s_curriculum()
             else if (ects < 240) return 13;
             else
             {
-                if (core < 25) return 19; //CHANGE
+                // Check for minimum 400-level EE courses requirement (9 credits)
+                let ee400LevelCredits = 0;
+                for(let i = 0; i < this.semesters.length; i++) {
+                    for(let a = 0; a < this.semesters[i].courses.length; a++) {
+                        let course = this.semesters[i].courses[a];
+                        // Check if it's a 400-level EE course in core electives
+                        if(course.code.startsWith("EE4") && course.category === "Core") {
+                            ee400LevelCredits += course.credit;
+                        }
+                    }
+                }
+
+                if (ee400LevelCredits < 9) return 38; // Not enough 400-level EE courses
+
+                if (core < 25) return 19; // Minimum core electives requirement
                 else
                 {
                     area = area + (core - 25);
+
+                    // Check for minimum one course from specific area electives
+                    let hasSpecificAreaCourse = false;
+                    const specificAreaCourses = ["CS300", "CS401", "CS412", "ME303", "PHYS302", "PHYS303"];
+
+                    for(let i = 0; i < this.semesters.length; i++) {
+                        for(let a = 0; a < this.semesters[i].courses.length; a++) {
+                            let course = this.semesters[i].courses[a];
+                            // Check for specific area courses
+                            if(specificAreaCourses.includes(course.code) ||
+                               (course.code.startsWith("EE48") && course.category === "Area")) {
+                                hasSpecificAreaCourse = true;
+                                break;
+                            }
+                        }
+                        if(hasSpecificAreaCourse) break;
+                    }
+
+                    if(!hasSpecificAreaCourse) return 39; // Missing specific area course requirement
+
                     if (area < 9) return 7;
                     else
                     {
