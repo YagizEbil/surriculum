@@ -108,7 +108,7 @@ def crawl_program(code, term):
         name_attr = a.get('name', '')
         # Skip non-category anchors with improved pattern matching
         if not (name_attr.endswith('_CEL') or name_attr.endswith('_REQ') or
-                name_attr.endswith('_AEL') or name_attr.endswith('_FEL') or
+                name_attr.endswith('_AEL') or name_attr.endswith('_FEL') or name_attr.endswith('_ARE') or name_attr.endswith('_FRE') or
                 name_attr == 'UC_FENS' or name_attr == 'FC_FENS' or
                 'BASIC_SCIE' in name_attr or 'ENG_SCIE' in name_attr or
                 name_attr.startswith('main')):  # Sometimes 'main' is used for categories
@@ -127,9 +127,9 @@ def crawl_program(code, term):
             el_type = 'core'
         elif name_attr.endswith('_REQ'):
             el_type = 'required'
-        elif name_attr.endswith('_AEL'):
+        elif name_attr.endswith('_AEL') or name_attr.endswith('_ARE'):
             el_type = 'area'
-        elif name_attr.endswith('_FEL'):
+        elif name_attr.endswith('_FEL') or name_attr.endswith('_FRE'):
             el_type = 'free'
         elif name_attr == 'UC_FENS':
             el_type = 'university'
@@ -184,9 +184,9 @@ def crawl_program(code, term):
                     el_type = 'core'
                 elif '_REQ' in area_code:
                     el_type = 'required'
-                elif '_AEL' in area_code:
+                elif '_AEL' in area_code or '_ARE' in area_code:
                     el_type = 'area'
-                elif '_FEL' in area_code:
+                elif '_FEL' in area_code or '_FRE' in area_code:
                     el_type = 'free'
                 elif 'UC_' in area_code:
                     el_type = 'university'
@@ -212,17 +212,17 @@ def crawl_program(code, term):
                 el_type = 'core'
             elif '_REQ' in area_code:
                 el_type = 'required'
-            elif '_AEL' in area_code:
+            elif '_AEL' in area_code or '_ARE' in area_code:
                 el_type = 'area'
-            elif '_FEL' in area_code:
+            elif '_FEL' in area_code or '_FRE' in area_code:
                 el_type = 'free'
             elif 'UC_' in area_code:
                 el_type = 'university'
             elif 'FC_' in area_code:
                 el_type = 'faculty'
             else:
-                # Default to free if unknown
-                el_type = 'free'
+                # Default to if unknown
+                el_type = 'unknown'
 
             list_url = urljoin(BASE, click_link['href'])
             new_rows = crawl_list(list_url, el_type)

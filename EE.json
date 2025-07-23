@@ -789,7 +789,7 @@
     "Basic_Science": 7.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -800,7 +800,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -811,7 +811,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -822,7 +822,7 @@
     "Basic_Science": 7.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -833,7 +833,7 @@
     "Basic_Science": 7.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -844,7 +844,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -855,7 +855,7 @@
     "Basic_Science": 7.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -866,7 +866,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -877,7 +877,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -888,7 +888,7 @@
     "Basic_Science": 7.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -899,7 +899,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -910,7 +910,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -921,7 +921,7 @@
     "Basic_Science": 7.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -932,7 +932,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -943,7 +943,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -954,7 +954,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -965,7 +965,7 @@
     "Basic_Science": 4.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -976,7 +976,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -987,7 +987,7 @@
     "Basic_Science": 4.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -998,7 +998,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -1009,7 +1009,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "BIO",
@@ -1020,7 +1020,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CHEM",
@@ -1031,7 +1031,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CHEM",
@@ -1042,7 +1042,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CHEM",
@@ -1053,7 +1053,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CHEM",
@@ -1064,7 +1064,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CHEM",
@@ -1075,7 +1075,7 @@
     "Basic_Science": 4.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1086,7 +1086,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1097,7 +1097,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1108,7 +1108,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1119,7 +1119,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1130,7 +1130,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1141,7 +1141,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1152,7 +1152,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1163,7 +1163,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1174,7 +1174,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1185,7 +1185,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1196,7 +1196,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1207,7 +1207,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1218,7 +1218,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1229,7 +1229,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1240,7 +1240,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1251,7 +1251,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1262,7 +1262,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1273,7 +1273,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1284,7 +1284,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1295,7 +1295,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1306,7 +1306,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1317,7 +1317,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1328,7 +1328,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1339,7 +1339,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1350,7 +1350,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1361,7 +1361,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1372,7 +1372,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1383,7 +1383,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1394,7 +1394,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1405,7 +1405,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1416,7 +1416,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1427,7 +1427,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1438,7 +1438,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1449,7 +1449,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1460,7 +1460,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1471,7 +1471,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1482,7 +1482,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "CS",
@@ -1493,7 +1493,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "DSA",
@@ -1504,7 +1504,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "DSA",
@@ -1515,7 +1515,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "DSA",
@@ -1526,7 +1526,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "DSA",
@@ -1537,7 +1537,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "DSA",
@@ -1548,7 +1548,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "DSA",
@@ -1559,7 +1559,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "EE",
@@ -1570,7 +1570,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "EE",
@@ -1581,7 +1581,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "EE",
@@ -1592,7 +1592,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1603,7 +1603,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1614,7 +1614,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1625,7 +1625,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1636,7 +1636,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1647,7 +1647,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1658,7 +1658,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1669,7 +1669,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1680,7 +1680,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENRG",
@@ -1691,7 +1691,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1702,7 +1702,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1713,7 +1713,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1724,7 +1724,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1735,7 +1735,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1746,7 +1746,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1757,7 +1757,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1768,7 +1768,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1779,7 +1779,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1790,7 +1790,7 @@
     "Basic_Science": 4.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1801,7 +1801,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1812,7 +1812,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1823,7 +1823,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1834,7 +1834,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1845,7 +1845,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1856,7 +1856,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1867,7 +1867,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1878,7 +1878,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1889,7 +1889,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1900,7 +1900,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ENS",
@@ -1911,7 +1911,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "IE",
@@ -1922,7 +1922,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "IE",
@@ -1933,7 +1933,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "IE",
@@ -1944,7 +1944,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "IE",
@@ -1955,7 +1955,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "IE",
@@ -1966,7 +1966,7 @@
     "Basic_Science": 4.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "IE",
@@ -1977,7 +1977,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -1988,7 +1988,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -1999,7 +1999,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2010,7 +2010,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2021,7 +2021,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2032,7 +2032,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2043,7 +2043,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2054,7 +2054,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2065,7 +2065,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2076,7 +2076,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2087,7 +2087,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2098,7 +2098,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2109,7 +2109,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2120,7 +2120,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2131,7 +2131,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2142,7 +2142,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MATH",
@@ -2153,7 +2153,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2164,7 +2164,7 @@
     "Basic_Science": 4.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2175,7 +2175,7 @@
     "Basic_Science": 5.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2186,7 +2186,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2197,7 +2197,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2208,7 +2208,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2219,7 +2219,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2230,7 +2230,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2241,7 +2241,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "4",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2252,7 +2252,7 @@
     "Basic_Science": 1.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2263,7 +2263,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "MAT",
@@ -2274,7 +2274,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ME",
@@ -2285,7 +2285,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ME",
@@ -2296,7 +2296,7 @@
     "Basic_Science": 3.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ME",
@@ -2307,7 +2307,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ME",
@@ -2318,7 +2318,7 @@
     "Basic_Science": 2.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ME",
@@ -2329,7 +2329,7 @@
     "Basic_Science": 0.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "NS",
@@ -2340,7 +2340,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "NS",
@@ -2351,7 +2351,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "NS",
@@ -2362,7 +2362,7 @@
     "Basic_Science": 4.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "PHYS",
@@ -2373,7 +2373,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "PHYS",
@@ -2384,7 +2384,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "PHYS",
@@ -2395,7 +2395,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "PHYS",
@@ -2406,7 +2406,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "PHYS",
@@ -2417,7 +2417,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "PHYS",
@@ -2428,7 +2428,7 @@
     "Basic_Science": 6.0,
     "SU_credit": "3",
     "Faculty": "FENS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "VA",
@@ -2439,7 +2439,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "free"
+    "EL_Type": "area"
   },
   {
     "Major": "ACC",
