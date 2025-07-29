@@ -2,6 +2,11 @@
 // be attached to the global window so that other scripts can instantiate
 // curricula without using ES module imports.
 
+
+// Expose s_curriculum constructor globally when running in a browser.
+if (typeof window !== 'undefined') {
+    window.s_curriculum = s_curriculum;
+}
 function s_curriculum()
 {
     this.semester_id = 0;
@@ -1700,7 +1705,3 @@ function s_curriculum()
     // end of s_curriculum constructor
 }
 
-// Expose s_curriculum constructor globally when running in a browser.
-if (typeof window !== 'undefined') {
-    window.s_curriculum = s_curriculum;
-}
