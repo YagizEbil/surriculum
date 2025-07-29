@@ -5,7 +5,7 @@
     z-index: 1;
 }
 
-html, body 
+html, body
 {
     overscroll-behavior: none;
 }
@@ -319,7 +319,7 @@ body
     color: white;
 }
 
-.tick 
+.tick
 {
     margin: 20px;
 }
@@ -432,7 +432,7 @@ input
 .course_name
 {
     font-size: 14px;
-    
+
     width: 225px;
     margin: 5px;
     margin-left: 10px;
@@ -526,7 +526,7 @@ input
     z-index: 2;
 
     background-color: #c7d6e7;
-    
+
 }
 
 .delete_add_course
@@ -544,7 +544,7 @@ input
     width: 15px;
     height: 15px;
     margin-right: 10px;
-    
+
     background-image: url('./assets/closed.png');
     background-size: cover;
     background-repeat: no-repeat;
@@ -585,7 +585,7 @@ input
 }
 .semester_date_edit
 {
-    background-image: url('./assets/editw.png'); 
+    background-image: url('./assets/editw.png');
 }
 
 .btns
@@ -636,8 +636,8 @@ input
     80% { transform: translate(1px, 0) rotate(3deg); }
     90% { transform: translate(-1px, 0) rotate(-3deg); }
     100% { transform: translate(0, 0) rotate(0); }
-  }
-  
-  .shake {
+}
+
+.shake {
     animation: shake 2s infinite;
-  }
+}

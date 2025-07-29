@@ -10,18 +10,21 @@
     <script src="helper_functions.js"></script>
     <script src="mouse_and_drag.js"></script>
     <script src="s_semester.js"></script>
-    <script src="s_curriculum.js"></script>
     <script src="create_semester.js"></script>
     <script src="click.js"></script>
-    <script src="graduation_check.js"></script>
     <script src="academic_records_parser.js"></script>
     <script src="https://unpkg.com/pdfjs-dist@2.10.377/build/pdf.js"></script>
+    <script src="graduation_check.js"></script>
+    <script type="module" src="flagMessages.js"></script>
+    <script type="module" src="s_curriculum.js"></script>
+    <script type="module" src="requirements.js"></script>
+
     <script>
       // Specify the path to the worker script
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.10.377/build/pdf.worker.js';
     </script>
 
-    <script src="main.js" defer></script>
+    <script type="module" src="main.js" defer></script>
 
 </head>
 <body>

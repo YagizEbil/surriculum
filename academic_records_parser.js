@@ -58,9 +58,19 @@ function parseAcademicRecords(htmlContent) {
         courseRows.forEach(row => {
             const cells = row.querySelectorAll('td');
             if (cells.length >= 4) {
-                const courseCode = cells[0].textContent.trim().replace(/\s/g, '');
+                let courseCode = cells[0].textContent.trim().replace(/\s/g, '');
                 const courseTitle = cells[1].textContent.trim();
                 const grade = cells[3].textContent.trim();
+
+                // Replace CS210 with DSA210
+                if (courseCode === 'CS210') {
+                    courseCode = 'DSA210';
+                }
+
+                // Correct the condition to skip courses with ELAE code
+                if (courseCode.includes('ELAE')) {
+                    return; // Skip this iteration
+                }
 
                 // Only include courses with passing grades (not F, W, NA, or currently registered)
                 if (!['F', 'W', 'NA', 'Registered'].includes(grade)) {
@@ -198,7 +208,19 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
             } else {
                 console.error('createSemeter function not found');
             }
+            }
         }
+
+    // After creating all semesters from the transcript import, update the
+    // effective categories so that courses are allocated correctly. We
+    // specifically pass the provided courseData so the recalc function can
+    // look up static course types. Guard against missing recalc.
+    try {
+        if (typeof curriculum.recalcEffectiveTypes === 'function') {
+            curriculum.recalcEffectiveTypes(courseData);
+        }
+    } catch(err) {
+        // ignore
     }
 
     return stats;

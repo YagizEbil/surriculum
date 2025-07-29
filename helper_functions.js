@@ -59,8 +59,8 @@ for (let i = (academicYear - 6); i <= (academicYear + 6); i++) {
 }
 
 var grade_list_InnerHTML = '';
-let letter_grades_global = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'T'];
-let letter_grades_global_dic = {'A':4.0, 'A-':3.7, 'B+':3.3, 'B':3.0, 'B-':2.7, 'C+':2.3, 'C':2.0, 'C-':1.7, 'D+':1.3, 'D':1.0, 'T':0.0}
+let letter_grades_global = ['S', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'F'];
+let letter_grades_global_dic = {'S':4.0, 'A':4.0, 'A-':3.7, 'B+':3.3, 'B':3.0, 'B-':2.7, 'C+':2.3, 'C':2.0, 'C-':1.7, 'D+':1.3, 'D':1.0, 'F':0.0}
 for(let i = 0; i < letter_grades_global.length; i++)
 {
     grade_list_InnerHTML += "<option value='" + letter_grades_global[i] + "'>";

@@ -1,3 +1,7 @@
+// Curriculum constructor. In a non-module environment this function will
+// be attached to the global window so that other scripts can instantiate
+// curricula without using ES module imports.
+
 function s_curriculum()
 {
     this.semester_id = 0;
@@ -75,19 +79,30 @@ function s_curriculum()
             engineering += this.semesters[i].totalEngineering;
             ects += this.semesters[i].totalECTS;
         }
+        // Generic requirement checks
+        const req = requirements[this.major] || {};
+        if (university < req.university) return 1;
+        if (req.internshipCourse && !this.hasCourse(req.internshipCourse)) return 4;
+        if (total < req.total) return 5;
+        if (science < req.science) return 8;
+        if (engineering < req.engineering) return 9;
+        if (ects < req.ects) return 10;
+        if (required < req.required) return 2;
+        // Check core, area and free credits against requirements directly.
+        // Do not perform dynamic reallocation here because the effective
+        // categories have already been computed via recalcEffectiveTypes().
+        if (core < req.core) return 6;
+        if (area < req.area) return 7;
+        if (free < req.free) return 8;
+        return 0;
+
+        // Major-specific CS checks (only additional flags beyond generic)
         if(this.major == 'CS')
         {
-            if(total < 125) return 1;
-            else if (university < 41) return 2;
-            else if (required < 29) return 3;
-            else if (science < 60) return 11;
-            else if (engineering < 90) return 12;
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("CS395"))  return 5;
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Check CS internship and special courses handled generically, now check SPS303, HUM2XX/HUM3XX
+            if (!this.hasCourse("SPS303")) return 11;
+            if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 12;
+            if (!this.hasCourse("CS395")) return 13;
             {
                 // Check faculty course requirements for CS
                 let facultyCoursesCount = 0;
@@ -114,37 +129,17 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 44; // Not enough faculty courses
-                if(mathCoursesCount < 2) return 45; // Not enough MATH courses
-                if(fensCoursesCount < 3) return 46; // Not enough FENS courses
+                if(facultyCoursesCount < 5) return 14;
+                if(mathCoursesCount < 2) return 19;
+                if(fensCoursesCount < 3) return 16;
 
-                if (core < 31) return 6;
-                else
-                {
-                    area = area + (core - 31);
-                    if (area < 9) return 7;
-                    else
-                    {
-                        free = free + (area - 9);
-                        if(free<15) return 8;
-                        else return 0;
-                    }
-                }
+
             }
         }
         else if(this.major == 'IE')
         {
-            if(total < 125) return 1;
-            else if (university < 41) return 2;
-            else if (required < 34) return 14; // Updated to 34 SU credits
-            else if (science < 60) return 11;
-            else if (engineering < 90) return 12;
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("IE395"))  return 15;
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
+            // Additional IE-specific logic can be added here if needed
             {
                 // Check faculty course requirements for IE (same as CS, EE, MAT)
                 let facultyCoursesCount = 0;
@@ -171,37 +166,15 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 44; // Not enough faculty courses
-                if(mathCoursesCount < 2) return 45; // Not enough MATH courses
-                if(fensCoursesCount < 3) return 46; // Not enough FENS courses
-
-                if (core < 26) return 16; // Updated to 26 SU credits
-                else
-                {
-                    area = area + (core - 26);
-                    if (area < 9) return 7;
-                    else
-                    {
-                        free = free + (area - 9);
-                        if(free<15) return 8;
-                        else return 0;
-                    }
-                }
+                if(facultyCoursesCount < 5) return 14;
+                if(mathCoursesCount < 2) return 19;
+                if(fensCoursesCount < 3) return 16;
+                return 0;
             }
         }
         else if(this.major == 'EE')
         {
-            if(total < 125) return 1;
-            else if (university < 41) return 2;
-            else if (required < 35) return 17; //CHANGE
-            else if (science < 60) return 11;
-            else if (engineering < 90) return 12;
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("EE395"))  return 18; //CHANGE
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check for minimum 400-level EE courses requirement (9 credits)
                 let ee400LevelCredits = 0;
@@ -215,12 +188,11 @@ function s_curriculum()
                     }
                 }
 
-                if (ee400LevelCredits < 9) return 38; // Not enough 400-level EE courses
+                if (ee400LevelCredits < 9) return 23;
 
                 if (core < 25) return 19; // Minimum core electives requirement
                 else
                 {
-                    area = area + (core - 25);
 
                     // Check for minimum one course from specific area electives
                     let hasSpecificAreaCourse = false;
@@ -239,31 +211,15 @@ function s_curriculum()
                         if(hasSpecificAreaCourse) break;
                     }
 
-                    if(!hasSpecificAreaCourse) return 39; // Missing specific area course requirement
+                    if(!hasSpecificAreaCourse) return 24;
 
-                    if (area < 9) return 7;
-                    else
-                    {
-                        free = free + (area - 9);
-                        if(free<15) return 8;
-                        else return 0;
-                    }
+                    return 0;
                 }
             }
         }
         else if(this.major == 'MAT')
         {
-            if(total < 125) return 1;
-            else if (university < 41) return 2;
-            else if (required < 26) return 20;
-            else if (science < 60) return 11;
-            else if (engineering < 90) return 12;
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("MAT395"))  return 21;
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check if student has at least 5 faculty courses with special requirements
                 let facultyCoursesCount = 0;
@@ -290,35 +246,16 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 44; // Not enough faculty courses
-                if(mathCoursesCount < 2) return 45; // Not enough MATH courses
-                if(fensCoursesCount < 3) return 46; // Not enough FENS courses
+                if(facultyCoursesCount < 5) return 14;
+                if(mathCoursesCount < 2) return 19;
+                if(fensCoursesCount < 3) return 16;
 
-                if (core < 34) return 22;
-                else
-                {
-                    area = area + (core - 34);
-                    if (area < 9) return 7;
-                    else
-                    {
-                        free = free + (area - 9);
-                        if(free<15) return 8;
-                        else return 0;
-                    }
-                }
+                return 0;
             }
         }
         else if(this.major == 'BIO')
         {
-            if(total < 127) return 1; // Updated total credits to 127
-            else if (university < 41) return 2;
-            else if (required < 33) return 14; // Updated required credits to 33
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("BIO395"))  return 23;
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check faculty course requirements for BIO
                 let facultyCoursesCount = 0;
@@ -345,37 +282,16 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 44; // Not enough faculty courses
-                if(mathCoursesCount < 2) return 45; // Not enough MATH courses
-                if(fensCoursesCount < 3) return 46; // Not enough FENS courses
+                if(facultyCoursesCount < 5) return 14;
+                if(mathCoursesCount < 2) return 19;
+                if(fensCoursesCount < 3) return 16;
 
-                if (core < 29) return 16;
-                else
-                {
-                    area = area + (core - 29);
-                    if (area < 9) return 7;
-                    else
-                    {
-                        free = free + (area - 9);
-                        if(free < 15) return 8;
-                        else return 0;
-                    }
-                }
+                return 0;
             }
         }
         else if(this.major == 'ME')
         {
-            if(total < 125) return 1;
-            else if (university < 41) return 2;
-            else if (required < 34) return 24; // Updated to 34 SU credits
-            else if (science < 60) return 11;
-            else if (engineering < 90) return 12;
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("ME395"))  return 25;
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check faculty course requirements for ME (same as CS, EE, MAT, IE)
                 let facultyCoursesCount = 0;
@@ -402,40 +318,18 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 44; // Not enough faculty courses
-                if(mathCoursesCount < 2) return 45; // Not enough MATH courses
-                if(fensCoursesCount < 3) return 46; // Not enough FENS courses
-
-                if (core < 26) return 26; // Updated to 26 SU credits
-                else
-                {
-                    area = area + (core - 26);
-                    if (area < 9) return 7;
-                    else
-                    {
-                        free = free + (area - 9);
-                        if(free<15) return 8;
-                        else return 0;
-                    }
-                }
+                if(facultyCoursesCount < 5) return 14;
+                if(mathCoursesCount < 2) return 19;
+                if(fensCoursesCount < 3) return 16;
             }
         }
         else if(this.major == 'ECON')
         {
-            if(total < 125) return 1;
-            else if (university < 44) return 2; // Updated to 44 SU credits
-            else if (required < 18) return 27; // Updated to 18 SU credits for required courses
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("ECON300"))  return 28;
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else if (!(this.hasCourse("HUM311") || this.hasCourse("HUM312") || this.hasCourse("HUM317") || this.hasCourse("HUM321") || this.hasCourse("HUM322") || this.hasCourse("HUM371"))) return 32; // Updated HUM courses list
-            else
+            // Generic checks apply
             {
                 // Check if Math requirement (3 credits) is fulfilled
                 let hasMathRequirement = this.hasCourse("MATH201") || this.hasCourse("MATH202") || this.hasCourse("MATH204");
-                if (!hasMathRequirement) return 40; // New error code for Math requirement
+                if (!hasMathRequirement) return 25;
 
                 // Check if at least 5 faculty courses requirement is met
                 let facultyCoursesCount = 0;
@@ -467,35 +361,14 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 41; // Not enough faculty courses
-                if(fassCount < 3) return 42; // Not enough FASS courses
-                if(areasCount.size < 3) return 43; // Not enough diverse areas
-
-                if (core < 12) return 29; // Updated to 12 SU credits for core electives
-                else
-                {
-                    area = area + (core - 12);
-                    if (area < 18) return 30; // Updated to 18 SU credits for area electives
-                    else
-                    {
-                        free = free + (area - 18);
-                        if(free < 30) return 31; // Updated to 30 SU credits for free electives
-                        else return 0;
-                    }
-                }
+                if(facultyCoursesCount < 5) return 14;
+                if(fassCount < 3) return 15;
+                if(areasCount.size < 3) return 18;
             }
         }
         else if(this.major == 'MAN')
         {
-            if(total < 127) return 1; // Updated to 127 SU credits
-            else if (university < 44) return 2;
-            else if (required < 15) return 54; // MAN required courses - 15 SU credits
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("MGMT300")) return 55; // Summer Internship requirement
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check faculty course requirements for MAN
                 let facultyCoursesCount = 0;
@@ -516,8 +389,8 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 56; // Not enough faculty courses
-                if(sbsCoursesCount < 2) return 57; // Not enough SBS courses
+                if(facultyCoursesCount < 5) return 14;
+                if(sbsCoursesCount < 2) return 22;
 
                 // Check core electives requirement (6 courses from 6 different areas)
                 let coreAreas = new Set();
@@ -540,32 +413,11 @@ function s_curriculum()
 
                 if(coreCount < 6) return 58; // Not enough core courses
                 if(coreAreas.size < 6) return 59; // Not enough diverse core areas
-
-                if (core < 18) return 60; // MAN core electives - 18 SU credits
-                else
-                {
-                    area = area + (core - 18);
-                    if (area < 24) return 61; // MAN area electives - 24 SU credits
-                    else
-                    {
-                        free = free + (area - 24);
-                        if(free < 26) return 62; // MAN free electives - 26 SU credits
-                        else return 0;
-                    }
-                }
             }
         }
         else if(this.major == 'PSIR')
         {
-            if(total < 125) return 1;
-            else if (university < 44) return 2;
-            else if (required < 24) return 63; // PSIR required courses - 24 SU credits
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("PSIR300")) return 64; // Project and Internship requirement
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check faculty course requirements for PSIR
                 let facultyCoursesCount = 0;
@@ -597,39 +449,18 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 65; // Not enough faculty courses
-                if(fassCoursesCount < 3) return 66; // Not enough FASS courses
-                if(areasCount.size < 3) return 67; // Not enough diverse areas
-
-                if (core < 24) return 68; // PSIR core electives - 24 SU credits (12+12)
-                else
-                {
-                    area = area + (core - 24);
-                    if (area < 15) return 69; // PSIR area electives - 15 SU credits
-                    else
-                    {
-                        free = free + (area - 15);
-                        if(free < 18) return 70; // PSIR free electives - 18 SU credits
-                        else return 0;
-                    }
-                }
+                if(facultyCoursesCount < 5) return 14;
+                if(fassCoursesCount < 3) return 15;
+                if(areasCount.size < 3) return 18;
             }
         }
         else if(this.major == 'PSY')
         {
-            if(total < 125) return 1;
-            else if (university < 44) return 2;
-            else if (required < 18) return 71; // PSY required courses - 18 SU credits
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("PSY300")) return 72; // Project and Internship requirement
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check Philosophy requirement
                 let hasPhilosophy = this.hasCourse("PHIL300") || this.hasCourse("PHIL301");
-                if (!hasPhilosophy) return 73; // Philosophy requirement not met
+                if (!hasPhilosophy) return 26;
 
                 // Check faculty course requirements for PSY
                 let facultyCoursesCount = 0;
@@ -661,9 +492,9 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 74; // Not enough faculty courses
-                if(fassCoursesCount < 3) return 75; // Not enough FASS courses
-                if(areasCount.size < 3) return 76; // Not enough diverse areas
+                if(facultyCoursesCount < 5) return 14;
+                if(fassCoursesCount < 3) return 15;
+                if(areasCount.size < 3) return 18;
 
                 // Check core electives requirement (7 courses)
                 let psyCoreCount = 0;
@@ -677,32 +508,11 @@ function s_curriculum()
                 }
 
                 if(psyCoreCount < 7) return 77; // Not enough PSY core courses
-
-                if (core < 21) return 78; // PSY core electives - 21 SU credits
-                else
-                {
-                    area = area + (core - 21);
-                    if (area < 18) return 79; // PSY area electives - 18 SU credits
-                    else
-                    {
-                        free = free + (area - 18);
-                        if(free < 21) return 80; // PSY free electives - 21 SU credits
-                        else return 0;
-                    }
-                }
             }
         }
         else if(this.major == 'VACD')
         {
-            if(total < 125) return 1;
-            else if (university < 44) return 2;
-            else if (required < 15) return 81; // VACD required courses - 15 SU credits
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!(this.hasCourse("VA300") || this.hasCourse("PROJ300"))) return 82; // Project/Internship requirement
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check faculty course requirements for VACD
                 let facultyCoursesCount = 0;
@@ -734,35 +544,14 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 83; // Not enough faculty courses
-                if(fassCoursesCount < 3) return 84; // Not enough FASS courses
-                if(areasCount.size < 3) return 85; // Not enough diverse areas
-
-                if (core < 21) return 86; // VACD core electives - 21 SU credits (9+12)
-                else
-                {
-                    area = area + (core - 21);
-                    if (area < 24) return 87; // VACD area electives - 24 SU credits
-                    else
-                    {
-                        free = free + (area - 24);
-                        if(free < 21) return 88; // VACD free electives - 21 SU credits
-                        else return 0;
-                    }
-                }
+                if(facultyCoursesCount < 5) return 14;
+                if(fassCoursesCount < 3) return 15;
+                if(areasCount.size < 3) return 18;
             }
         }
         else if(this.major == 'DSA')
         {
-            if(total < 125) return 1;
-            else if (university < 41) return 2;
-            else if (required < 30) return 33; // DSA required courses - 30 SU credits
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("DSA395")) return 47; // Internship requirement
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else if (ects < 240) return 13;
-            else
+            // Generic checks apply
             {
                 // Check faculty course requirements for DSA
                 let facultyCoursesCount = 0;
@@ -789,10 +578,10 @@ function s_curriculum()
                     }
                 }
 
-                if(facultyCoursesCount < 5) return 37; // Not enough faculty courses
-                if(fensCoursesCount < 1) return 48; // Not enough FENS courses
-                if(fassCoursesCount < 1) return 49; // Not enough FASS courses
-                if(sbsCoursesCount < 1) return 50; // Not enough SBS courses
+                if(facultyCoursesCount < 5) return 14;
+                if(fensCoursesCount < 1) return 20;
+                if(fassCoursesCount < 1) return 21;
+                if(sbsCoursesCount < 1) return 22;
 
                 // Check core electives requirements
                 // At least 27 SU credits with at least 3 courses from each faculty
@@ -815,35 +604,198 @@ function s_curriculum()
                     }
                 }
 
-                if(fensCoreCount < 3) return 51; // Not enough FENS core courses
-                if(fassCoreCount < 3) return 52; // Not enough FASS core courses
-                if(sbsCoreCount < 3) return 53; // Not enough SBS core courses
+                if(fensCoreCount < 3) return 27;
+                if(fassCoreCount < 3) return 28;
+                if(sbsCoreCount < 3) return 29;
+            }
+        }
+    }
 
-                if (core < 27) return 34; // DSA core electives - 27 SU credits
-                else
-                {
-                    area = area + (core - 27);
-                    if (area < 12) return 35; // DSA area electives - 12 SU credits
-                    else
-                    {
-                        free = free + (area - 12);
-                        if(free < 15) return 36; // DSA free electives - 15 SU credits
-                        else return 0;
+    /**
+     * Recalculate the effective category (core/area/free) for every course
+     * across all semesters based on chronological order. This method sorts
+     * semesters by their `termIndex` values (earliest to latest) and then
+     * allocates course credits to core, area and free categories according to
+     * the major requirements. If the core requirement is filled, additional
+     * core courses count toward the area requirement. Once area is filled,
+     * additional core or area courses count as free electives. Courses with
+     * static types of "university" or "required" are not reallocated. After
+     * reallocation, the semester totals for core, area and free are updated
+     * accordingly and each course's `.effective_type` field is set. The
+     * displayed course type in the DOM (the `.course_type` element) is also
+     * updated to reflect the effective category.
+     *
+     * @param {Array} course_data The full course data array for the current major.
+     */
+    this.recalcEffectiveTypes = function (course_data) {
+        // Determine requirement thresholds for this major. If a requirement is
+        // undefined (e.g., for non-engineering majors without a science
+        // requirement), default to 0 so no credits are allocated to that
+        // category.
+        const req = requirements[this.major] || {};
+        const reqCore = req.core || 0;
+        const reqArea = req.area || 0;
+
+        // Before performing any lookups, attempt to find the `getInfo` helper
+        // function. In a browser environment `getInfo` is declared in
+        // helper_functions.js and becomes a property of the global `window`.
+        // In the unlikely event that it cannot be found, we skip
+        // reallocation since course information will be unavailable.
+        const getInfoFn = (typeof getInfo === 'function') ? getInfo :
+                          ((typeof window !== 'undefined' && typeof window.getInfo === 'function') ? window.getInfo : null);
+        if (!getInfoFn) {
+            return;
+        }
+
+
+        // First reset totals for each semester. We will accumulate fresh values
+        // below. Note: totalCredit is recomputed to avoid stale values.
+        for (let i = 0; i < this.semesters.length; i++) {
+            const sem = this.semesters[i];
+            sem.totalCredit = 0;
+            sem.totalArea = 0;
+            sem.totalCore = 0;
+            sem.totalFree = 0;
+            sem.totalUniversity = 0;
+            sem.totalRequired = 0;
+            sem.totalScience = 0.0;
+            sem.totalEngineering = 0.0;
+            sem.totalECTS = 0.0;
+            // We leave totalGPA and totalGPACredits untouched because they
+            // depend on the user's recorded grades rather than the static type.
+        }
+
+        // Sort a copy of semesters chronologically based on the stored
+        // `termIndex` property. If `termIndex` is null (e.g., a newly created
+        // semester without a date), treat it as very large so it will be
+        // allocated last.
+        const sortedSemesters = this.semesters.slice().sort((a, b) => {
+            const idxA = (a.termIndex !== null && a.termIndex !== undefined) ? a.termIndex : Number.MAX_SAFE_INTEGER;
+            const idxB = (b.termIndex !== null && b.termIndex !== undefined) ? b.termIndex : Number.MAX_SAFE_INTEGER;
+            return idxA - idxB;
+        });
+
+        // Running counters for how many credits have been allocated to core and
+        // area so far. Once these exceed the requirements, we allocate
+        // additional courses to the next category (area or free).
+        let currentCoreCredits = 0;
+        let currentAreaCredits = 0;
+
+        // Iterate semesters in chronological order
+        for (let i = 0; i < sortedSemesters.length; i++) {
+            const sem = sortedSemesters[i];
+            // Iterate courses in the order they appear within the semester.
+            for (let j = 0; j < sem.courses.length; j++) {
+                const course = sem.courses[j];
+                const info = getInfoFn(course.code, course_data);
+                if (!info) continue; // Skip unknown courses
+                const staticType = (info['EL_Type'] || '').toLowerCase();
+                const credit = parseInt(info['SU_credit'] || '0');
+
+                // Update generic totals (credits, science, engineering, ECTS).
+                sem.totalCredit += credit;
+                sem.totalScience += parseFloat(info['Basic_Science'] || '0');
+                sem.totalEngineering += parseFloat(info['Engineering'] || '0');
+                sem.totalECTS += parseFloat(info['ECTS'] || '0');
+
+                let effectiveType = staticType;
+                // Only core and area types are reallocated. Free types stay as
+                // free. Required and university types remain unchanged.
+                if (staticType === 'core') {
+                    if (currentCoreCredits < reqCore) {
+                        effectiveType = 'core';
+                        currentCoreCredits += credit;
+                    } else if (currentAreaCredits < reqArea) {
+                        effectiveType = 'area';
+                        currentAreaCredits += credit;
+                    } else {
+                        effectiveType = 'free';
                     }
+                } else if (staticType === 'area') {
+                    if (currentAreaCredits < reqArea) {
+                        effectiveType = 'area';
+                        currentAreaCredits += credit;
+                    } else {
+                        effectiveType = 'free';
+                    }
+                } else if (staticType === 'free') {
+                    effectiveType = 'free';
+                } else {
+                    // Types 'university' and 'required' (and any others)
+                    // remain unchanged and are not reallocated.
+                    effectiveType = staticType;
+                }
+                // Persist the effective type on the course object
+                course.effective_type = effectiveType;
+
+                // Update semester category totals based on the effective type.
+                if (effectiveType === 'core') {
+                    sem.totalCore += credit;
+                } else if (effectiveType === 'area') {
+                    sem.totalArea += credit;
+                } else if (effectiveType === 'free') {
+                    sem.totalFree += credit;
+                } else if (effectiveType === 'university') {
+                    sem.totalUniversity += credit;
+                } else if (effectiveType === 'required') {
+                    sem.totalRequired += credit;
+                }
+
+                // Update the course type displayed in the DOM if possible. The
+                // course element has id equal to course.id (e.g., 'c3'). It
+                // contains a child with class 'course_type' that shows the
+                // static type. We update its text content to reflect the
+                // effective type. If the element does not exist (e.g., during
+                // server-side tests), this call will silently fail.
+                try {
+                    const courseElem = document.getElementById(course.id);
+                    if (courseElem) {
+                        const typeElem = courseElem.querySelector('.course_type');
+                        if (typeElem) {
+                            typeElem.textContent = effectiveType.toUpperCase();
+                        }
+                    }
+                } catch (err) {
+                    // Ignore DOM errors in non-browser contexts
                 }
             }
         }
-        else if(this.major == 'MAN' || this.major == 'PSIR' || this.major == 'PSY' || this.major == 'VACD')
-        {
-            // Detailed graduation requirements are not yet defined for these majors
-            // For now, assume the student meets requirements if basic credit thresholds are satisfied
-            if(total < 125) return 1;
-            else if (university < 41) return 2;
-            else if (ects < 240) return 13;
-            else if ( !this.hasCourse("CIP101N")) return 4;
-            else if (!this.hasCourse("SPS303")) return 9;
-            else if (!(this.hasCourse("HUM201") || this.hasCourse("HUM202") || this.hasCourse("HUM207"))) return 10;
-            else return 0;
+        // After reallocation, update the displayed total credits for each
+        // semester in the user interface. Each semester element has an id
+        // (e.g., 's1') and resides within a container with class
+        // 'container_semester' which contains a span showing the total.
+        try {
+            for (let i = 0; i < this.semesters.length; i++) {
+                const sem = this.semesters[i];
+                const semElem = document.getElementById(sem.id);
+                if (semElem) {
+                    // Traverse up to the nearest container_semester
+                    let containerElem = semElem.closest && semElem.closest('.container_semester');
+                    if (!containerElem) {
+                        // Fallback manual traversal if closest isn't available
+                        let parent = semElem.parentNode;
+                        while (parent && !parent.classList.contains('container_semester')) {
+                            parent = parent.parentNode;
+                        }
+                        containerElem = parent;
+                    }
+                    if (containerElem) {
+                        const span = containerElem.querySelector('.total_credit_text span');
+                        if (span) {
+                            span.innerHTML = 'Total: ' + sem.totalCredit + ' credits';
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            // Ignore DOM errors in non-browser contexts
         }
-    }
+    };
+
+    // end of s_curriculum constructor
+}
+
+// Expose s_curriculum constructor globally when running in a browser.
+if (typeof window !== 'undefined') {
+    window.s_curriculum = s_curriculum;
 }

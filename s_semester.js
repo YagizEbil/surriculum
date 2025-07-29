@@ -12,6 +12,13 @@ function s_semester(id, course_data)
     this.totalScience = 0.0;
     this.totalEngineering = 0.0;
     this.totalECTS = 0.0;
+    // Track the chronological order of this semester in the academic calendar. This index
+    // corresponds to the position of the semester's term string within the global
+    // `terms` array defined in helper_functions.js. It will be set when the
+    // semester is created and whenever the user edits the term via the UI. A
+    // smaller index means the semester is earlier chronologically.
+    this.termIndex = null;
+
     this.totalGPA = 0.0;
     this.totalGPACredits = 0;
     this.addCourse = function(course)
@@ -69,4 +76,7 @@ function s_course(code, id = 0)
 {
     this.code = code.toUpperCase().trim();
     this.id = id
+    // Effective type of the course after category reallocation. Initially null and
+    // will be set by curriculum.recalcEffectiveTypes().
+    this.effective_type = null;
 }

@@ -4,6 +4,9 @@ import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import subprocess
+import os
+
+COURSES_DIR = 'courses'
 
 BASE = 'https://suis.sabanciuniv.edu/prod/'
 LIST_URL = BASE + 'SU_DEGREE.p_list_degree?P_LEVEL=UG&P_LANG=EN&P_PRG_TYPE='
@@ -89,9 +92,6 @@ def map_category(title):
         return 'area'
     if 'free' in t and 'elective' in t:
         return 'free'
-    # Remove the incorrect faculty course mapping
-    # if 'faculty courses' in t:
-    #     return 'free'
     if t == 'total':
         return 'university'  # Easy fix for university course problem, they are miss detected as total
     return 'unknown'  # Default to if no match
@@ -170,7 +170,6 @@ def crawl_program(code, term):
         if not (name_attr.endswith('_CEL') or name_attr.endswith('_REQ') or
                 name_attr.endswith('_AEL') or name_attr.endswith('_FEL') or name_attr.endswith('_ARE') or name_attr.endswith('_FRE') or
                 name_attr == 'UC_FENS' or name_attr == 'UC_FASS' or
-                'BASIC_SCIE' in name_attr or 'ENG_SCIE' in name_attr or
                 name_attr.startswith('main') or
                 # Add more specific patterns for different program types
                 '_COR' in name_attr or '_C1' in name_attr or '_C2' in name_attr or '_CE1' in name_attr or '_CE2' in name_attr or
@@ -186,8 +185,10 @@ def crawl_program(code, term):
 
         # Determine the category type based on the name attribute or title
         el_type = None
-        if name_attr.endswith('_CEL') or '_COR' in name_attr or '_CE1' in name_attr or '_CE2' in name_attr or '_C1' in name_attr or '_C2' in name_attr:
+        if name_attr.endswith('_CEL') or '_COR' in name_attr or '_CE1' in name_attr or '_C1' in name_attr:
             el_type = 'core'
+        elif name_attr.endswith('_CE2') or name_attr.endswith('_PHL') or name_attr.endswith('_C2') or '_MEL' in name_attr:
+            el_type = 'extra_attribute'
         elif name_attr.endswith('_REQ'):
             el_type = 'required'
         elif name_attr.endswith('_AEL') or name_attr.endswith('_ARE'):
@@ -196,13 +197,6 @@ def crawl_program(code, term):
             el_type = 'free'
         elif name_attr == 'UC_FENS' or name_attr == 'UC_FASS':
             el_type = 'university'
-        elif '_PHL' in name_attr or '_MEL' in name_attr:
-            # Special handling for specific requirement types
-            el_type = 'required'
-        elif 'BASIC_SCIE' in name_attr:
-            el_type = 'basic_science'
-        elif 'ENG_SCIE' in name_attr:
-            el_type = 'engineering'
         else:
             # If we can't determine from the name attribute, use the title text
             el_type = map_category(category_title)
@@ -308,8 +302,10 @@ def crawl_program(code, term):
             if area_match:
                 area_code = area_match.group(1)
                 # Override el_type if we have a more specific area code from the URL
-                if '_CEL' in area_code or '_COR' in area_code or '_CE1' in area_code or '_CE2' in area_code or '_C1' in area_code or '_C2' in area_code:
+                if '_CEL' in area_code or '_COR' in area_code or '_CE1' in area_code or '_C1' in area_code:
                     el_type = 'core'
+                elif '_CE2' in area_code or '_PHL' in area_code or '_MEL' in area_code or '_C2' in area_code:
+                    el_type = 'extra_attribute'
                 elif '_REQ' in area_code:
                     el_type = 'required'
                 elif '_AEL' in area_code or '_ARE' in area_code:
@@ -365,6 +361,9 @@ def crawl_program(code, term):
 
 
 def main():
+
+    os.makedirs(COURSES_DIR, exist_ok=True)
+
     programs = get_program_codes()
     for code, fname in PROGRAM_FILES.items():
         if code not in programs:
@@ -373,7 +372,11 @@ def main():
         if not term:
             continue
         data = crawl_program(code, term)
-        with open(fname, 'w') as f:
+        full_path = os.path.join(COURSES_DIR, fname)
+        if not data:
+            print(f'No data found for {code} ({fname})')
+            continue
+        with open(full_path, 'w') as f:
             json.dump(data, f, indent=2)
         print(f'Updated {fname} with {len(data)} records')
 

@@ -72,7 +72,7 @@ function mouseout(e)
     }
 }
 
-function drop(e, curriculum, dragged_item)
+function drop(e, curriculum, dragged_item, course_data)
 {
     let container = getAncestor(e.target, "container_semester");
     if(container)
@@ -111,6 +111,16 @@ function drop(e, curriculum, dragged_item)
                 curriculum.semesters[id-1] = s_temp;
             }
         }
+    }
 
+    // After reordering semesters via drag-and-drop, recalculate effective types
+    // so that category allocation reflects the new chronological order. If
+    // recalcEffectiveTypes is not defined, silently skip.
+    try {
+        if (typeof curriculum.recalcEffectiveTypes === 'function') {
+            curriculum.recalcEffectiveTypes(course_data);
+        }
+    } catch(err) {
+        // ignore
     }
 }

@@ -1,6 +1,10 @@
 import csv
 import json
 import re
+import os
+import subprocess
+
+COURSES_DIR = 'courses'
 
 def extract_credits_from_csv(csv_path):
     """
@@ -58,6 +62,8 @@ def update_json_with_credits(json_path, credits_map):
     """
     Update a JSON file with Basic Science and Engineering credits.
     """
+
+
     try:
         with open(json_path, 'r') as file:
             data = json.load(file)
@@ -83,7 +89,8 @@ def update_all_program_files(credits_map, program_files):
     Update all program JSON files with Basic Science and Engineering credits.
     """
     for program_file in program_files.values():
-        update_json_with_credits(program_file, credits_map)
+        program_file_path = os.path.join(COURSES_DIR, program_file)
+        update_json_with_credits(program_file_path, credits_map)
 
 if __name__ == "__main__":
     csv_path = "katalog_basic_eng_degerler_202401_yuklenen_07.05.2025 (1)-converted.csv"

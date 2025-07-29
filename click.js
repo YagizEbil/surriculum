@@ -88,6 +88,19 @@ function dynamic_click(e, curriculum, course_data)
                     alert("Warning: Only 20 credits can be taken per semester!!" + '\nYou have taken ' + parseInt(sem.totalCredit));
                 }*/
                 e.target.parentNode.remove()
+
+                // After successfully adding a course, re-run the category
+                // allocation to update effective types across all semesters. This
+                // ensures that newly added courses are correctly classified
+                // based on chronological order. If the recalc function is
+                // unavailable (e.g., during tests), skip silently.
+                try {
+                    if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                        curriculum.recalcEffectiveTypes(course_data);
+                    }
+                } catch(err) {
+                    // Ignore errors
+                }
             }
             else{
                 alert("You have already added " + myCourse.code);
@@ -117,6 +130,17 @@ function dynamic_click(e, curriculum, course_data)
                 curriculum.container_id = extractNumericValue(element.id);
             }
         })
+
+        // After deleting a semester, recalculate effective types in case
+        // category allocation changes due to the removal. Guard for
+        // recalcExisting undefined.
+        try {
+            if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                curriculum.recalcEffectiveTypes(course_data);
+            }
+        } catch(err) {
+            // ignore
+        }
     }
     //CLICKED "<course delete>"
     else if(e.target.classList.contains("delete_course"))
@@ -138,6 +162,15 @@ function dynamic_click(e, curriculum, course_data)
 
 
         e.target.parentNode.parentNode.parentNode.remove();
+
+        // Re-run allocation after a course deletion to update effective types
+        try {
+            if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                curriculum.recalcEffectiveTypes(course_data);
+            }
+        } catch(err) {
+            // ignore
+        }
     }
     //CLICKED "<semester_date_edit>"
     else if(e.target.classList.contains("semester_date_edit"))
@@ -174,6 +207,27 @@ function dynamic_click(e, curriculum, course_data)
         icons.appendChild(drag);
         icons.appendChild(closebtn);
         date.appendChild(icons)    
+
+        // Update the semester's term index to reflect the new date and
+        // recalculate effective categories. The date element sits inside
+        // the subcontainer, which also contains the semester div.
+        try {
+            const newDateTextElem = date.querySelector('p');
+            const newDateText = newDateTextElem ? newDateTextElem.innerHTML : '';
+            // Locate the semester corresponding to this date element
+            const semElem = date.parentNode.querySelector('.semester');
+            if (semElem) {
+                const semObj = curriculum.getSemester(semElem.id);
+                if (semObj) {
+                    semObj.termIndex = terms.indexOf(newDateText);
+                }
+            }
+            if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                curriculum.recalcEffectiveTypes(course_data);
+            }
+        } catch(err) {
+            // ignore
+        }
     }
     //CLICKED trash in input:
     else if(e.target.classList.contains("delete_add_course"))

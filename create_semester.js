@@ -120,8 +120,24 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
     curriculum.semester_id++;
     semester.id = 's' + curriculum.semester_id;
     let newsem = new s_semester(semester.id, course_data);
-    if(aslastelement){curriculum.semesters.push(newsem);}
-    else{curriculum.semesters.unshift(newsem);}
+    // Attach this new semester to the curriculum list
+    if(aslastelement){
+        curriculum.semesters.push(newsem);
+    } 
+    else{
+        curriculum.semesters.unshift(newsem);
+    }
+    // Record the term index for chronological ordering. The date element
+    // contains a <p> with the term string. Use it to compute the index
+    // within the global `terms` array (defined in helper_functions.js).
+    try {
+        const dateTextElem = date.querySelector('p');
+        const dateText = dateTextElem ? dateTextElem.innerHTML : '';
+        newsem.termIndex = terms.indexOf(dateText);
+    } catch (err) {
+        // If date or terms are unavailable, leave termIndex as null
+        newsem.termIndex = null;
+    }
 
     const btn = document.querySelector(".addSemester");
     let addCourse = document.createElement("button");
@@ -216,5 +232,19 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
             let dom_tc = dom_course.parentNode.parentNode.parentNode.querySelector('span');
             dom_tc.innerHTML = 'Total: ' + curriculum.getSemester(semester.id).totalCredit + ' credits';
         }
+    }
+
+    // Once the semester has been created and all initial courses added, re-run
+    // the category allocation to compute each course's effective type. This
+    // ensures that newly inserted semesters (especially those added at the
+    // beginning) are considered in chronological order when allocating core
+    // and area credits. If the recalc function is not present (e.g., during
+    // testing), this call is ignored.
+    try {
+        if (typeof curriculum.recalcEffectiveTypes === 'function') {
+            curriculum.recalcEffectiveTypes(course_data);
+        }
+    } catch (err) {
+        // Silent failure if curriculum or recalc is undefined
     }
 }

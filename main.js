@@ -1,14 +1,89 @@
+// Import statements removed. `s_curriculum` is expected to be defined
+// globally by s_curriculum.js when loaded as a non-module script.
+
+import {displayGraduationResults} from "./graduation_check.js";
+import {displaySummary} from "./graduation_check.js";
+
 let course_data;
 //can only be CS, BIO, MAT, EE, ME, IE, ECON, DSA, MAN, PSIR, PSY, VACD:
 let initial_major_chosen = 'CS'
 
-function SUrriculum(major_chosen_by_user)
-{
-    fetch('./' + major_chosen_by_user + '.json')
-    .then(response => response.json())
+
+function SUrriculum(major_chosen_by_user) {
+    /**
+     * Attempt to fetch course data for the given major. By default the data
+     * is expected to live under `./courses/${major}.json`, but in some
+     * deployments the JSON files are present at the root (e.g., `./CS.json`).
+     * This helper first tries the canonical location and falls back to the
+     * root if the first fetch fails. It always returns a resolved Promise
+     * with the parsed JSON or rejects if neither location is found.
+     *
+     * @param {string} major
+     * @returns {Promise<Object[]>}
+     */
+    // Clear stored curriculum data on each load to avoid interference from
+    // stale localStorage when working under the file:// scheme. In a
+    // production environment you might remove this line to preserve
+    // user sessions across refreshes.
+    // try {
+    //     localStorage.clear();
+    // } catch (_) {}
+
+    function fetchCourseData(major) {
+        const primaryPath = `./courses/${major}.json`;
+        const fallbackPath = `./${major}.json`;
+
+        // Helper to synchronously read JSON via XMLHttpRequest. This
+        // approach works for file:// origins where fetch() may be blocked.
+        const tryRead = (path) => {
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', path, false);
+                xhr.overrideMimeType('application/json');
+                xhr.send(null);
+                // status 0 indicates success for file:// scheme in many browsers
+                if (xhr.status === 200 || xhr.status === 0) {
+                    return JSON.parse(xhr.responseText);
+                }
+            } catch (_) {
+                // ignore
+            }
+            return null;
+        };
+
+        // First: attempt to read via synchronous XHR from primary and fallback.
+        const dataPrimary = tryRead(primaryPath);
+        if (dataPrimary) {
+            return Promise.resolve(dataPrimary);
+        }
+        const dataFallback = tryRead(fallbackPath);
+        if (dataFallback) {
+            return Promise.resolve(dataFallback);
+        }
+
+        // If synchronous reads failed, fall back to fetch API. This path
+        // supports http(s) origins where fetch is permitted. We'll try
+        // primary then fallback.
+        return fetch(primaryPath)
+            .then(res => {
+                if (!res.ok) throw new Error('Primary course JSON not found');
+                return res.json();
+            })
+            .catch(async () => {
+                try {
+                    const res = await fetch(fallbackPath);
+                    if (res.ok) return res.json();
+                } catch (_) {
+                    /* ignored */
+                }
+                // All attempts failed; return empty array
+                return [];
+            });
+    }
+    fetchCourseData(major_chosen_by_user)
     .then(json => {
     //START OF PROGRAM
-    change_major_element = document.querySelector('.change_major');
+        let change_major_element = document.querySelector('.change_major');
     change_major_element.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
 
     course_data = json;
@@ -132,7 +207,9 @@ function SUrriculum(major_chosen_by_user)
     })
 
     document.addEventListener('drop', function(e){
-        drop(e, curriculum, dragged_item);
+        // Pass course_data to the drop handler so that it can invoke
+        // curriculum.recalcEffectiveTypes() when semesters are reordered.
+        drop(e, curriculum, dragged_item, course_data);
     })
     /*
     document.addEventListener("input", function(e){
@@ -149,8 +226,18 @@ function SUrriculum(major_chosen_by_user)
 
     const auto_add = document.querySelector('.autoAdd');
     auto_add.addEventListener('click', function(){
+        // Check if there are existing semesters
+        const semesters = document.querySelectorAll('.semester');
+        if (semesters.length > 0) {
+            alert('Error: Add First Year Courses only works when no semesters are present.');
+            return;
+        }
+
+        // Automatically insert the typical first year courses into two semesters.
+        // Fall semester courses: FS semester (first semester) and spring semester courses defined below.
         let fs_courses = ["MATH101","NS101","SPS101","IF100","TLL101","HIST191","CIP101N"];
         let ss_courses = ["MATH102","NS102","SPS102","AL102","TLL102","HIST192","PROJ201"];
+        // Insert spring courses first so that the subsequent fall courses appear earlier chronologically.
         createSemeter(false, ss_courses, curriculum, course_data);
         createSemeter(false, fs_courses, curriculum, course_data);
     })
@@ -170,6 +257,16 @@ function SUrriculum(major_chosen_by_user)
 
     //Reload items from local storage:
     reload(curriculum, course_data);
+    // After reloading existing semesters, recalculate effective categories
+    // so that the allocation respects chronological order. Guard against
+    // missing recalc function.
+    try {
+        if (typeof curriculum.recalcEffectiveTypes === 'function') {
+            curriculum.recalcEffectiveTypes(course_data);
+        }
+    } catch(err) {
+        // ignore
+    }
     //Save:
     setInterval(function() {
         localStorage.removeItem("curriculum");
@@ -182,6 +279,8 @@ function SUrriculum(major_chosen_by_user)
 
     //createSemeter(false, ["MATH101","MATH102","MATH201","MATH203","IF100","TLL101"], curriculum, course_data)
     //createSemeter(false, ["NS101","SPS101","SPS102","AL102","TLL102","HIST192","PROJ201", "NS102", "HIST191", "CIP101N", "CS210", "MATH306", "CS201", "CS204", "MATH204"], curriculum, course_data)
+
+    // No debug alerts in production; remove for clean UI
 
     // Get from transcript:
     function handleAcademicRecordsImport() {
