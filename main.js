@@ -1,8 +1,10 @@
 // Import statements removed. `s_curriculum` is expected to be defined
 // globally by s_curriculum.js when loaded as a non-module script.
 
-import {displayGraduationResults} from "./graduation_check.js";
-import {displaySummary} from "./graduation_check.js";
+// Remove ES module imports for graduation_check. The functions
+// displayGraduationResults and displaySummary will be attached to the
+// global window object by graduation_check.js when loaded as a
+// non-module script.
 
 let course_data;
 //can only be CS, BIO, MAT, EE, ME, IE, ECON, DSA, MAN, PSIR, PSY, VACD:
@@ -87,6 +89,27 @@ function SUrriculum(major_chosen_by_user) {
     change_major_element.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
 
     course_data = json;
+
+    // ----------------------------------------------------------------------
+    // Load any previously defined custom courses for this major from
+    // localStorage. Custom courses are stored as an array of course
+    // objects keyed by `customCourses_<major>`. These custom courses are
+    // appended to the fetched course_data. This allows users to define
+    // additional courses specific to a major without modifying the
+    // underlying JSON files. On first use, the key may not exist so
+    // JSON.parse on an empty string would throw; guard accordingly.
+    try {
+        const customKey = 'customCourses_' + major_chosen_by_user;
+        const stored = localStorage.getItem(customKey);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) {
+                course_data = course_data.concat(parsed);
+            }
+        }
+    } catch (err) {
+        console.error('Failed to load custom courses:', err);
+    }
     let curriculum = new s_curriculum();
     curriculum.major = major_chosen_by_user;
 
@@ -253,6 +276,351 @@ function SUrriculum(major_chosen_by_user) {
         displaySummary(curriculum, major_chosen_by_user);
     })
 
+    // ----------------------------------------------------------------------
+    // Custom Course: create a modal form to let the user define a new
+    // course. The new course is stored in localStorage under a key
+    // specific to the current major (customCourses_<major>) and added to
+    // course_data. Existing datalists are updated so the new course can
+    // be selected immediately. Only one custom course modal can be open
+    // at a time.
+        function showCustomCourseForm(prefill = null, courseObj = null, onSaveCallback = null) {
+            // Prevent multiple modals
+            if (document.querySelector('.custom_course_modal')) return;
+
+        // Append the overlay to the document body rather than the board
+        // container so that it always covers the full viewport and is not
+        // clipped by the board's scroll container.  This also ensures the
+        // modal remains visible even if the board is scrolled horizontally.
+        const boardDom = document.body;
+
+        // Create overlay with click-to-dismiss behaviour
+        const overlay = document.createElement('div');
+        overlay.classList.add('custom_course_overlay');
+        // Inline styling for overlay: darken background and capture clicks
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        overlay.style.zIndex = '200';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+
+        // Create modal container
+        const modal = document.createElement('div');
+        modal.classList.add('custom_course_modal');
+        // Inline styling for modal: centre box with padding
+        modal.style.backgroundColor = '#f5f7fa';
+        modal.style.borderRadius = '6px';
+        modal.style.padding = '20px';
+        modal.style.minWidth = '300px';
+        modal.style.maxWidth = '500px';
+        modal.style.color = '#333';
+        modal.style.boxShadow = '0 3px 6px rgba(0,0,0,0.2)';
+        modal.style.zIndex = '201';
+
+        // Title
+        const title = document.createElement('h3');
+        title.innerText = 'Add Custom Course';
+        title.style.marginTop = '0';
+        title.style.marginBottom = '15px';
+        modal.appendChild(title);
+
+        // Helper to create input row
+        function createInputRow(labelText, inputType = 'text', placeholder = '', defaultValue = '') {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.flexDirection = 'column';
+            row.style.marginBottom = '10px';
+
+            const label = document.createElement('label');
+            label.innerText = labelText;
+            label.style.marginBottom = '3px';
+            row.appendChild(label);
+
+            const input = document.createElement('input');
+            input.type = inputType;
+            input.placeholder = placeholder;
+            input.value = defaultValue;
+            input.style.padding = '6px';
+            input.style.border = '1px solid #ccc';
+            input.style.borderRadius = '3px';
+            row.appendChild(input);
+
+            return { row, input };
+        }
+
+            // Course Code input (e.g., CS101)
+            const { row: codeRow, input: codeInput } = createInputRow('Course Code:', 'text', 'e.g. CS300');
+            modal.appendChild(codeRow);
+
+            // Course Name input
+            const { row: nameRow, input: nameInput } = createInputRow('Course Name:', 'text', 'Course name');
+            modal.appendChild(nameRow);
+
+            // SU Credits input
+            const { row: suRow, input: suInput } = createInputRow('SU Credits:', 'number', 'e.g. 3');
+            modal.appendChild(suRow);
+
+            // ECTS input
+            const { row: ectsRow, input: ectsInput } = createInputRow('ECTS:', 'number', 'e.g. 6');
+            modal.appendChild(ectsRow);
+
+            // Basic Science credits input
+            const { row: bsRow, input: bsInput } = createInputRow('Basic Science credits:', 'number', 'e.g. 0');
+            bsInput.value = '0';
+            modal.appendChild(bsRow);
+
+            // Engineering credits input
+            const { row: engRow, input: engInput } = createInputRow('Engineering credits:', 'number', 'e.g. 0');
+            engInput.value = '0';
+            modal.appendChild(engRow);
+
+            // EL Type dropdown
+            const typeRow = document.createElement('div');
+            typeRow.style.display = 'flex';
+            typeRow.style.flexDirection = 'column';
+            typeRow.style.marginBottom = '10px';
+            const typeLabel = document.createElement('label');
+            typeLabel.innerText = 'Category (EL_Type):';
+            typeLabel.style.marginBottom = '3px';
+            typeRow.appendChild(typeLabel);
+            const typeSelect = document.createElement('select');
+            ['core', 'area', 'university', 'free', 'required'].forEach(function(opt) {
+                const option = document.createElement('option');
+                option.value = opt;
+                option.innerText = opt.charAt(0).toUpperCase() + opt.slice(1);
+                typeSelect.appendChild(option);
+            });
+            typeSelect.style.padding = '6px';
+            typeSelect.style.border = '1px solid #ccc';
+            typeSelect.style.borderRadius = '3px';
+            typeRow.appendChild(typeSelect);
+            modal.appendChild(typeRow);
+
+            // If prefill data is provided, populate the inputs and select accordingly.
+            if (prefill) {
+                // Code may be provided as combined string or separate parts; if we
+                // have courseObj (the actual course object), we can use its
+                // Major and Code fields to reconstruct the code. Otherwise use
+                // prefill.code.
+                if (courseObj && courseObj.Major && courseObj.Code) {
+                    codeInput.value = courseObj.Major + courseObj.Code;
+                } else if (prefill.code) {
+                    codeInput.value = prefill.code;
+                }
+                if (courseObj && courseObj.Course_Name) {
+                    nameInput.value = courseObj.Course_Name;
+                } else if (prefill.name) {
+                    nameInput.value = prefill.name;
+                }
+                if (courseObj && courseObj.SU_credit) {
+                    suInput.value = courseObj.SU_credit;
+                } else if (prefill.suCredits !== undefined) {
+                    suInput.value = prefill.suCredits;
+                }
+                if (courseObj && courseObj.ECTS) {
+                    ectsInput.value = courseObj.ECTS;
+                } else if (prefill.ects !== undefined) {
+                    ectsInput.value = prefill.ects;
+                }
+                if (courseObj && courseObj.Basic_Science !== undefined) {
+                    bsInput.value = courseObj.Basic_Science;
+                } else if (prefill.basicScience !== undefined) {
+                    bsInput.value = prefill.basicScience;
+                }
+                if (courseObj && courseObj.Engineering !== undefined) {
+                    engInput.value = courseObj.Engineering;
+                } else if (prefill.engineering !== undefined) {
+                    engInput.value = prefill.engineering;
+                }
+                // Set EL type dropdown
+                if (courseObj && courseObj.EL_Type) {
+                    typeSelect.value = courseObj.EL_Type;
+                } else if (prefill.elType) {
+                    typeSelect.value = prefill.elType;
+                }
+            }
+
+        // Buttons container
+        const buttonsRow = document.createElement('div');
+        buttonsRow.style.display = 'flex';
+        buttonsRow.style.justifyContent = 'flex-end';
+        buttonsRow.style.marginTop = '15px';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.innerText = 'Cancel';
+        cancelBtn.style.marginRight = '10px';
+        cancelBtn.style.padding = '6px 12px';
+        cancelBtn.style.border = 'none';
+        cancelBtn.style.borderRadius = '3px';
+        cancelBtn.style.backgroundColor = '#ccc';
+        cancelBtn.style.cursor = 'pointer';
+            cancelBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                overlay.remove();
+                // On cancel, advance pending custom course processing if provided
+                if (typeof onSaveCallback === 'function') {
+                    onSaveCallback();
+                }
+            });
+        buttonsRow.appendChild(cancelBtn);
+
+        const saveBtn = document.createElement('button');
+        saveBtn.innerText = 'Save';
+        saveBtn.style.padding = '6px 12px';
+        saveBtn.style.border = 'none';
+        saveBtn.style.borderRadius = '3px';
+        saveBtn.style.backgroundColor = '#4caf50';
+        saveBtn.style.color = 'white';
+        saveBtn.style.cursor = 'pointer';
+            saveBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Read input values
+                const rawCode = codeInput.value.trim().toUpperCase();
+                if (!rawCode) {
+                    alert('Course code is required.');
+                    return;
+                }
+                // Parse major and numeric code from input (letters+digits)
+                const match = rawCode.match(/^([A-Z]+)(\d+)$/);
+                if (!match) {
+                    alert('Invalid course code format. Use e.g. CS300 or MATH101.');
+                    return;
+                }
+                const parsedMajor = match[1];
+                const parsedCode = match[2];
+                // Determine if we're updating an existing course or creating a new one
+                if (courseObj) {
+                    // Update fields on the existing course object
+                    courseObj.Major = parsedMajor;
+                    courseObj.Code = parsedCode;
+                    courseObj.Course_Name = nameInput.value.trim() || rawCode;
+                    courseObj.ECTS = ectsInput.value.toString() || '0';
+                    courseObj.Engineering = parseInt(engInput.value || '0') || 0;
+                    courseObj.Basic_Science = parseInt(bsInput.value || '0') || 0;
+                    courseObj.SU_credit = suInput.value.toString() || '0';
+                    courseObj.EL_Type = typeSelect.value;
+                    // Persist update to localStorage
+                    try {
+                        const key = 'customCourses_' + major_chosen_by_user;
+                        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                        // Find and update the matching course in storage
+                        for (let i = 0; i < existing.length; i++) {
+                            if (existing[i].Major === courseObj.Major && existing[i].Code === courseObj.Code) {
+                                existing[i] = courseObj;
+                                break;
+                            }
+                        }
+                        localStorage.setItem(key, JSON.stringify(existing));
+                    } catch (ex) {
+                        console.error('Failed to update custom course:', ex);
+                    }
+                } else {
+                    // Build course object
+                    const newCourse = {
+                        Major: parsedMajor,
+                        Code: parsedCode,
+                        Course_Name: nameInput.value.trim() || rawCode,
+                        ECTS: ectsInput.value.toString() || '0',
+                        Engineering: parseInt(engInput.value || '0') || 0,
+                        Basic_Science: parseInt(bsInput.value || '0') || 0,
+                        SU_credit: suInput.value.toString() || '0',
+                        Faculty: 'FENS',
+                        EL_Type: typeSelect.value,
+                        Faculty_Course: 'No'
+                    };
+                    // Append to in-memory course_data
+                    course_data.push(newCourse);
+                    // Persist to localStorage under current major
+                    try {
+                        const key = 'customCourses_' + major_chosen_by_user;
+                        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                        existing.push(newCourse);
+                        localStorage.setItem(key, JSON.stringify(existing));
+                    } catch (ex) {
+                        console.error('Failed to save custom course:', ex);
+                    }
+                }
+                // Update any open datalists so the new or updated course appears as an option
+                try {
+                    const optionsHTML = getCoursesDataList(course_data);
+                    document.querySelectorAll('datalist').forEach(function(dl) {
+                        if (dl.id === 'datalist') {
+                            dl.innerHTML = optionsHTML;
+                        }
+                    });
+                } catch (ex) {
+                    // ignore if datalists not present
+                }
+                // Recalculate effective types since new course attributes may affect totals
+                try {
+                    if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                        curriculum.recalcEffectiveTypes(course_data);
+                    }
+                } catch (err) {
+                    // ignore
+                }
+                // Remove modal
+                overlay.remove();
+                // Invoke callback to process next pending custom course
+                if (typeof onSaveCallback === 'function') {
+                    onSaveCallback();
+                }
+            });
+        buttonsRow.appendChild(saveBtn);
+
+        modal.appendChild(buttonsRow);
+
+        // Prevent overlay clicks from triggering underlying events
+        modal.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Append modal to overlay and overlay to board
+        overlay.appendChild(modal);
+        overlay.addEventListener('click', function(e) {
+            // If clicking directly on the overlay (not the modal), close
+            if (e.target === overlay) {
+                overlay.remove();
+            }
+        });
+        boardDom.appendChild(overlay);
+    }
+
+    // Bind custom course button click
+    const customCourseBtn = document.querySelector('.customCourse');
+    if (customCourseBtn) {
+        customCourseBtn.addEventListener('click', function() {
+            showCustomCourseForm();
+        });
+    }
+
+    // Bind delete custom courses button click
+    const deleteCustomBtn = document.querySelector('.deleteCustom');
+    if (deleteCustomBtn) {
+        deleteCustomBtn.addEventListener('click', function() {
+            handleDeleteCustomCourses();
+        });
+    }
+    // Bind reset local data button click
+    const resetLocalBtn = document.querySelector('.resetLocal');
+    if (resetLocalBtn) {
+        resetLocalBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset all local data? This will remove all saved semesters, custom courses, and grades.')) {
+                try {
+                    localStorage.clear();
+                } catch (ex) {
+                    console.error('Failed to clear localStorage:', ex);
+                }
+                // Reload the page to reflect the cleared state
+                location.reload();
+            }
+        });
+    }
+
     //************************************************************** 
 
     //Reload items from local storage:
@@ -282,8 +650,115 @@ function SUrriculum(major_chosen_by_user) {
 
     // No debug alerts in production; remove for clean UI
 
-    // Get from transcript:
-    function handleAcademicRecordsImport() {
+        // Helper to sequentially process a list of pending custom courses.
+        // Each entry should contain a `course` (reference to the course object
+        // already added to course_data) and optionally a `parsedInfo` object
+        // containing raw code/title/credits extracted from the transcript. The
+        // function will show the custom course modal prefilled with the known
+        // information and allow the user to complete any missing fields. Once
+        // the user saves or cancels, the next pending course is processed.
+        function processPendingCustomCourses(list) {
+            if (!Array.isArray(list) || list.length === 0) return;
+            const next = list.shift();
+            const prefill = {};
+            if (next.parsedInfo && next.parsedInfo.code) {
+                prefill.code = next.parsedInfo.code;
+            } else if (next.course && next.course.Major && next.course.Code) {
+                prefill.code = next.course.Major + next.course.Code;
+            }
+            if (next.parsedInfo && next.parsedInfo.title) {
+                prefill.name = next.parsedInfo.title;
+            } else if (next.course && next.course.Course_Name) {
+                prefill.name = next.course.Course_Name;
+            }
+            if (next.course) {
+                prefill.suCredits = next.course.SU_credit;
+                prefill.ects = next.course.ECTS;
+                prefill.basicScience = next.course.Basic_Science;
+                prefill.engineering = next.course.Engineering;
+                prefill.elType = next.course.EL_Type;
+            }
+            // Show the custom course form. Pass the existing course object so
+            // that the save handler updates it instead of creating a new one.
+            showCustomCourseForm(prefill, next.course, function() {
+                processPendingCustomCourses(list);
+            });
+        }
+
+        /**
+         * Deletes all custom courses defined for the current major. Custom
+         * courses are stored under the localStorage key `customCourses_<major>`.
+         * This function removes those entries from both localStorage and the
+         * in-memory `course_data` array. It also removes any instances of
+         * those courses from the current curriculum's semesters. Finally it
+         * updates the stored curriculum in localStorage and reloads the page
+         * so that the UI reflects the changes. A confirmation prompt guards
+         * against accidental deletion.
+         */
+        function handleDeleteCustomCourses() {
+            const key = 'customCourses_' + major_chosen_by_user;
+            let customList = [];
+            try {
+                customList = JSON.parse(localStorage.getItem(key) || '[]');
+            } catch (e) {
+                customList = [];
+            }
+            if (!customList || customList.length === 0) {
+                alert('There are no custom courses to delete for this major.');
+                return;
+            }
+            if (!confirm('Are you sure you want to delete all custom courses for ' + major_chosen_by_user + '?')) {
+                return;
+            }
+            // Build a set of combined codes (Major+Code) for quick lookup
+            const codeSet = new Set(customList.map(c => (c.Major + c.Code)));
+            // Remove these courses from in-memory course_data
+            course_data = course_data.filter(c => !codeSet.has(c.Major + c.Code));
+            // Remove from semesters in curriculum
+            if (curriculum && Array.isArray(curriculum.semesters)) {
+                curriculum.semesters.forEach(function(sem) {
+                    if (Array.isArray(sem.courses)) {
+                        sem.courses = sem.courses.filter(function(code) {
+                            return !codeSet.has(code);
+                        });
+                    }
+                });
+            }
+            // Remove the custom courses entry from localStorage
+            try {
+                localStorage.removeItem(key);
+            } catch (ex) {
+                // ignore
+            }
+            // Persist the updated curriculum to localStorage
+            try {
+                if (typeof serializator === 'function') {
+                    localStorage.removeItem('curriculum');
+                    localStorage.setItem('curriculum', serializator(curriculum));
+                }
+            } catch (ex) {
+                // ignore
+            }
+            // Recalculate effective types and update datalist
+            try {
+                if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                    curriculum.recalcEffectiveTypes(course_data);
+                }
+                const optionsHTML = getCoursesDataList(course_data);
+                document.querySelectorAll('datalist').forEach(function(dl) {
+                    if (dl.id === 'datalist') {
+                        dl.innerHTML = optionsHTML;
+                    }
+                });
+            } catch (err) {
+                // ignore
+            }
+            // Reload the page to ensure UI reflects removed courses
+            location.reload();
+        }
+
+        // Get from transcript:
+        function handleAcademicRecordsImport() {
         const fileInput = document.getElementById('academicRecordsInput');
 
         if (fileInput.files.length > 0) {
@@ -296,12 +771,17 @@ function SUrriculum(major_chosen_by_user) {
                 // Parse the HTML content
                 const parsedData = window.academicRecordsParser.parseAcademicRecords(htmlContent);
 
-                // Import courses to curriculum
-                const importStats = window.academicRecordsParser.importParsedCourses(
+                // Import courses to curriculum. The parser returns an object
+                // containing both statistics and a list of pending custom
+                // courses that need additional user input.
+                const importResult = window.academicRecordsParser.importParsedCourses(
                     parsedData.courses,
                     course_data,
                     curriculum
                 );
+
+                const importStats = importResult.stats;
+                const pendingList = importResult.pendingCustomCourses || [];
 
                 // Show import results to user
                 let message = `Successfully imported ${importStats.importedCourses} of ${importStats.totalCourses} courses.`;
@@ -311,6 +791,12 @@ function SUrriculum(major_chosen_by_user) {
                 }
 
                 alert(message);
+
+                // If there are pending custom courses, process them
+                if (pendingList.length > 0) {
+                    const queue = pendingList.slice();
+                    processPendingCustomCourses(queue);
+                }
             };
 
             reader.readAsText(file);

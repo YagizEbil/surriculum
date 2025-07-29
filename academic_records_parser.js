@@ -61,6 +61,26 @@ function parseAcademicRecords(htmlContent) {
                 let courseCode = cells[0].textContent.trim().replace(/\s/g, '');
                 const courseTitle = cells[1].textContent.trim();
                 const grade = cells[3].textContent.trim();
+                // Extract SU credit and ECTS values if available. The transcript
+                // table uses the fourth and fifth columns (zero-indexed) for
+                // credit and ECTS, respectively. Parse them as floats and
+                // default to 0 when not present. Leading/trailing whitespace
+                // and zero-padding are stripped.
+                let suCredits = 0;
+                let ects = 0;
+                try {
+                    if (cells.length > 4) {
+                        const creditText = cells[4].textContent.trim();
+                        suCredits = creditText ? parseFloat(creditText) : 0;
+                    }
+                    if (cells.length > 5) {
+                        const ectsText = cells[5].textContent.trim();
+                        ects = ectsText ? parseFloat(ectsText) : 0;
+                    }
+                } catch (_) {
+                    suCredits = 0;
+                    ects = 0;
+                }
 
                 // Replace CS210 with DSA210
                 if (courseCode === 'CS210') {
@@ -78,7 +98,9 @@ function parseAcademicRecords(htmlContent) {
                         code: courseCode,
                         title: courseTitle,
                         grade: grade,
-                        semester: semester
+                        semester: semester,
+                        suCredits: suCredits,
+                        ects: ects
                     });
                 }
             }
@@ -96,11 +118,21 @@ function parseAcademicRecords(htmlContent) {
  * @returns {Object} Statistics about the import process
  */
 function importParsedCourses(parsedCourses, courseData, curriculum) {
+    // Build statistics object up front.  The `notFoundCourses` array will
+    // accumulate codes that are neither present in the program nor match
+    // the special prefixes.  These will be reported back to the user.
     const stats = {
         totalCourses: parsedCourses.length,
         importedCourses: 0,
         notFoundCourses: []
     };
+    // When we encounter courses that need to be created as custom courses
+    // (based on their prefix), we'll push them into this array.  The
+    // consuming code in main.js can then prompt the user to fill in
+    // additional fields (e.g. engineering/basic science credits) for each
+    // pending course.  Each entry will hold a reference to the newCourse
+    // object that was inserted into courseData so it can be updated later.
+    const pendingCustomCourses = [];
 
     // Group courses by semester
     const courseBySemester = {};
@@ -148,7 +180,7 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
         const codeNumber = course.code.match(/\d+[A-Z0-9]*/)[0];
 
         // Check if course exists in course data using both combined and split formats
-        const courseExists = courseData.some(c => {
+        let courseExists = courseData.some(c => {
             // Try direct match first
             if (c.code === course.code) return true;
 
@@ -160,6 +192,82 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
 
             return false;
         });
+
+        // If course does not exist, attempt to automatically add it as a
+        // custom course for certain special prefixes.  For non-engineering
+        // majors we also consider LANG* courses as free electives.  We use
+        // both short and full prefixes (e.g., COR/CORE, ARE/AREA) to match
+        // variations in the transcript.  If a match is found we create a
+        // placeholder course using the known credit information and queue it
+        // for user confirmation via the custom course modal.
+        if (!courseExists) {
+            const code = course.code || '';
+            const engineeringMajors = ['CS','EE','IE','ME','BIO','MAT','DSA'];
+            const nonEngineering = engineeringMajors.indexOf(curriculum.major) === -1;
+            let prefix = '';
+            let elType = '';
+            // Determine elective type based on prefix.  Accept both the
+            // minimal three-letter form (COR, ARE, FEL, LANG) and their
+            // longer forms (CORE, AREA, etc.).
+            if (/^COR(E)?/.test(code)) {
+                prefix = code.match(/^([A-Z]+)/)[0];
+                elType = 'core';
+            } else if (/^ARE(A)?/.test(code)) {
+                prefix = code.match(/^([A-Z]+)/)[0];
+                elType = 'area';
+            } else if (/^FEL/.test(code)) {
+                prefix = code.match(/^([A-Z]+)/)[0];
+                elType = 'free';
+            } else if (/^LANG/.test(code) && nonEngineering) {
+                prefix = code.match(/^([A-Z]+)/)[0];
+                elType = 'free';
+            }
+            if (elType) {
+                const numMatch = code.match(/\d+[A-Z0-9]*/);
+                const num = numMatch ? numMatch[0] : '';
+                // Use the credit information from the parsed course when
+                // available. Default to zero if missing.
+                const su = (typeof course.suCredits === 'number' && !isNaN(course.suCredits)) ? course.suCredits : 0;
+                const ectsVal = (typeof course.ects === 'number' && !isNaN(course.ects)) ? course.ects : 0;
+                const newCourse = {
+                    Major: prefix,
+                    Code: num,
+                    Course_Name: course.title || code,
+                    ECTS: ectsVal.toString(),
+                    Engineering: 0,
+                    Basic_Science: 0,
+                    SU_credit: su.toString(),
+                    Faculty: '',
+                    EL_Type: elType,
+                    Faculty_Course: 'No'
+                };
+                // Append to course data so future imports recognize it
+                courseData.push(newCourse);
+                // Persist to localStorage under the current major
+                try {
+                    const key = 'customCourses_' + curriculum.major;
+                    const existingList = JSON.parse(localStorage.getItem(key) || '[]');
+                    existingList.push(newCourse);
+                    localStorage.setItem(key, JSON.stringify(existingList));
+                } catch (e) {
+                    // ignore storage errors
+                }
+                // Queue this course for user confirmation.  We capture the
+                // reference to the inserted course object and the parsed
+                // information to prefill the form later.
+                pendingCustomCourses.push({
+                    course: newCourse,
+                    parsedInfo: {
+                        code: course.code,
+                        title: course.title,
+                        suCredits: su,
+                        ects: ectsVal,
+                        elType: elType
+                    }
+                });
+                courseExists = true;
+            }
+        }
 
         if (courseExists) {
             // Get formatted semester name
@@ -187,43 +295,48 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
     const sortedSemesters = Object.values(courseBySemester)
         .sort((a, b) => a.order - b.order);  // Ascending order (oldest first)
 
-    // Process in reverse order so oldest appears on left
-    // When each semester is inserted at the beginning, the oldest needs to be inserted last
+    // Process in reverse order so oldest appears on the left.  When each
+    // semester is inserted at the beginning, the oldest needs to be
+    // inserted last.  We collect any courses with grades in the same
+    // order as they appear in `sortedSemesters`.
     for (let i = sortedSemesters.length - 1; i >= 0; i--) {
         const semesterData = sortedSemesters[i];
-
-        // Make sure we have valid courses before creating a semester
+        // Only create a semester if there is at least one course to add.
         if (semesterData.courses && semesterData.courses.length > 0) {
-            // Prepare the grade list in the same order as the courses
             const gradeList = semesterData.courses.map(courseCode => {
                 return semesterData.grades[courseCode] || '';
             });
-
-            // Create the semester with a proper name and grades
+            // Create the semester using whichever global function is available.
             if (typeof createSemeter === 'function') {
-                // Pass false for isCreate, the courses array, curriculum object, course data, grades, and properly formatted semester name
                 createSemeter(false, semesterData.courses, curriculum, courseData, gradeList, semesterData.name);
             } else if (typeof window.createSemeter === 'function') {
                 window.createSemeter(false, semesterData.courses, curriculum, courseData, gradeList, semesterData.name);
             } else {
                 console.error('createSemeter function not found');
             }
-            }
         }
+    }
 
     // After creating all semesters from the transcript import, update the
-    // effective categories so that courses are allocated correctly. We
+    // effective categories so that courses are allocated correctly.  We
     // specifically pass the provided courseData so the recalc function can
-    // look up static course types. Guard against missing recalc.
+    // look up static course types.  Guard against missing recalc.
     try {
         if (typeof curriculum.recalcEffectiveTypes === 'function') {
             curriculum.recalcEffectiveTypes(courseData);
         }
-    } catch(err) {
+    } catch (err) {
         // ignore
     }
 
-    return stats;
+    // Finally, return both the import statistics and any pending custom
+    // courses.  Do not return prematurely inside loops; returning here
+    // ensures we process all semesters and recalc credits before
+    // prompting the user for missing information.
+    return {
+        stats: stats,
+        pendingCustomCourses: pendingCustomCourses
+    };
 }
 
 // Export functions for use in main.js

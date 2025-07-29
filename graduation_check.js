@@ -91,5 +91,8 @@ function displaySummary(curriculum, major_chosen_by_user) {
     }
 }
 
-// Export the functions for external use
-export { displayGraduationResults, displaySummary };
+if (typeof window !== 'undefined') {
+    // Expose the displayGraduationResults and displaySummary functions on the window object
+    window.displayGraduationResults = displayGraduationResults;
+    window.displaySummary = displaySummary;
+}

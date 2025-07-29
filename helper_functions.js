@@ -143,23 +143,44 @@ function dates_serializator()
     return result;
 }
 
-function reload(curriculum, course_data)
-{
+function reload(curriculum, course_data) {
     let data, grades, dates;
-    try{data = JSON.parse(localStorage.getItem("curriculum"));} catch{}
-    try{grades = JSON.parse(localStorage.getItem("grades"));}   catch{}
-    try{dates = JSON.parse(localStorage.getItem("dates"))}      catch{}
-    if(data)
-    {
-        for(let i = 0; i < data.length; i++)
-        {
-            if(grades && dates)
+    try { data = JSON.parse(localStorage.getItem("curriculum")); } catch {}
+    try { grades = JSON.parse(localStorage.getItem("grades")); } catch {}
+    try { dates = JSON.parse(localStorage.getItem("dates")); } catch {}
+
+    if (data) {
+        for (let i = 0; i < data.length; i++) {
+            if (grades && dates)
                 createSemeter(true, data[i], curriculum, course_data, grades[i], dates[i]);
             else
                 createSemeter(true, data[i], curriculum, course_data);
-
         }
     }
+
+    // Ensure assets and styles are properly restored
+    const head = document.querySelector('head');
+
+    // Restore styles
+    if (!document.querySelector('link[href="styles.css"]')) {
+        const styleLink = document.createElement('link');
+        styleLink.rel = 'stylesheet';
+        styleLink.href = 'styles.css';
+        head.appendChild(styleLink);
+    }
+
+    // Restore assets
+    const assetPaths = [
+        './assets/drag.png',
+        './assets/closed.png',
+        './assets/open.png',
+        './assets/tick.png'
+    ];
+
+    assetPaths.forEach(path => {
+        const img = new Image();
+        img.src = path;
+    });
 }
 
 function getAncestor(element, ancestor_class)
