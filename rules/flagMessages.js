@@ -13,12 +13,12 @@ export function buildFlagMessages(major) {
       2: () => `Your Required SU credit is less than ${req.required}.`,
       3: () => `Your Core Elective SU credit is less than ${req.core}.`,
       4: () => `You have not taken ${req.internshipCourse}.`,
-      5: () => `Your Total SU credit is less than ${req.total}.`,
+      5: () => `Your Total SU credit is less than sufficient.`,
       6: () => `Your Area Elective SU credit is less than ${req.area}.`,
       7: () => `Your Free Elective SU credit is less than ${req.free}.`,
       8: () => `Your Basic Science SU credit is less than ${req.science}.`,
       9: () => `Your Engineering SU credit is less than ${req.engineering}.`,
-      10: () => `Your ECTS is less than ${req.ects}.`,
+      10: () => `Your ECTS is less than sufficient.`,
 
       //Major-specific messages
 
@@ -40,7 +40,15 @@ export function buildFlagMessages(major) {
       26: () => `You need to complete your Physics requirement (PHYS201, PHYS202, or PHYS204)!`,
       27: () => `You need at least 3 FENS courses in your core electives!`,
       28: () => `You need at least 3 FASS courses in your core electives!`,
-      29: () => `You need at least 3 SBS courses in your core electives!,`
+      29: () => `You need at least 3 SBS courses in your core electives!,`,
+      30: () => `You need at least 9 Core I elective credits, beware of mutually exclusive courses!`,
+      31: () => `You need at least 12 Core II elective credits, beware of mutually exclusive courses!`,
+      32: () => `You need at least 15 Required credits, beware of mutually exclusive courses!`,
+      33: () => `You need at least 12 Core I elective credits!`,
+      34: () => `You need at least 12 Core II elective credits!`,
+      35: () => `Your Core courses must span at least 6 different areas!`,
+      36: () => `Your Area courses must span at least 5 different areas!`,
+      37: () => `You need at least 9 credits from FASS & FENS courses in your Free electives!`,
 
   };
 }

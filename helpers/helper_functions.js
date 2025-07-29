@@ -1,8 +1,25 @@
 //checks wheter the course exists:
 function isCourseValid(course, course_data)
 {
-    for(let i = 0; i < course_data.length; i++){
-        if (((course_data[i]['Major'] + course_data[i]['Code']) == course.code)) return true;
+    // First check within the main major's course data
+    for (let i = 0; i < course_data.length; i++) {
+        if (((course_data[i]['Major'] + course_data[i]['Code']) === course.code)) return true;
+    }
+    // If not found and a double major is active, check the double major's
+    // course catalog for this course code. The global curriculum object
+    // exposes doubleMajorCourseData when a second major is selected.
+    try {
+        const cur = (typeof window !== 'undefined') ? window.curriculum : null;
+        if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
+            const dmList = cur.doubleMajorCourseData;
+            for (let i = 0; i < dmList.length; i++) {
+                if (((dmList[i]['Major'] + dmList[i]['Code']) === course.code)) {
+                    return true;
+                }
+            }
+        }
+    } catch (_) {
+        // ignore errors
     }
     return false;
 }
@@ -10,8 +27,27 @@ function isCourseValid(course, course_data)
 //returns info's of the course:
 function getInfo(course, course_data)
 {
-    for(let i = 0; i < course_data.length; i++){
-        if ((course_data[i]['Major'] + course_data[i]['Code'] == course)) return course_data[i];
+    // First search within the primary course data
+    for (let i = 0; i < course_data.length; i++) {
+        if ((course_data[i]['Major'] + course_data[i]['Code']) === course) return course_data[i];
+    }
+    // If not found and a double major is active, search within the double
+    // major's catalog so that course details (name, credits) can be
+    // retrieved for DM-only courses.  This allows unknown courses to
+    // provide their metadata while still being ignored for the main
+    // major's allocations.
+    try {
+        const cur = (typeof window !== 'undefined') ? window.curriculum : null;
+        if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
+            const dmList = cur.doubleMajorCourseData;
+            for (let i = 0; i < dmList.length; i++) {
+                if (((dmList[i]['Major'] + dmList[i]['Code']) === course)) {
+                    return dmList[i];
+                }
+            }
+        }
+    } catch (_) {
+        // ignore errors
     }
     return 0;
 }
@@ -69,17 +105,35 @@ for(let i = 0; i < letter_grades_global.length; i++)
 
 function getCoursesDataList(course_data)
 {
-    let allCourses = [];
-    for(let i = 0; i < course_data.length; i++)
-    {
-        allCourses.push(course_data[i]['Major'] + course_data[i]['Code'] + ' ' + course_data[i]['Course_Name']);
+    // Build a combined list of courses. If a double major is selected,
+    // merge courses unique to the double major into the primary list so
+    // that users can select DM-only courses from the dropdown.  We
+    // construct a copy of course_data and append unique DM courses.
+    let combined = Array.isArray(course_data) ? course_data.slice() : [];
+    try {
+        const cur = (typeof window !== 'undefined') ? window.curriculum : null;
+        if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
+            // Create a set of primary courses for quick lookup
+            const mainSet = new Set(combined.map(function(c) {
+                return (c.Major + c.Code);
+            }));
+            cur.doubleMajorCourseData.forEach(function(dm) {
+                const key = dm.Major + dm.Code;
+                if (!mainSet.has(key)) {
+                    combined.push(dm);
+                }
+            });
+        }
+    } catch (ex) {
+        // ignore any errors in DM detection
     }
+    // Build the datalist HTML using the combined courses. Each option
+    // value starts with the course code followed by the course name.
     let datalistInnerHTML = '';
-    for(let i = 0; i < allCourses.length; i++)
-    {
-        datalistInnerHTML = datalistInnerHTML + "<option value='" + allCourses[i] + "'>";
+    for (let i = 0; i < combined.length; i++) {
+        const item = combined[i];
+        datalistInnerHTML += "<option value='" + item['Major'] + item['Code'] + ' ' + item['Course_Name'] + "'>";
     }
-
     return datalistInnerHTML;
 }
 
@@ -143,44 +197,23 @@ function dates_serializator()
     return result;
 }
 
-function reload(curriculum, course_data) {
+function reload(curriculum, course_data)
+{
     let data, grades, dates;
-    try { data = JSON.parse(localStorage.getItem("curriculum")); } catch {}
-    try { grades = JSON.parse(localStorage.getItem("grades")); } catch {}
-    try { dates = JSON.parse(localStorage.getItem("dates")); } catch {}
-
-    if (data) {
-        for (let i = 0; i < data.length; i++) {
-            if (grades && dates)
+    try{data = JSON.parse(localStorage.getItem("curriculum"));} catch{}
+    try{grades = JSON.parse(localStorage.getItem("grades"));}   catch{}
+    try{dates = JSON.parse(localStorage.getItem("dates"))}      catch{}
+    if(data)
+    {
+        for(let i = 0; i < data.length; i++)
+        {
+            if(grades && dates)
                 createSemeter(true, data[i], curriculum, course_data, grades[i], dates[i]);
             else
                 createSemeter(true, data[i], curriculum, course_data);
+
         }
     }
-
-    // Ensure assets and styles are properly restored
-    const head = document.querySelector('head');
-
-    // Restore styles
-    if (!document.querySelector('link[href="styles.css"]')) {
-        const styleLink = document.createElement('link');
-        styleLink.rel = 'stylesheet';
-        styleLink.href = 'styles.css';
-        head.appendChild(styleLink);
-    }
-
-    // Restore assets
-    const assetPaths = [
-        './assets/drag.png',
-        './assets/closed.png',
-        './assets/open.png',
-        './assets/tick.png'
-    ];
-
-    assetPaths.forEach(path => {
-        const img = new Image();
-        img.src = path;
-    });
 }
 
 function getAncestor(element, ancestor_class)

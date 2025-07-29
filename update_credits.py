@@ -93,7 +93,7 @@ def update_all_program_files(credits_map, program_files):
         update_json_with_credits(program_file_path, credits_map)
 
 if __name__ == "__main__":
-    csv_path = "katalog_basic_eng_degerler_202401_yuklenen_07.05.2025 (1)-converted.csv"
+    csv_path = "Pre-Conversion Files/katalog_basic_eng_degerler_202401_yuklenen_07.05.2025 (1)-converted.csv"
 
     program_files = {
         'BSBIO': 'BIO.json',

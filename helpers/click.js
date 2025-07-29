@@ -23,93 +23,140 @@ function dynamic_click(e, curriculum, course_data)
         input_container.appendChild(datalist);
         input_container.appendChild(enter);
         input_container.appendChild(delete_ac);
+        // Allow pressing Enter in the input to trigger the same action as
+        // clicking the tick icon. Without this, users must click the
+        // enter button manually. We listen for the keydown event and
+        // simulate a click on the `.enter` element when Enter is pressed.
+        input1.addEventListener('keydown', function(evt) {
+            if (evt.key === 'Enter') {
+                evt.preventDefault();
+                // If the enter button exists in this input container, click it
+                const btn = this.parentNode.querySelector('.enter');
+                if (btn) btn.click();
+            }
+        });
 
         e.target.parentNode.insertBefore(input_container, e.target.parentNode.querySelector(".addCourse"));
     }
     //CLICKED "OK" (for entering course input):
     else if(e.target.classList.contains("enter"))
     {
-        let courseCode = e.target.parentNode.querySelector("input").value.split(' ')[0];
-        courseCode = courseCode.trim().toUpperCase()
+        // Retrieve the user's input and attempt to determine the course code.
+        // Users may type either the full code+name (e.g., "CS101 Intro"), just
+        // the course code, or the course name. We first take the first
+        // token as the tentative code. If the resulting course is not
+        // valid, we attempt to match the entire input against course names
+        // in both the primary major and the double major. If a match is
+        // found, we derive the code accordingly.
+        let inputValue = e.target.parentNode.querySelector("input").value.trim();
+        let tentativeCode = inputValue.split(' ')[0].toUpperCase();
+        let courseCode = tentativeCode;
+        let courseObj = new s_course(courseCode, '');
+        // Helper to search course by name in course_data and DM data
+        function findCourseByName(name) {
+            name = name.trim().toUpperCase();
+            // search primary course_data
+            for (let i = 0; i < course_data.length; i++) {
+                if (course_data[i]['Course_Name'].toUpperCase() === name) {
+                    return course_data[i];
+                }
+            }
+            // search double major data if available
+            try {
+                const cur = (typeof window !== 'undefined') ? window.curriculum : null;
+                if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
+                    for (let i = 0; i < cur.doubleMajorCourseData.length; i++) {
+                        if (cur.doubleMajorCourseData[i]['Course_Name'].toUpperCase() === name) {
+                            return cur.doubleMajorCourseData[i];
+                        }
+                    }
+                }
+            } catch (_) {}
+            return null;
+        }
+        // If tentative code is not valid, try matching by full input as name
+        if (!isCourseValid(courseObj, course_data)) {
+            // Attempt to find by full value (case-insensitive)
+            const found = findCourseByName(inputValue);
+            if (found) {
+                // Derive code from found course
+                courseCode = found.Major + found.Code;
+                courseObj = new s_course(courseCode, '');
+            }
+        }
+        // If still invalid after name search, show error
+        if (!isCourseValid(courseObj, course_data)) {
+            alert("ERROR: Course Not Found!");
+            e.target.parentNode.querySelector("input").value = '';
+            return;
+        }
+        // Now we have a valid courseCode. Generate a unique id for the new
+        // course and proceed with addition.
         curriculum.course_id = curriculum.course_id + 1;
         let course_id = 'c' + curriculum.course_id;
         let myCourse = new s_course(courseCode, course_id);
-
-        if(isCourseValid(myCourse, course_data))
-        {
-            if(!curriculum.hasCourse(courseCode))
-            {
-                let sem = curriculum.getSemester(e.target.parentNode.parentNode.querySelector('.semester').id)
-                
-                sem.addCourse(myCourse);
-                let c_container = document.createElement("div")
-                c_container.classList.add("course_container");
-                let c_label = document.createElement("div");
-                c_label.classList.add("course_label");
-                c_label.innerHTML = '<div>'+myCourse.code+'</div>' + '<button class="delete_course"></button>';
-                let c_info = document.createElement("div");
-                c_info.classList.add("course_info");
-                c_info.innerHTML = '<div class="course_name">'+ getInfo(courseCode, course_data)['Course_Name'] +'</div>';
-                c_info.innerHTML += '<div class="course_type">'+getInfo(courseCode, course_data)['EL_Type'].toUpperCase() + '</div>';
-                
-                c_info.innerHTML += '<div class="course_credit">' +getInfo(courseCode, course_data)['SU_credit']+ '.0 credits </div>';
-                
-                let grade = document.createElement('div');
-                grade.classList.add('grade');
-                grade.innerHTML = 'Add grade';
-                c_container.appendChild(c_label)
-                c_container.appendChild(c_info);
-                c_container.appendChild(grade);
-
-
-                let course = document.createElement("div");
-                course.classList.add("course");
-                course.id = course_id;
-                course.appendChild(c_container)
-                e.target.parentNode.parentNode.querySelector('.semester').appendChild(course);
-
-
-
-                //changing total credits element in dom:
-                let dom_tc = e.target.parentNode.parentNode.parentNode.querySelector('span');
-                dom_tc.innerHTML = 'Total: ' + sem.totalCredit + ' credits';
-
-                e.target.parentNode.querySelector("input").remove();
-                /*
-                if (e.target.parentNode.parentNode.querySelector('.date>p').innerHTML.substring(0, 6) == 'SUMMER')
-                {
-                    if ((parseInt(sem.totalCredit) > 8))
-                    {
-                        alert("Warning: Only 8 credits can be taken in a summer semester!!" + '\nYou have taken ' + parseInt(sem.totalCredit));
-                    }
+        if(!curriculum.hasCourse(courseCode)) {
+            let sem = curriculum.getSemester(e.target.parentNode.parentNode.querySelector('.semester').id);
+            // Attach additional metadata from the course info to the s_course
+            // instance.  This ensures that double-major courses retain
+            // attributes like credit, category, faculty course, science and
+            // engineering credits. These fields are required for proper
+            // graduation logic and summary calculations, and they are
+            // normally available via the info object returned by getInfo().
+            const infoAdd = getInfo(courseCode, course_data);
+            if (infoAdd) {
+                // Course credit values
+                myCourse.credit = parseInt(infoAdd['SU_credit'] || '0');
+                myCourse.Basic_Science = parseFloat(infoAdd['Basic_Science'] || '0');
+                myCourse.Engineering = parseFloat(infoAdd['Engineering'] || '0');
+                myCourse.ECTS = parseFloat(infoAdd['ECTS'] || '0');
+                // Category and faculty course information.  Normalize the
+                // category string so that the first letter is uppercase
+                // (e.g., "Core", "Area", "Free", "Required", "University").
+                const elType = (infoAdd['EL_Type'] || '').toString();
+                if (elType) {
+                    myCourse.category = elType.charAt(0).toUpperCase() + elType.slice(1).toLowerCase();
                 }
-                else if ((parseInt(sem.totalCredit) > 20))
-                {
-                    alert("Warning: Only 20 credits can be taken per semester!!" + '\nYou have taken ' + parseInt(sem.totalCredit));
-                }*/
-                e.target.parentNode.remove()
-
-                // After successfully adding a course, re-run the category
-                // allocation to update effective types across all semesters. This
-                // ensures that newly added courses are correctly classified
-                // based on chronological order. If the recalc function is
-                // unavailable (e.g., during tests), skip silently.
-                try {
-                    if (typeof curriculum.recalcEffectiveTypes === 'function') {
-                        curriculum.recalcEffectiveTypes(course_data);
-                    }
-                } catch(err) {
-                    // Ignore errors
+                myCourse.Faculty_Course = infoAdd['Faculty_Course'] || 'No';
+            }
+            sem.addCourse(myCourse);
+            let c_container = document.createElement("div");
+            c_container.classList.add("course_container");
+            let c_label = document.createElement("div");
+            c_label.classList.add("course_label");
+            c_label.innerHTML = '<div>'+myCourse.code+'</div>' + '<button class="delete_course"></button>';
+            let c_info = document.createElement("div");
+            c_info.classList.add("course_info");
+            // Use getInfo to fetch course details (works for DM-only courses)
+            const info = getInfo(courseCode, course_data);
+            c_info.innerHTML = '<div class="course_name">'+ info['Course_Name'] +'</div>';
+            c_info.innerHTML += '<div class="course_type">'+ info['EL_Type'].toUpperCase() + '</div>';
+            c_info.innerHTML += '<div class="course_credit">' + info['SU_credit']+ '.0 credits </div>';
+            let grade = document.createElement('div');
+            grade.classList.add('grade');
+            grade.innerHTML = 'Add grade';
+            c_container.appendChild(c_label);
+            c_container.appendChild(c_info);
+            c_container.appendChild(grade);
+            let course = document.createElement("div");
+            course.classList.add("course");
+            course.id = course_id;
+            course.appendChild(c_container);
+            e.target.parentNode.parentNode.querySelector('.semester').appendChild(course);
+            // changing total credits element in DOM:
+            let dom_tc = e.target.parentNode.parentNode.parentNode.querySelector('span');
+            dom_tc.innerHTML = 'Total: ' + sem.totalCredit + ' credits';
+            // Remove input and container after adding course
+            e.target.parentNode.querySelector("input").remove();
+            e.target.parentNode.remove();
+            // Recalculate categories for main (and DM via recalc) after adding
+            try {
+                if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                    curriculum.recalcEffectiveTypes(course_data);
                 }
-            }
-            else{
-                alert("You have already added " + myCourse.code);
-                e.target.parentNode.querySelector("input").value = '';
-            }
-        }
-        else
-        {
-            alert("ERROR: Course Not Found!");
+            } catch(err) {}
+        } else {
+            alert("You have already added " + myCourse.code);
             e.target.parentNode.querySelector("input").value = '';
         }
     }

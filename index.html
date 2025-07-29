@@ -4,22 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUrriculum</title>
+    <title>SUrriculum -v2.0 (beta)</title>
     <link rel="stylesheet" href="styles.css"/>
 
-    <script src="helper_functions.js"></script>
-    <script src="mouse_and_drag.js"></script>
-    <script src="s_semester.js"></script>
-    <script src="create_semester.js"></script>
-    <script src="click.js"></script>
-    <script src="academic_records_parser.js"></script>
+    <script src="helpers/helper_functions.js"></script>
+    <script src="helpers/mouse_and_drag.js"></script>
+    <script src="helpers/s_semester.js"></script>
+    <script src="helpers/create_semester.js"></script>
+    <script src="helpers/click.js"></script>
+    <script src="helpers/academic_records_parser.js"></script>
     <script src="https://unpkg.com/pdfjs-dist@2.10.377/build/pdf.js"></script>
-    <!-- Load graduation_check.js as a plain script. It will attach its
-         functions to the global window object instead of using ES modules. -->
-    <script src="graduation_check.js"></script>
-    <script src="flagMessages.js"></script>
-    <script src="s_curriculum.js"></script>
-    <script src="requirements.js"></script>
+    <script type="module" src="helpers/graduation_check.js"></script>
+    <script type="module" src="rules/flagMessages.js"></script>
+    <script type="module" src="s_curriculum.js"></script>
+    <script type="module" src="rules/requirements.js"></script>
 
     <script>
       // Specify the path to the worker script
@@ -31,7 +29,7 @@
 </head>
 <body>
     <div class="title">
-        SUrriculum
+        SUrriculum -v2.0 (beta)
         
         <div class="import-container">
             <button class="import-toggle btn">
@@ -50,6 +48,9 @@
                     <input type="file" id="academicRecordsInput" accept=".html,.htm">
                     <button id="importAcademicRecords" class="btn">Import</button>
                 </div>
+                <div id="course-import-box">
+                    <p><b>Choose your major and double major before importing</b></p>
+                </div>
             </div>
         </div>
     </div>
@@ -62,7 +63,14 @@
             </div>
             <div class="btns">
                 <button class="change_major btn"> <p>...</p> </button>
+                <!-- Double Major button: behaves like major selection.  The
+                     current double major (or None) is displayed as text.  When
+                     clicked it becomes an input allowing the user to choose
+                     another major or select none.  -->
+                <button class="doubleMajor btn"><p>Double Major: None</p></button>
                 <button class="addSemester btn"> <p>New Semester</p> </button>
+                <button class="check btn"><p>Check Graduation</p></button>
+                <button class="summary btn"><p class="summary_p">Summary</p></button>
                 <button class="autoAdd btn"> <p>Add First Year Courses</p></button>
                 <!-- Button to add a custom user-defined course -->
                 <button class="customCourse btn"><p>Add Custom Course</p></button>
@@ -70,11 +78,12 @@
                 <button class="deleteCustom btn"><p>Delete Custom Courses</p></button>
                 <!-- Button to reset all locally stored data (custom courses, saved semesters, etc.) -->
                 <button class="resetLocal btn"><p>Reset Local Data</p></button>
-                <button class="check btn"><p>Check Graduation</p></button>
-                <button class="summary btn"><p class="summary_p">Summary</p></button>
             </div>
         </div>
     </div>
+    <footer>
+        <p>Always verify the graduation requirements yourself. For any issues you spot, send an e-mail to: bilal.gebenoglu@sabanciuniv.edu</p>
+    </footer>
 
 </body>
 </html>
