@@ -1,69 +1,35 @@
-visit website from the link:
-# Surriculum
+# Surriculum v2.0 (beta)
 
-This repository contains the source code for the Surriculum website, which is a curriculum for learning about computer science and software engineering topics.
+Surriculum is an interactive graduation planner for Sabanci University undergraduate programs. The entire application runs in the browser using plain HTML, CSS and JavaScript. It lets you build a semester-by-semester plan, track program requirements and check whether you are on course to graduate.
 
-The website is built using HTML, CSS, and JavaScript, and is designed to be a comprehensive resource for learners at all levels.
+A live instance is available at [beficent.github.io/surriculum](https://beficent.github.io/surriculum/).
 
-## Getting Started
+## Using the tool
 
-To get started with the Surriculum website, you can clone this repository and open the `index.html` file in your web browser. You can also view the live version of the website at:
-https://beficent.github.io/surriculum/
+Clone this repository or download the source and open `index.html` in a modern web browser. No build step or server is required.
 
-## Credit and Contribution
+The interface allows you to:
 
-This repository is a fork of the original Surriculum project, updated and maintained by BEFICENT (Bilal M. G.). The updates include:
+- Select your major and an optional double major
+- Add semesters and drag courses from the catalog
+- Import your Academic Records Summary (HTML) to prefill taken courses
+- Add custom courses manually
+- Check graduation status and view a summary of remaining requirements
 
-- Added support for the Data Science and Analytics (DSA) program and additional majors (MAN, PSIR, PSY, VACD)
-- Fixed graduation requirements checking functionality
-- Updated course lists for all programs
-- Improved basic science and engineering credit calculation
-- Enhanced error handling and documentation
+Always verify graduation requirements yourself. For issues or suggestions, contact [bilal.gebenoglu@sabanciuniv.edu](mailto:bilal.gebenoglu@sabanciuniv.edu).
 
-The original repository was forked and updated to reflect current curriculum requirements and to add support for additional programs.
+## Updating course data
 
-## Updating the Curriculum
+Course catalogs for each program are stored as JSON files under `courses/`. To refresh them or add new programs:
 
-### How to Update Course Data
+1. Edit `fetch_courses.py` if the university site changes and run `python fetch_courses.py` to regenerate the JSON files.
+2. Use `update_credits.py` when Basic Science and Engineering credit values need to be extracted from official CSV/HTML sources.
+3. Modify `requirements.js` for new or changed graduation rules and update matching messages in `main.js`.
 
-If you need to update the course data or add new programs, follow these steps:
+After updating data, manually test with various course combinations to ensure the graduation checker behaves correctly.
 
-1. **Update the Python scripts**:
-   - Modify `fetch_courses.py` to fetch the latest course information from the university website
-   - Run the script to generate updated JSON files: `python fetch_courses.py`
-   - Verify the generated `X.json's` contains the correct course information
+## Credits
 
-2. **Update program-specific JSON files**:
-   - Each program (CS, BIO, EE, IE, MAT, ME, ECON, DSA, MAN, PSIR, PSY, VACD) has its own JSON file
-   - Make sure to update the appropriate files when programs change their requirements
-   - Ensure courses are properly categorized (university, required, core, area, free, faculty)
+This repository continues the original Surriculum project and is maintained by **BEFICENT (Bilal M. G.)**. Major additions include double major support, Data Science and Analytics and several FASS programs, updated course lists and improved requirement checks.
 
-3. **Update Basic Science and Engineering credits**:
-   - Use `update_credits.py` to update ECTS values for basic science and engineering courses
-   - Verify the HTML/CSV data source has the correct credit information
-   - Pay attention to the correct column indexes when parsing the data
 
-4. **Update graduation requirements in code**:
-   - If program requirements change, update the `canGraduate()` method in `s_curriculum.js`
-   - Add corresponding error messages in `main.js` for any new error codes
-   - Update the credit limits in the summary modal section of `main.js`
-
-### Important Warnings and Notes
-
-⚠️ **Critical Warnings**:
-
-1. **Error Messages**: When adding a new program or updating requirements, always add corresponding error messages in `main.js` for all error codes used in `s_curriculum.js`. Missing error messages will result in "undefined" errors.
-
-2. **Program Requirements**: The summary display and graduation requirements must match exactly. Verify both `canGraduate()` in `s_curriculum.js` and the limits array in `main.js`.
-
-3. **Basic Science/Engineering Parsing**: Be careful with column indexes when parsing basic science and engineering credits. Incorrect indexes will lead to wrong credit calculations.
-
-4. **Course Categorization**: Be cautious when updating course categorization (university, core, etc.) as it affects graduation requirements checks.
-
-5. **Faculty Courses**: For programs that require a minimum number of faculty courses (like DSA), make sure the faculty property is correctly set for relevant courses.
-
-6. **Testing**: Always test the tool with various course combinations to ensure the graduation check works correctly for all programs.
-
-7. **JSON Structure**: Maintain the same JSON structure when updating course data to ensure compatibility with the existing code.
-
-By following these guidelines, you can successfully update the Surriculum tool to reflect the latest curriculum requirements. Just like how I updated the original repository, you can ensure that the tool remains a valuable resource for students and educators alike.
