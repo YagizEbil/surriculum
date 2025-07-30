@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import subprocess
 import os
+import datetime
 
 COURSES_DIR = 'courses'
 
@@ -361,24 +362,41 @@ def crawl_program(code, term):
 
 
 def main():
-
     os.makedirs(COURSES_DIR, exist_ok=True)
 
     programs = get_program_codes()
-    for code, fname in PROGRAM_FILES.items():
-        if code not in programs:
-            continue
-        term = get_latest_term(code)
-        if not term:
-            continue
-        data = crawl_program(code, term)
-        full_path = os.path.join(COURSES_DIR, fname)
-        if not data:
-            print(f'No data found for {code} ({fname})')
-            continue
-        with open(full_path, 'w') as f:
-            json.dump(data, f, indent=2)
-        print(f'Updated {fname} with {len(data)} records')
+
+    # Generate term codes starting from Fall 2019 up to two years ahead of the
+    # current academic year. Terms follow the pattern YYYY01 (Fall), YYYY02
+    # (Spring) and YYYY03 (Summer).
+    cur_year = datetime.datetime.now().year
+    terms = []
+    for year in range(2019, cur_year + 3):
+        for suf in ('01', '02', '03'):
+            terms.append(f"{year}{suf}")
+
+    majors_by_term = {}
+
+    for term in terms:
+        term_dir = os.path.join(COURSES_DIR, term)
+        os.makedirs(term_dir, exist_ok=True)
+        majors_found = []
+        for code, fname in PROGRAM_FILES.items():
+            if code not in programs:
+                continue
+            data = crawl_program(code, term)
+            if not data:
+                continue
+            majors_found.append(os.path.splitext(fname)[0])
+            with open(os.path.join(term_dir, fname), 'w') as f:
+                json.dump(data, f, indent=2)
+            print(f"Updated {fname} for term {term} with {len(data)} records")
+        if majors_found:
+            majors_by_term[term] = majors_found
+
+    # Write mapping of majors per term
+    with open(os.path.join(COURSES_DIR, 'terms.json'), 'w') as f:
+        json.dump(majors_by_term, f, indent=2)
 
     # Optionally run update_credits.py after updating course files
     print("\nRunning update_credits.py to update credits in JSON files...\n")

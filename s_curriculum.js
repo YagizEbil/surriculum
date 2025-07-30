@@ -15,6 +15,11 @@ function s_curriculum()
     this.semesters = [];
     this.major = '';
 
+    // Academic entry term codes (e.g., "202301") for the main major and
+    // optional double major. These control which requirement set is used
+    // when evaluating graduation status.
+    this.entryTerm = '';
+
     // When the user chooses a double major via the UI, this property is
     // assigned the second major's code (e.g., "EE").  When set, the
     // curriculum will compute a second set of effective course categories
@@ -22,6 +27,21 @@ function s_curriculum()
     // recalcEffectiveTypesDouble method.  If undefined or empty, no
     // double major processing occurs.
     this.doubleMajor = '';
+    this.entryTermDM = '';
+
+    // Helper to retrieve requirement object for a given major and term code.
+    // The global `requirements` may either be a flat object keyed by major or
+    // a nested object keyed by term then major. This function abstracts the
+    // lookup so both formats are supported during the transition to
+    // term-based data.
+    const getReq = (major, term) => {
+        if (typeof requirements === 'undefined') return {};
+        if (requirements[term] && requirements[term][major]) {
+            return requirements[term][major];
+        }
+        if (requirements[major]) return requirements[major];
+        return {};
+    };
 
     this.getTotalCredits = function ()
     {};
@@ -97,7 +117,7 @@ function s_curriculum()
             gpaValue += this.semesters[i].totalGPA;
         }
         // Generic requirement checks
-        const req = requirements[this.major] || {};
+        const req = getReq(this.major, this.entryTerm);
         if (university < req.university) return 1;
         if (req.internshipCourse && !this.hasCourse(req.internshipCourse)) return 4;
         if (total < req.total) return 5;
@@ -750,7 +770,7 @@ function s_curriculum()
         // undefined (e.g., for non-engineering majors without a science
         // requirement), default to 0 so no credits are allocated to that
         // category.
-        const req = requirements[this.major] || {};
+        const req = getReq(this.major, this.entryTerm);
         const reqCore = req.core || 0;
         const reqArea = req.area || 0;
 
@@ -1070,7 +1090,7 @@ function s_curriculum()
         if (!this.doubleMajor) return;
         // Determine requirement thresholds for the double major.  Core and
         // area requirements are drawn from the second major's requirements.
-        const dmReq = (typeof requirements !== 'undefined' && requirements[this.doubleMajor]) || {};
+        const dmReq = getReq(this.doubleMajor, this.entryTermDM);
         const dmCoreReq = dmReq.core || 0;
         const dmAreaReq = dmReq.area || 0;
         // Acquire the getInfo helper.  If unavailable, skip processing.
@@ -1271,7 +1291,7 @@ function s_curriculum()
             gpaValueDM += sem.totalGPA;
         }
         // Fetch requirements for double major and adjust SU/ECTS thresholds
-        const req = requirements[this.doubleMajor] || {};
+        const req = getReq(this.doubleMajor, this.entryTermDM);
         const totalReq = (req.total || 0) + 30;
         const ectsReq = (req.ects || 0) + 60;
         // Generic checks
