@@ -191,8 +191,9 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
         const codePrefix = course.code.match(/^[A-Z]+/)[0];
         const codeNumber = course.code.match(/\d+[A-Z0-9]*/)[0];
 
-        // Check if course exists in course data using both combined and split formats
-        let courseExists = courseData.some(c => {
+        // Check if course exists in course data using both combined and split formats.
+        // Also check the selected double major's course list if available.
+        const existsInList = (list) => list.some(c => {
             // Try direct match first
             if (c.code === course.code) return true;
 
@@ -204,6 +205,18 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
 
             return false;
         });
+
+        let courseExists = existsInList(courseData);
+        if (!courseExists) {
+            try {
+                if (curriculum && curriculum.doubleMajor &&
+                    Array.isArray(curriculum.doubleMajorCourseData)) {
+                    courseExists = existsInList(curriculum.doubleMajorCourseData);
+                }
+            } catch (_) {
+                /* ignore */
+            }
+        }
 
         // If course does not exist, attempt to automatically add it as a
         // custom course for certain special prefixes.  For non-engineering
