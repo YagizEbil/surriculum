@@ -205,7 +205,7 @@ function dynamic_click(e, curriculum, course_data)
         let credit = parseInt(getInfo(courseName, course_data)['SU_credit']);
 
         curriculum.getSemester(sem.id).totalGPA -= (letter_grades_global_dic[grade] * credit);
-        if(grade != 'T'){curriculum.getSemester(sem.id).totalGPACredits -= credit;}
+        if(grade != 'F'){curriculum.getSemester(sem.id).totalGPACredits -= credit;}
 
 
         e.target.parentNode.parentNode.parentNode.remove();

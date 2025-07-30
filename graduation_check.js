@@ -74,7 +74,7 @@ function displaySummary(curriculum, major_chosen_by_user) {
             const child = document.createElement('div');
             child.classList.add('summary_modal_child');
             if (i === 0) {
-                child.innerHTML = '<p>GPA: ' + gpa + '</p>';
+                child.innerHTML = '<p>GPA: ' + gpa + ' / 4.00</p>';
             } else {
                 child.innerHTML = '<p>' + labels[i] + total_values[i] + ' / ' + limits[i] + '</p>';
             }

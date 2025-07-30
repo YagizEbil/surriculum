@@ -79,7 +79,9 @@ function s_curriculum()
         let science = 0;
         let engineering = 0;
         let ects = 0;
-        
+        let gpaCredits = 0;
+        let gpaValue = 0.0;
+
         for(let i = 0; i < this.semesters.length; i++)
         {
             total = total + this.semesters[i].totalCredit;
@@ -91,6 +93,8 @@ function s_curriculum()
             science += this.semesters[i].totalScience;
             engineering += this.semesters[i].totalEngineering;
             ects += this.semesters[i].totalECTS;
+            gpaCredits += this.semesters[i].totalGPACredits;
+            gpaValue += this.semesters[i].totalGPA;
         }
         // Generic requirement checks
         const req = requirements[this.major] || {};
@@ -107,8 +111,12 @@ function s_curriculum()
         if (core < req.core) return 6;
         if (area < req.area) return 7;
         if (free < req.free) return 8;
-        return 0;
-
+        // GPA check for graduation
+        const gpaThresholdMainMajor = 2.00;
+        let GPA = gpaCredits ? (gpaValue / gpaCredits).toFixed(3) : NaN;
+        if (!isNaN(GPA)){
+            if (GPA < gpaThresholdMainMajor) return 38; // Flag for main major
+        }
         // Major-specific CS checks (only additional flags beyond generic)
         if(this.major == 'CS')
         {
@@ -144,8 +152,6 @@ function s_curriculum()
                 if(facultyCoursesCount < 5) return 14;
                 if(mathCoursesCount < 2) return 19;
                 if(fensCoursesCount < 3) return 16;
-
-
             }
         }
         else if(this.major == 'IE')
@@ -181,7 +187,6 @@ function s_curriculum()
                 if(facultyCoursesCount < 5) return 14;
                 if(mathCoursesCount < 2) return 19;
                 if(fensCoursesCount < 3) return 16;
-                return 0;
             }
         }
         else if(this.major == 'EE')
@@ -214,7 +219,7 @@ function s_curriculum()
                             let course = this.semesters[i].courses[a];
                             // Check for specific area courses
                             if(specificAreaCourses.includes(course.code) ||
-                               (course.code.startsWith("EE48") && course.category === "Area")) {
+                                (course.code.startsWith("EE48") && course.category === "Area")) {
                                 hasSpecificAreaCourse = true;
                                 break;
                             }
@@ -224,7 +229,6 @@ function s_curriculum()
 
                     if(!hasSpecificAreaCourse) return 24;
 
-                    return 0;
                 }
             }
         }
@@ -261,7 +265,6 @@ function s_curriculum()
                 if(mathCoursesCount < 2) return 19;
                 if(fensCoursesCount < 3) return 16;
 
-                return 0;
             }
         }
         else if(this.major == 'BIO')
@@ -297,7 +300,6 @@ function s_curriculum()
                 if(mathCoursesCount < 2) return 19;
                 if(fensCoursesCount < 3) return 16;
 
-                return 0;
             }
         }
         else if(this.major == 'ME')
@@ -724,6 +726,7 @@ function s_curriculum()
                 if(sbsCoreCount < 3) return 29;
             }
         }
+        return 0; // No issues found, return 0
     }
 
     /**
@@ -757,7 +760,7 @@ function s_curriculum()
         // In the unlikely event that it cannot be found, we skip
         // reallocation since course information will be unavailable.
         const getInfoFn = (typeof getInfo === 'function') ? getInfo :
-                          ((typeof window !== 'undefined' && typeof window.getInfo === 'function') ? window.getInfo : null);
+            ((typeof window !== 'undefined' && typeof window.getInfo === 'function') ? window.getInfo : null);
         if (!getInfoFn) {
             return;
         }
@@ -1215,6 +1218,8 @@ function s_curriculum()
         let science = 0;
         let engineering = 0;
         let ects = 0;
+        let gpaCreditsDM = 0;
+        let gpaValueDM = 0;
         for (let i = 0; i < this.semesters.length; i++) {
             const sem = this.semesters[i];
             total += sem.totalCredit;
@@ -1230,6 +1235,8 @@ function s_curriculum()
             science += sem.totalScience;
             engineering += sem.totalEngineering;
             ects += sem.totalECTS;
+            gpaCreditsDM += sem.semesters.totalGPACredits;
+            gpaValueDM += sem.semesters.totalGPA;
         }
         // Fetch requirements for double major and adjust SU/ECTS thresholds
         const req = requirements[this.doubleMajor] || {};
@@ -1247,6 +1254,12 @@ function s_curriculum()
         if (core < (req.core || 0)) return 6;
         if (area < (req.area || 0)) return 7;
         if (free < (req.free || 0)) return 8;
+        // GPA check for graduation
+        const gpaThresholdDoubleMajor = 3.20;
+        let GPA = gpaCreditsDM ? (gpaValueDM / gpaCreditsDM).toFixed(3) : NaN;
+        if (!isNaN(GPA)){
+            if (this.doubleMajor && GPA < gpaThresholdDoubleMajor) return 38; // Flag for double major
+        }
         // Major-specific checks for double major
         const maj = this.doubleMajor;
         if (maj === 'CS') {

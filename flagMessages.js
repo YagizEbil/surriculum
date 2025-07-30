@@ -8,7 +8,6 @@ export function buildFlagMessages(major) {
   const req = requirements[major];
 
   return {
-      // --- The ones we already know were mismatched ---
       1: () => `Your University SU credit is less than ${req.university}.`,
       2: () => `Your Required SU credit is less than ${req.required}.`,
       3: () => `Your Core Elective SU credit is less than ${req.core}.`,
@@ -19,6 +18,7 @@ export function buildFlagMessages(major) {
       8: () => `Your Basic Science SU credit is less than ${req.science}.`,
       9: () => `Your Engineering SU credit is less than ${req.engineering}.`,
       10: () => `Your ECTS is less than sufficient.`,
+      38: () => `You don't have enough GPA!`,
 
       //Major-specific messages
 

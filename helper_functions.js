@@ -84,8 +84,8 @@ for (let i = (academicYear - 6); i <= (academicYear + 6); i++) {
     let yearRange = i + "-" + (i + 1);
 
     // Add Spring, Fall, and optionally Summer to the list
-    date_list_InnerHTML += "<option value='" + yearRange + " Spring'>";
     date_list_InnerHTML += "<option value='" + yearRange + " Fall'>";
+    date_list_InnerHTML += "<option value='" + yearRange + " Spring'>";
     date_list_InnerHTML += "<option value='" + yearRange + " Summer'>";
 
     // Add to terms array in chronological order: Fall, Spring, Summer

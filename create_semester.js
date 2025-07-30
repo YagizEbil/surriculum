@@ -213,7 +213,7 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
                 grade.style.fontSize = '20px'
                 grade.style.paddingRight = '7px';
                 grade.style.paddingBottom = '7px';
-                if(grade_list[i] != 'T')
+                if(grade_list[i] != 'F')
                 {
                     curriculum.getSemester(semester.id).totalGPA += (courseCredit * letter_grades_global_dic[grade_list[i]]);
                     curriculum.getSemester(semester.id).totalGPACredits += courseCredit;
