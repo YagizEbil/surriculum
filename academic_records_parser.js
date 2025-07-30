@@ -19,6 +19,12 @@ function parseAcademicRecords(htmlContent) {
         notFoundCourses: []
     };
 
+    // Track the most recent entry for each course code. As we parse the tables
+    // in the order they appear in the transcript, later occurrences will
+    // overwrite earlier ones so that repeated attempts keep only the latest
+    // grade.
+    const latestMap = {};
+
     // Extract courses from each table (semester)
     courseTables.forEach(table => {
         // Get semester information from the header
@@ -61,6 +67,17 @@ function parseAcademicRecords(htmlContent) {
                 let courseCode = cells[0].textContent.trim().replace(/\s/g, '');
                 const courseTitle = cells[1].textContent.trim();
                 const grade = cells[3].textContent.trim();
+
+                // Determine status if available by scanning remaining cells. If
+                // the row marks the course as "Repeated" or "Excluded", we skip
+                // it as it should not affect credits or categories.
+                const statusText = Array.from(cells)
+                    .slice(4)
+                    .map(c => c.textContent.trim().toLowerCase())
+                    .join(' ');
+                if (statusText.includes('repeated') || statusText.includes('excluded')) {
+                    return;
+                }
                 // Extract SU credit and ECTS values if available. The transcript
                 // table uses the fourth and fifth columns (zero-indexed) for
                 // credit and ECTS, respectively. Parse them as floats and
@@ -94,19 +111,21 @@ function parseAcademicRecords(htmlContent) {
 
                 // Only include courses with passing grades or F (exclude W, NA and Registered)
                 if (!['W', 'NA', 'Registered'].includes(grade)) {
-                    result.courses.push({
+                    latestMap[courseCode] = {
                         code: courseCode,
                         title: courseTitle,
                         grade: grade,
                         semester: semester,
                         suCredits: suCredits,
                         ects: ects
-                    });
+                    };
                 }
             }
         });
     });
 
+    // Finalize the result courses from the latestMap values
+    result.courses = Object.values(latestMap);
     return result;
 }
 
