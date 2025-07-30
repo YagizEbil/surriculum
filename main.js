@@ -87,7 +87,7 @@ function SUrriculum(major_chosen_by_user) {
     let doubleMajorCourseData = [];
 
     fetchCourseData(major_chosen_by_user)
-    .then(json => {
+    .then(async json => {
     //START OF PROGRAM
         let change_major_element = document.querySelector('.change_major');
     change_major_element.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
@@ -189,8 +189,37 @@ function SUrriculum(major_chosen_by_user) {
     } catch (err) {
         console.error('Failed to load custom courses:', err);
     }
+
+    // Preload double major data so that courses unique to the second major
+    // are available when reloading semesters from localStorage.
+    let savedDMPref = '';
+    try {
+        savedDMPref = localStorage.getItem('doubleMajor') || '';
+    } catch (_) {}
+    if (savedDMPref) {
+        const dmData = await fetchCourseData(savedDMPref);
+        if (Array.isArray(dmData)) {
+            doubleMajorCourseData = dmData.slice();
+        } else {
+            doubleMajorCourseData = [];
+        }
+        try {
+            const keyDM = 'customCourses_' + savedDMPref;
+            const storedDM = localStorage.getItem(keyDM);
+            if (storedDM) {
+                const parsedDM = JSON.parse(storedDM);
+                if (Array.isArray(parsedDM)) {
+                    doubleMajorCourseData = doubleMajorCourseData.concat(parsedDM);
+                }
+            }
+        } catch (_) {}
+    }
     let curriculum = new s_curriculum();
     curriculum.major = major_chosen_by_user;
+    if (savedDMPref) {
+        curriculum.doubleMajorCourseData = doubleMajorCourseData;
+        curriculum.doubleMajor = savedDMPref;
+    }
 
     // Expose the curriculum object globally so that helper functions
     // (e.g., isCourseValid and getInfo) can access the double major
@@ -803,11 +832,9 @@ function SUrriculum(major_chosen_by_user) {
 
         // Append modal to overlay and overlay to board
         overlay.appendChild(modal);
+        // Do not allow closing the form by clicking outside the modal
         overlay.addEventListener('click', function(e) {
-            // If clicking directly on the overlay (not the modal), close
-            if (e.target === overlay) {
-                overlay.remove();
-            }
+            e.stopPropagation();
         });
         boardDom.appendChild(overlay);
     }
@@ -1035,14 +1062,6 @@ function SUrriculum(major_chosen_by_user) {
             const buttons = document.createElement('div');
             buttons.style.display = 'flex';
             buttons.style.justifyContent = 'flex-end';
-            const cancel = document.createElement('button');
-            cancel.innerText = 'Cancel';
-            cancel.style.marginRight = '10px';
-            cancel.onclick = function(e) {
-                e.stopPropagation();
-                overlay.remove();
-                if (callback) callback(null);
-            };
             const save = document.createElement('button');
             save.innerText = 'Save';
             save.style.backgroundColor = '#4caf50';
@@ -1056,15 +1075,12 @@ function SUrriculum(major_chosen_by_user) {
                 overlay.remove();
                 if (callback) callback(chosen);
             };
-            buttons.appendChild(cancel);
             buttons.appendChild(save);
             modal.appendChild(buttons);
             overlay.appendChild(modal);
+            // Prevent closing the modal by clicking outside
             overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) {
-                    overlay.remove();
-                    if (callback) callback(null);
-                }
+                e.stopPropagation();
             });
             document.body.appendChild(overlay);
         }
@@ -1304,6 +1320,8 @@ function SUrriculum(major_chosen_by_user) {
                     const queue = pendingList.slice();
                     processPendingCustomCourses(queue);
                 }
+                const importSection = document.querySelector('.import-section');
+                if (importSection) importSection.style.display = 'none';
             };
 
             reader.readAsText(file);

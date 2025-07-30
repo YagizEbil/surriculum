@@ -1124,12 +1124,12 @@ function s_curriculum()
                         dmType = dmStaticType;
                     }
                 } else {
-                    // Unknown course: treat as free elective but use any
-                    // credit value attached to the course object (e.g., from
-                    // primary catalog) to count towards DM totals.
+                    // Unknown course in the double major catalog: do not
+                    // allocate it to any DM category. Still count its credit
+                    // values for science/engineering/ECTS tracking.
                     credit = parseInt(course.credit || course.SU_credit || '0');
-                    dmType = 'free';
-                    dmStaticType = 'free';
+                    dmType = 'none';
+                    dmStaticType = 'none';
                 }
                 // Assign DM effective type
                 course.effective_type_dm = dmType;
