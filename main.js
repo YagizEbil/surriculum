@@ -590,7 +590,7 @@ function SUrriculum(major_chosen_by_user) {
             typeLabel.style.marginBottom = '3px';
             typeRow.appendChild(typeLabel);
             const typeSelect = document.createElement('select');
-            ['core', 'area', 'university', 'free', 'required'].forEach(function(opt) {
+            ['core', 'area', 'university', 'free', 'required', 'none'].forEach(function(opt) {
                 const option = document.createElement('option');
                 option.value = opt;
                 option.innerText = opt.charAt(0).toUpperCase() + opt.slice(1);
@@ -1047,7 +1047,7 @@ function SUrriculum(major_chosen_by_user) {
             modal.appendChild(info);
             // Select
             const select = document.createElement('select');
-            ['core','area','required','university','free'].forEach(function(opt) {
+            ['core','area','required','university','free','none'].forEach(function(opt) {
                 const o = document.createElement('option');
                 o.value = opt;
                 o.innerText = opt.charAt(0).toUpperCase() + opt.slice(1);
@@ -1119,14 +1119,13 @@ function SUrriculum(major_chosen_by_user) {
                 curriculum.recalcEffectiveTypesDouble(doubleMajorCourseData);
                 // Determine pending courses that need classification for DM
                 const pending = [];
+                const pendingSet = new Set();
                 // Build a set of existing DM course codes for quick lookup
                 const dmSet = new Set(doubleMajorCourseData.map(c => c.Major + c.Code));
                 // Iterate all courses currently known (main + custom)
                 course_data.forEach(function(c) {
                     const combined = (c.Major + c.Code);
                     if (!dmSet.has(combined)) {
-                        // If this course is present in the curriculum (i.e., exists in any semester) we need classification
-                        // Only prompt if the course appears in the user's semesters
                         let appears = false;
                         for (let si = 0; si < curriculum.semesters.length && !appears; si++) {
                             const sem = curriculum.semesters[si];
@@ -1138,11 +1137,29 @@ function SUrriculum(major_chosen_by_user) {
                                 }
                             }
                         }
-                        if (appears) {
+                        if (appears && !pendingSet.has(combined)) {
                             pending.push({ code: combined, title: c.Course_Name });
+                            pendingSet.add(combined);
                         }
                     }
                 });
+                // Also include custom courses defined for the primary major even if not in semesters
+                try {
+                    const keyMain = 'customCourses_' + curriculum.major;
+                    const storedMain = localStorage.getItem(keyMain);
+                    if (storedMain) {
+                        const parsedMain = JSON.parse(storedMain);
+                        if (Array.isArray(parsedMain)) {
+                            parsedMain.forEach(function(cc){
+                                const comb = cc.Major + cc.Code;
+                                if (!dmSet.has(comb) && !pendingSet.has(comb)) {
+                                    pending.push({ code: comb, title: cc.Course_Name });
+                                    pendingSet.add(comb);
+                                }
+                            });
+                        }
+                    }
+                } catch(_){}
                 if (pending.length > 0) {
                     processPendingDoubleMajor(pending);
                 }

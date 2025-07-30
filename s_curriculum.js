@@ -805,6 +805,26 @@ function s_curriculum()
             // Iterate courses in the order they appear within the semester.
             for (let j = 0; j < sem.courses.length; j++) {
                 const course = sem.courses[j];
+                // Skip credit calculations for courses with grade F
+                let gradeText = '';
+                try {
+                    const elem = document.getElementById(course.id);
+                    if (elem) {
+                        const gr = elem.querySelector('.grade');
+                        gradeText = gr ? gr.textContent.trim() : '';
+                    }
+                } catch (_) {}
+                if (gradeText === 'F') {
+                    course.effective_type = 'none';
+                    try {
+                        const courseElem = document.getElementById(course.id);
+                        if (courseElem) {
+                            const typeElem = courseElem.querySelector('.course_type');
+                            if (typeElem) typeElem.textContent = 'N/A';
+                        }
+                    } catch (_) {}
+                    continue;
+                }
                 // Attempt to find course information in the primary major's
                 // course_data.  We do this search ourselves rather than
                 // relying on getInfo() because getInfo has been extended to
@@ -1093,6 +1113,18 @@ function s_curriculum()
             const sem = sorted[i];
             for (let j = 0; j < sem.courses.length; j++) {
                 const course = sem.courses[j];
+                let gradeText = '';
+                try {
+                    const elem = document.getElementById(course.id);
+                    if (elem) {
+                        const gr = elem.querySelector('.grade');
+                        gradeText = gr ? gr.textContent.trim() : '';
+                    }
+                } catch (_) {}
+                if (gradeText === 'F') {
+                    course.effective_type_dm = 'none';
+                    continue;
+                }
                 const info = getInfoFnDM(course.code, course_data_dm);
                 let dmType = 'free';
                 let credit = 0;
