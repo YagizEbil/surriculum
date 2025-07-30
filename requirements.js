@@ -1,10 +1,28 @@
 // requirements.js
-// Define the degree requirements for each major. When this script is loaded
-// via a normal <script> tag (non-module) the requirements object will be
-// attached to the global window so other scripts can reference it without
-// importing.
+// Degree requirements are stored as JSON files under `requirements/<TERM>.json`.
+// This module loads the file matching the user's selected entry term. If no
+// term-specific file is found, it falls back to `requirements/default.json` and
+// finally the hard-coded values below.
 
-export const requirements = {
+let requirements = {};
+
+function loadRequirements(termCode) {
+  const path = `./requirements/${termCode}.json`;
+  const defPath = './requirements/default.json';
+  const tryLoad = (p) => {
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', p, false);
+      xhr.overrideMimeType('application/json');
+      xhr.send(null);
+      if (xhr.status === 200 || xhr.status === 0) return JSON.parse(xhr.responseText);
+    } catch (_) {}
+    return null;
+  };
+  return tryLoad(path) || tryLoad(defPath) || null;
+}
+
+const fallbackRequirements = {
   // ----- Engineering majors -----
   CS: {
     total: 125,
@@ -150,9 +168,21 @@ export const requirements = {
   }
 };
 
+let termName = '';
+try {
+  termName = localStorage.getItem('entryTerm') || '';
+} catch (_) {}
+let termCode = '';
+try {
+  if (typeof termNameToCode === 'function') termCode = termNameToCode(termName);
+} catch (_) {}
+const loadedReq = termCode ? loadRequirements(termCode) : null;
+export const requirements = loadedReq || fallbackRequirements;
+
 // Expose the requirements object on the window in browser environments. This
 // allows other scripts to access `requirements` when modules are not
 // available (e.g., when loading files directly via the file:// scheme).
 if (typeof window !== 'undefined') {
   window.requirements = requirements;
+  window.loadRequirements = loadRequirements;
 }
