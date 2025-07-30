@@ -1267,8 +1267,8 @@ function s_curriculum()
             science += sem.totalScience;
             engineering += sem.totalEngineering;
             ects += sem.totalECTS;
-            gpaCreditsDM += sem.semesters.totalGPACredits;
-            gpaValueDM += sem.semesters.totalGPA;
+            gpaCreditsDM += sem.totalGPACredits;
+            gpaValueDM += sem.totalGPA;
         }
         // Fetch requirements for double major and adjust SU/ECTS thresholds
         const req = requirements[this.doubleMajor] || {};
