@@ -200,7 +200,7 @@ function s_curriculum()
                         let course = this.semesters[i].courses[a];
                         // Check if it's a 400-level EE course in core electives
                         if(course.code.startsWith("EE4") && course.category === "Core") {
-                            ee400LevelCredits += course.credit;
+                            ee400LevelCredits += course.SU_credit;
                         }
                     }
                 }
@@ -451,9 +451,9 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (course.category === 'Free') {
-                            freeElectivesCount += course.credit;
+                            freeElectivesCount += course.SU_credit;
                             if (course.Faculty_Course === 'FASS' || course.Faculty_Course === 'FENS') {
-                                fassFensCredits += course.credit;
+                                fassFensCredits += course.SU_credit;
                             }
                             if (basicLanguageCourses.includes(course.code)) {
                                 basicLanguageCoursesCount++;
@@ -513,7 +513,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIPool.includes(course.Major + course.Code)) {
-                            coreElectivesICount += course.credit;
+                            coreElectivesICount += course.SU_credit;
                         }
                     }
                 }
@@ -526,7 +526,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIIPool.includes(course.Major + course.Code)) {
-                            coreElectivesIICount += course.credit;
+                            coreElectivesIICount += course.SU_credit;
                         }
                     }
                 }
@@ -621,7 +621,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIPool.includes(course.Major + course.Code)) {
-                            coreElectivesICount += course.credit;
+                            coreElectivesICount += course.SU_credit;
                         }
                     }
                 }
@@ -636,7 +636,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIIPool.includes(course.Major + course.Code)) {
-                            coreElectivesIICount += course.credit;
+                            coreElectivesIICount += course.SU_credit;
                             // Track mutually exclusive pairs
                             for (const pair of mutuallyExclusivePairs) {
                                 if (pair.includes(course.Major + course.Code)) {
@@ -874,7 +874,7 @@ function s_curriculum()
                         engVal = parseFloat(dmInfo['Engineering'] || '0');
                         ectsVal = parseFloat(dmInfo['ECTS'] || '0');
                     } else {
-                        credit = parseInt(course.credit || course.SU_credit || '0');
+                        credit = parseInt(course.SU_credit || course.SU_credit || '0');
                         scienceVal = parseFloat(course.Basic_Science || '0');
                         engVal = parseFloat(course.Engineering || '0');
                         ectsVal = parseFloat(course.ECTS || '0');
@@ -1162,7 +1162,7 @@ function s_curriculum()
                     // Unknown course in the double major catalog: do not
                     // allocate it to any DM category. Still count its credit
                     // values for science/engineering/ECTS tracking.
-                    credit = parseInt(course.credit || course.SU_credit || '0');
+                    credit = parseInt(course.SU_credit || course.SU_credit || '0');
                     dmType = 'none';
                     dmStaticType = 'none';
                 }
@@ -1342,12 +1342,11 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (course.code.startsWith('EE4') && course.category === 'Core') {
-                            ee400LevelCredits += course.credit;
+                            ee400LevelCredits += course.SU_credit;
                         }
                     }
                 }
                 if (ee400LevelCredits < 9) return 23;
-                if (core < 25) return 19;
                 else {
                     let hasSpecificAreaCourse = false;
                     const specificAreaCourses = ['CS300','CS401','CS412','ME303','PHYS302','PHYS303'];
@@ -1510,9 +1509,9 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (course.category === 'Free') {
-                            freeElectivesCount += course.credit;
+                            freeElectivesCount += course.SU_credit;
                             if (course.Faculty_Course === 'FASS' || course.Faculty_Course === 'FENS') {
-                                fassFensCredits += course.credit;
+                                fassFensCredits += course.SU_credit;
                             }
                             if (basicLanguageCourses.includes(course.code)) {
                                 basicLanguageCoursesCount++;
@@ -1559,7 +1558,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIPool.includes(course.Major + course.Code)) {
-                            coreElectivesICount += course.credit;
+                            coreElectivesICount += course.SU_credit;
                         }
                     }
                 }
@@ -1572,7 +1571,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIIPool.includes(course.Major + course.Code)) {
-                            coreElectivesIICount += course.credit;
+                            coreElectivesIICount += course.SU_credit;
                         }
                     }
                 }
@@ -1650,7 +1649,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIPool.includes(course.Major + course.Code)) {
-                            coreElectivesICount += course.credit;
+                            coreElectivesICount += course.SU_credit;
                         }
                     }
                 }
@@ -1665,7 +1664,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (coreElectivesIIPool.includes(course.Major + course.Code)) {
-                            coreElectivesIICount += course.credit;
+                            coreElectivesIICount += course.SU_credit;
                             // Track mutually exclusive pairs
                             for (const pair of mutuallyExclusivePairs) {
                                 if (pair.includes(course.Major + course.Code)) {
@@ -1737,7 +1736,7 @@ function s_curriculum()
                     for (let a = 0; a < this.semesters[i].courses.length; a++) {
                         const course = this.semesters[i].courses[a];
                         if (course.category === 'Core') {
-                            coreSUCredits += (course.credit || parseInt(course.SU_credit) || 0);
+                            coreSUCredits += (course.SU_credit || parseInt(course.SU_credit) || 0);
                         }
                     }
                 }
