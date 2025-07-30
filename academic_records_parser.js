@@ -92,8 +92,8 @@ function parseAcademicRecords(htmlContent) {
                     return; // Skip this iteration
                 }
 
-                // Only include courses with passing grades (not F, W, NA, or currently registered)
-                if (!['F', 'W', 'NA', 'Registered'].includes(grade)) {
+                // Only include courses with passing grades or F (exclude W, NA and Registered)
+                if (!['W', 'NA', 'Registered'].includes(grade)) {
                     result.courses.push({
                         code: courseCode,
                         title: courseTitle,

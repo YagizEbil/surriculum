@@ -190,22 +190,30 @@ function dynamic_click(e, curriculum, course_data)
         }
     }
     //CLICKED "<course delete>"
+
     else if(e.target.classList.contains("delete_course"))
     {
-        curriculum.getSemester(e.target.parentNode.parentNode.parentNode.parentNode.id).deleteCourse(e.target.parentNode.parentNode.parentNode.id);
-        //changing total credits element in dom:
-        let dom_tc = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('span');
-        dom_tc.innerHTML = 'Total: ' + curriculum.getSemester(e.target.parentNode.parentNode.parentNode.parentNode.id).totalCredit + ' credits';
-
-
-        let grade = e.target.parentNode.parentNode.querySelector('.grade').innerHTML;
-
         let sem = e.target.parentNode.parentNode.parentNode.parentNode;
+        let semObj = curriculum.getSemester(sem.id);
         let courseName = e.target.parentNode.firstChild.innerHTML;
         let credit = parseInt(getInfo(courseName, course_data)['SU_credit']);
+        let grade = e.target.parentNode.parentNode.querySelector('.grade').innerHTML;
 
-        curriculum.getSemester(sem.id).totalGPA -= (letter_grades_global_dic[grade] * credit);
-        if(grade != 'F'){curriculum.getSemester(sem.id).totalGPACredits -= credit;}
+        // If this course had grade F we previously removed its credits. Add them back before deletion
+        if(grade == 'F'){
+            let info = getInfo(courseName, course_data);
+            if(info){
+                adjustSemesterTotals(semObj, info, 1);
+            }
+        }
+
+        semObj.deleteCourse(e.target.parentNode.parentNode.parentNode.id);
+        //changing total credits element in dom:
+        let dom_tc = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('span');
+        dom_tc.innerHTML = 'Total: ' + semObj.totalCredit + ' credits';
+
+        semObj.totalGPA -= (letter_grades_global_dic[grade] * credit);
+        if(grade != 'T'){semObj.totalGPACredits -= credit;}
 
 
         e.target.parentNode.parentNode.parentNode.remove();
@@ -284,16 +292,17 @@ function dynamic_click(e, curriculum, course_data)
     //CLICKED ADD GRADE:
     else if(e.target.classList.contains("grade"))
     {
+        var prevGrade;
         if(e.target.innerHTML.length <= 2)
         {
-            let grade = e.target.innerHTML;
+            prevGrade = e.target.innerHTML;
 
             let sem = e.target.parentNode.parentNode.parentNode;
             let courseName = e.target.parentNode.querySelector('.course_label').firstChild.innerHTML;
             let credit = parseInt(getInfo(courseName, course_data)['SU_credit']);
 
-            curriculum.getSemester(sem.id).totalGPA -= (letter_grades_global_dic[grade] * credit);
-            if(grade != 'T'){curriculum.getSemester(sem.id).totalGPACredits -= credit;}
+            curriculum.getSemester(sem.id).totalGPA -= (letter_grades_global_dic[prevGrade] * credit);
+            if(prevGrade != 'T'){curriculum.getSemester(sem.id).totalGPACredits -= credit;}
         }
 
         let input = document.createElement('input');
@@ -317,8 +326,17 @@ function dynamic_click(e, curriculum, course_data)
             let sem = e.target.parentNode.parentNode.parentNode.parentNode;
             let courseName = e.target.parentNode.parentNode.querySelector('.course_label').firstChild.innerHTML;
             let credit = parseInt(getInfo(courseName, course_data)['SU_credit']);
-            curriculum.getSemester(sem.id).totalGPA += (letter_grades_global_dic[grade] * credit);
-            if(grade != 'T'){curriculum.getSemester(sem.id).totalGPACredits += credit;}
+            let semObj = curriculum.getSemester(sem.id);
+            semObj.totalGPA += (letter_grades_global_dic[grade] * credit);
+            if(grade != 'T'){semObj.totalGPACredits += credit;}
+            // Adjust earned credits based on grade change
+            let info = getInfo(courseName, course_data);
+            if(prevGrade === 'F' && grade !== 'F'){
+                adjustSemesterTotals(semObj, info, 1);
+            } else if(prevGrade !== 'F' && grade === 'F'){
+                adjustSemesterTotals(semObj, info, -1);
+            }
+            prevGrade = grade;
             e.target.parentNode.innerHTML = grade;
             
             //alert(curriculum.getSemester(sem.id).totalGPA / curriculum.getSemester(sem.id).totalGPACredits)

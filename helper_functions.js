@@ -137,6 +137,28 @@ function getCoursesDataList(course_data)
     return datalistInnerHTML;
 }
 
+// Adjust semester totals by adding or subtracting the specified course's
+// credit, science/engineering values and category totals. `multiplier`
+// should be +1 to add credits or -1 to remove them.
+function adjustSemesterTotals(semesterObj, courseInfo, multiplier) {
+    if (!semesterObj || !courseInfo) return;
+    multiplier = multiplier || 1;
+    const credit = parseInt(courseInfo['SU_credit'] || '0');
+    const bs = parseFloat(courseInfo['Basic_Science'] || '0');
+    const eng = parseFloat(courseInfo['Engineering'] || '0');
+    const ects = parseFloat(courseInfo['ECTS'] || '0');
+    semesterObj.totalCredit += multiplier * credit;
+    semesterObj.totalScience += multiplier * bs;
+    semesterObj.totalEngineering += multiplier * eng;
+    semesterObj.totalECTS += multiplier * ects;
+    const el = (courseInfo['EL_Type'] || '').toLowerCase();
+    if (el === 'free') semesterObj.totalFree += multiplier * credit;
+    else if (el === 'area') semesterObj.totalArea += multiplier * credit;
+    else if (el === 'core') semesterObj.totalCore += multiplier * credit;
+    else if (el === 'university') semesterObj.totalUniversity += multiplier * credit;
+    else if (el === 'required') semesterObj.totalRequired += multiplier * credit;
+}
+
 function serializator(curriculum)
 {
     let result = '[';
