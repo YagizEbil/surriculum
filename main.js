@@ -840,6 +840,7 @@ function SUrriculum(major_chosen_by_user) {
                     const customKey = 'customCourses_' + major_chosen_by_user;
                     localStorage.removeItem(customKey);
                     localStorage.clear()
+                    localStorage.clear()
                 } catch (ex) {
                     console.error('Failed to clear localStorage:', ex);
                 }
