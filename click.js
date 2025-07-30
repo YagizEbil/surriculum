@@ -346,9 +346,39 @@ function dynamic_click(e, curriculum, course_data)
                 if (typeof curriculum.recalcEffectiveTypes === 'function') {
                     curriculum.recalcEffectiveTypes(course_data);
                 }
+                if (typeof curriculum.recalcEffectiveTypesDouble === 'function' && curriculum.doubleMajor) {
+                    curriculum.recalcEffectiveTypesDouble(curriculum.doubleMajorCourseData);
+                }
             } catch (_) {}
 
             //alert(curriculum.getSemester(sem.id).totalGPA / curriculum.getSemester(sem.id).totalGPACredits)
-        })
+        });
+
+        // Allow leaving the grade empty by blurring the input
+        input.addEventListener('blur', function(e){
+            const val = input.value.trim();
+            if(!val){
+                let sem = input.parentNode.parentNode.parentNode.parentNode;
+                let courseName = input.parentNode.parentNode.querySelector('.course_label').firstChild.innerHTML;
+                let semObj = curriculum.getSemester(sem.id);
+                // If there was a previous grade remove its effects already subtracted above
+                if(prevGrade === 'F'){
+                    let info = getInfo(courseName, course_data);
+                    adjustSemesterTotals(semObj, info, 1);
+                }
+                input.parentNode.style.fontSize = '';
+                input.parentNode.style.paddingRight = '7px';
+                input.parentNode.style.paddingBottom = '';
+                input.parentNode.innerHTML = 'Add grade';
+                try{
+                    if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                        curriculum.recalcEffectiveTypes(course_data);
+                    }
+                    if (typeof curriculum.recalcEffectiveTypesDouble === 'function' && curriculum.doubleMajor) {
+                        curriculum.recalcEffectiveTypesDouble(curriculum.doubleMajorCourseData);
+                    }
+                }catch(_){}
+            }
+        });
     }
 }

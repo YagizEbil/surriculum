@@ -31,16 +31,6 @@ function parseAcademicRecords(htmlContent) {
         const semesterHeader = table.querySelector('thead tr th:first-child b');
         let semester = semesterHeader ? semesterHeader.textContent.trim() : "Unknown Semester";
 
-        // Skip if the semester is a future or current semester with registered courses
-        if (semester.includes("Registered") || table.textContent.includes("Registered")) {
-            const hasRegisteredOnly = Array.from(table.querySelectorAll('tbody tr'))
-                .filter(row => {
-                    const cells = row.querySelectorAll('td');
-                    return cells.length >= 4 && cells[3].textContent.trim() !== "Registered";
-                }).length === 0;
-
-            if (hasRegisteredOnly) return;
-        }
 
         // Get all course rows (skip header rows and special rows)
         const courseRows = Array.from(table.querySelectorAll('tbody tr')).filter(row => {
@@ -109,17 +99,20 @@ function parseAcademicRecords(htmlContent) {
                     return; // Skip this iteration
                 }
 
-                // Only include courses with passing grades or F (exclude W, NA and Registered)
-                if (!['W', 'NA', 'Registered'].includes(grade)) {
-                    latestMap[courseCode] = {
-                        code: courseCode,
-                        title: courseTitle,
-                        grade: grade,
-                        semester: semester,
-                        suCredits: suCredits,
-                        ects: ects
-                    };
+                // Skip withdrawn or not attended courses
+                if (['W', 'NA'].includes(grade)) {
+                    return;
                 }
+
+                // Include the course, using blank grade for "Registered"
+                latestMap[courseCode] = {
+                    code: courseCode,
+                    title: courseTitle,
+                    grade: grade === 'Registered' ? '' : grade,
+                    semester: semester,
+                    suCredits: suCredits,
+                    ects: ects
+                };
             }
         });
     });
