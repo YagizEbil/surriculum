@@ -338,7 +338,16 @@ function dynamic_click(e, curriculum, course_data)
             }
             prevGrade = grade;
             e.target.parentNode.innerHTML = grade;
-            
+
+            // Recalculate effective categories when the grade changes so
+            // that courses that were previously failed (F) or newly
+            // passed are allocated correctly.
+            try {
+                if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                    curriculum.recalcEffectiveTypes(course_data);
+                }
+            } catch (_) {}
+
             //alert(curriculum.getSemester(sem.id).totalGPA / curriculum.getSemester(sem.id).totalGPACredits)
         })
     }
