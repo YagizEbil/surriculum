@@ -128,9 +128,11 @@ function s_curriculum()
         // Check core, area and free credits against requirements directly.
         // Do not perform dynamic reallocation here because the effective
         // categories have already been computed via recalcEffectiveTypes().
-        if (core < req.core) return 6;
-        if (area < req.area) return 7;
-        if (free < req.free) return 8;
+        // Flag codes must align with flagMessages.js:
+        // 3=core, 6=area, 7=free, 8=science.
+        if (core < req.core) return 3;
+        if (area < req.area) return 6;
+        if (free < req.free) return 7;
         // GPA check for graduation
         const gpaThresholdMainMajor = 2.00;
         let GPA = gpaCredits ? (gpaValue / gpaCredits).toFixed(3) : NaN;
@@ -1302,10 +1304,11 @@ function s_curriculum()
         if (engineering < (req.engineering || 0)) return 9;
         if (ects < ectsReq) return 10;
         if (required < (req.required || 0)) return 2;
-        // Core/area/free requirements
-        if (core < (req.core || 0)) return 6;
-        if (area < (req.area || 0)) return 7;
-        if (free < (req.free || 0)) return 8;
+        // Core/area/free requirements. Flag codes mirror flagMessages.js
+        // where 3=core, 6=area, 7=free and 8=science.
+        if (core < (req.core || 0)) return 3;
+        if (area < (req.area || 0)) return 6;
+        if (free < (req.free || 0)) return 7;
         // GPA check for graduation
         const gpaThresholdDoubleMajor = 3.20;
         let GPA = gpaCreditsDM ? (gpaValueDM / gpaCreditsDM).toFixed(3) : NaN;

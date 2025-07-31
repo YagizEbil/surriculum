@@ -5,7 +5,14 @@
 // function will be attached to the global window for other scripts to call.
 
 export function buildFlagMessages(major) {
-  const req = requirements[major];
+  // Retrieve the requirements object from the global scope when running in
+  // the browser. This avoids reference errors when this module is parsed by
+  // Node or other environments where "requirements" isn't a top-level
+  // variable.
+  const allReq = (typeof globalThis !== 'undefined' && globalThis.requirements)
+    ? globalThis.requirements
+    : {};
+  const req = allReq[major] || {};
 
   return {
       1: () => `Your University SU credit is less than ${req.university}.`,
