@@ -80,9 +80,11 @@ if (currentMonth >= 7) { // August or later
 
 // Generate terms from 2019 onwards. We still keep a window of 6 years in the
 // past and future relative to the current academic year but never go earlier
-// than 2019 so that the earliest selectable term matches the scraped data.
+// than 2019 so that the earliest selectable term matches the scraped data. The
+// dataset currently ends at Fall 2025, however for planning purposes we allow
+// selecting terms up to 2030.
 const startYear = Math.max(2019, academicYear - 6);
-const endYear = Math.min(2025, academicYear + 6);
+const endYear = Math.min(2030, academicYear + 6);
 for (let i = endYear; i >= startYear; i--) {
     // Create academic year string (e.g., "2022-2023")
     let yearRange = i + "-" + (i + 1);
