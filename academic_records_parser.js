@@ -154,10 +154,10 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
         // Extract the semester pattern like "Fall 2022-2023" from the header
         let match = semester.match(/(Fall|Spring|Summer)\s+(\d{4}-\d{4})/);
         if (match) {
-            // Reformat it to the expected format: "2022-2023 Fall"
+            // Reformat it to the expected format: "Fall 2022-2023"
             const term = match[1];
             const yearRange = match[2];
-            return yearRange + " " + term;
+            return term + " " + yearRange;
         }
         return semester;
     };

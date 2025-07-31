@@ -83,45 +83,45 @@ if (currentMonth >= 7) { // August or later
 // than 2019 so that the earliest selectable term matches the scraped data.
 const startYear = Math.max(2019, academicYear - 6);
 const endYear = Math.min(2025, academicYear + 6);
-for (let i = startYear; i <= endYear; i++) {
+for (let i = endYear; i >= startYear; i--) {
     // Create academic year string (e.g., "2022-2023")
     let yearRange = i + "-" + (i + 1);
 
     // Only allow Fall term for 2025-2026 academic year
     if (i === 2025) {
-        date_list_InnerHTML += "<option value='" + yearRange + " Fall'>";
-        terms.push(yearRange + " Fall");
+        date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
+        terms.push("Fall " + yearRange);
     } else {
-        date_list_InnerHTML += "<option value='" + yearRange + " Fall'>";
-        date_list_InnerHTML += "<option value='" + yearRange + " Spring'>";
-        date_list_InnerHTML += "<option value='" + yearRange + " Summer'>";
+        date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
+        date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
+        date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
 
-        terms.push(yearRange + " Fall");
-        terms.push(yearRange + " Spring");
-        terms.push(yearRange + " Summer");
+        terms.push("Summer " + yearRange);
+        terms.push("Spring " + yearRange);
+        terms.push("Fall " + yearRange);
     }
 }
 
-// Utility: convert a term name like "2023-2024 Fall" to its numeric code
+// Utility: convert a term name like "Fall 2023-2024" to its numeric code
 // (e.g. "202301"). This is used to map user selections to the folders
 // produced by the scraper.
 function termNameToCode(name) {
-    const m = name && name.match(/(\d{4})-\d{4} (Fall|Spring|Summer)/);
+    const m = name && name.match(/(Fall|Spring|Summer)\s+(\d{4})-(\d{4})/);
     if (!m) return '';
-    const year = m[1];
-    const suffix = { 'Fall': '01', 'Spring': '02', 'Summer': '03' }[m[2]] || '01';
+    const year = m[2];
+    const suffix = { 'Fall': '01', 'Spring': '02', 'Summer': '03' }[m[1]] || '01';
     return year + suffix;
 }
 
 // Reverse of termNameToCode. Converts numeric term code to display string
-// like "2023-2024 Fall".
+// like "Fall 2023-2024".
 function termCodeToName(code) {
     if (!code || code.length !== 6) return '';
     const year = code.slice(0, 4);
     const termNum = code.slice(4);
     const term = { '01': 'Fall', '02': 'Spring', '03': 'Summer' }[termNum] || '';
     const nextYear = String(parseInt(year, 10) + 1);
-    return year + '-' + nextYear + ' ' + term;
+    return term + ' ' + year + '-' + nextYear;
 }
 
 var grade_list_InnerHTML = '';
