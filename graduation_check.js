@@ -105,7 +105,13 @@ function displaySummary(curriculum, major_chosen_by_user) {
     }
     const gpaMain = gpaCredits ? (gpaValue / gpaCredits).toFixed(3) : '0.000';
     // Determine limits from requirements for primary major
-    const reqMain = requirements[major_chosen_by_user] || {};
+    // Access the requirements object via the global scope to avoid reference
+    // errors when this script runs in environments without an imported
+    // variable.
+    const allReq = (typeof globalThis !== 'undefined' && globalThis.requirements)
+        ? globalThis.requirements
+        : {};
+    const reqMain = allReq[major_chosen_by_user] || {};
     const limitsMain = [
         '4.0',
         String(reqMain.total || 0),
@@ -151,7 +157,7 @@ function displaySummary(curriculum, major_chosen_by_user) {
         }
         const gpaDM = gpaCreditsDM ? (gpaValueDM / gpaCreditsDM).toFixed(3) : '0.000';
         // Determine limits for DM (SU +30, ECTS +60)
-        const dmReq = requirements[curriculum.doubleMajor] || {};
+        const dmReq = allReq[curriculum.doubleMajor] || {};
         const limitsDM = [
             '4.0',
             String((dmReq.total || 0) + 30),
