@@ -94,8 +94,15 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
             }
         }
         else {
-            // No semesters yet; start from the earliest available term
-            nextTermIndex = terms.length - 1;
+            // No semesters yet; start from the user's entry term if available
+            let entryTermName = '';
+            try {
+                entryTermName = localStorage.getItem('entryTerm') || entryTerms[0];
+            } catch (_) {
+                entryTermName = entryTerms[0];
+            }
+            const idx = terms.indexOf(entryTermName);
+            nextTermIndex = (idx !== -1) ? idx : terms.length - 1;
         }
 
         date.innerHTML = '<p>' + terms[nextTermIndex] + '</p>';

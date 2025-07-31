@@ -91,19 +91,16 @@ for (let i = endYear; i >= startYear; i--) {
     // Create academic year string (e.g., "2022-2023")
     let yearRange = i + "-" + (i + 1);
 
-    // Only allow Fall term for 2025-2026 academic year
-    if (i === 2025) {
-        date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
-        terms.push("Fall " + yearRange);
-    } else {
-        date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
-        date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
-        date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
+    // Provide all three terms for each academic year. Previously the
+    // 2025-2026 year exposed only the Fall term which prevented users from
+    // selecting Spring 2025-2026.
+    date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
+    date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
+    date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
 
-        terms.push("Summer " + yearRange);
-        terms.push("Spring " + yearRange);
-        terms.push("Fall " + yearRange);
-    }
+    terms.push("Summer " + yearRange);
+    terms.push("Spring " + yearRange);
+    terms.push("Fall " + yearRange);
 }
 
 // Entry term options are limited to Fall 2025-2026. Build a
@@ -113,18 +110,17 @@ const entryEndYear = 2025;
 const entryStartYear = startYear;
 for (let i = entryEndYear; i >= entryStartYear; i--) {
     const yearRange = i + '-' + (i + 1);
-    if (i === 2025) {
-        entry_date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
-        entryTerms.push('Fall ' + yearRange);
-    } else {
-        entry_date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
-        entry_date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
-        entry_date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
 
-        entryTerms.push('Summer ' + yearRange);
-        entryTerms.push('Spring ' + yearRange);
-        entryTerms.push('Fall ' + yearRange);
-    }
+    // Allow admitting in any term of the academic year. Previously the most
+    // recent year only listed the Fall term which forced new plans to start
+    // from Fall 2025-2026 regardless of the user's actual admit term.
+    entry_date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
+    entry_date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
+    entry_date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
+
+    entryTerms.push('Summer ' + yearRange);
+    entryTerms.push('Spring ' + yearRange);
+    entryTerms.push('Fall ' + yearRange);
 }
 
 // Utility: convert a term name like "Fall 2023-2024" to its numeric code
