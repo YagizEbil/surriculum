@@ -1173,7 +1173,30 @@ function s_curriculum()
                     course.effective_type_dm = 'none';
                     continue;
                 }
-                const info = getInfoFnDM(course.code, course_data_dm);
+                let info = getInfoFnDM(course.code, course_data_dm);
+                // If the course is not present in the fetched double major
+                // catalog, check localStorage for a custom course definition
+                // under `customCourses_<doubleMajor>`.
+                if (!info) {
+                    try {
+                        if (typeof localStorage !== 'undefined') {
+                            const keyDM = 'customCourses_' + this.doubleMajor;
+                            const storedDM = localStorage.getItem(keyDM);
+                            if (storedDM) {
+                                const parsedDM = JSON.parse(storedDM);
+                                if (Array.isArray(parsedDM)) {
+                                    for (let ci = 0; ci < parsedDM.length; ci++) {
+                                        const cc = parsedDM[ci];
+                                        if ((cc['Major'] + cc['Code']) === course.code) {
+                                            info = cc;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (_) {}
+                }
                 let dmType = 'free';
                 let credit = 0;
                 let dmStaticType = '';
