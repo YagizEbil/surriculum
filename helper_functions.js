@@ -67,6 +67,8 @@ let currentMonth = currentDate.getMonth(); // 0-11, where 0 is January
 
 var date_list_InnerHTML = '';
 var terms = [];
+var entry_date_list_InnerHTML = '';
+var entryTerms = [];
 
 // Determine the current academic year
 let academicYear;
@@ -101,6 +103,27 @@ for (let i = endYear; i >= startYear; i--) {
         terms.push("Summer " + yearRange);
         terms.push("Spring " + yearRange);
         terms.push("Fall " + yearRange);
+    }
+}
+
+// Entry term options are limited to Fall 2025-2026. Build a
+// separate list so that admit term selectors are capped while
+// semester dates can extend further into the future.
+const entryEndYear = 2025;
+const entryStartYear = startYear;
+for (let i = entryEndYear; i >= entryStartYear; i--) {
+    const yearRange = i + '-' + (i + 1);
+    if (i === 2025) {
+        entry_date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
+        entryTerms.push('Fall ' + yearRange);
+    } else {
+        entry_date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
+        entry_date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
+        entry_date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
+
+        entryTerms.push('Summer ' + yearRange);
+        entryTerms.push('Spring ' + yearRange);
+        entryTerms.push('Fall ' + yearRange);
     }
 }
 

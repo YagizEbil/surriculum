@@ -106,7 +106,7 @@ function SUrriculum(major_chosen_by_user) {
     // Determine entry terms for main and double majors from localStorage. The
     // terms are stored as display strings (e.g. "Fall 2023-2024"). We convert
     // them to numeric codes to locate the scraped JSON files.
-    const entryTermName = localStorage.getItem('entryTerm') || terms[0];
+    const entryTermName = localStorage.getItem('entryTerm') || entryTerms[0];
     const entryTermDMName = localStorage.getItem('entryTermDM') || entryTermName;
     const entryTermCode = termNameToCode(entryTermName);
     const entryTermDMCode = termNameToCode(entryTermDMName);
@@ -469,10 +469,10 @@ function SUrriculum(major_chosen_by_user) {
                     inp.setAttribute('list','datalist_terms');
                     const dl = document.createElement('datalist');
                     dl.id = 'datalist_terms';
-                    terms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
+                    entryTerms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
                     entry_term_el.appendChild(inp); entry_term_el.appendChild(dl);
                     inp.addEventListener('input', function(ev){
-                        if (terms.indexOf(ev.target.value) !== -1) {
+                        if (entryTerms.indexOf(ev.target.value) !== -1) {
                             localStorage.setItem('entryTerm', ev.target.value);
                             location.reload();
                         } else {
@@ -497,10 +497,10 @@ function SUrriculum(major_chosen_by_user) {
                     inp.setAttribute('list','datalist_terms_dm');
                     const dl = document.createElement('datalist');
                     dl.id = 'datalist_terms_dm';
-                    terms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
+                    entryTerms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
                     entry_term_dm_el.appendChild(inp); entry_term_dm_el.appendChild(dl);
                     inp.addEventListener('input', function(ev){
-                        if (terms.indexOf(ev.target.value) !== -1) {
+                        if (entryTerms.indexOf(ev.target.value) !== -1) {
                             localStorage.setItem('entryTermDM', ev.target.value);
                             location.reload();
                         } else {

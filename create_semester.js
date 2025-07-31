@@ -93,6 +93,10 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
                 nextTermIndex = terms.indexOf(termToUse) !== -1 ? terms.indexOf(termToUse) : 0;
             }
         }
+        else {
+            // No semesters yet; start from the earliest available term
+            nextTermIndex = terms.length - 1;
+        }
 
         date.innerHTML = '<p>' + terms[nextTermIndex] + '</p>';
     }
