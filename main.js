@@ -117,6 +117,9 @@ function SUrriculum(major_chosen_by_user) {
 
     fetchCourseData(major_chosen_by_user, entryTermCode)
     .then(async json => {
+        if (!json || json.length === 0) {
+            alert('No course data available for ' + major_chosen_by_user + ' in ' + entryTermName + '.');
+        }
     //START OF PROGRAM
         let change_major_element = document.querySelector('.change_major');
         let etElem = document.querySelector('.entryTerm');
@@ -1207,6 +1210,9 @@ function SUrriculum(major_chosen_by_user) {
             // recalcEffectiveTypes() can trigger DM recalculation automatically.
             // Fetch course data for second major
             fetchCourseData(dm, entryTermDMCode).then(function(jsonDM) {
+                if (!jsonDM || jsonDM.length === 0) {
+                    alert('No course data available for ' + dm + ' in ' + termCodeToName(entryTermDMCode));
+                }
                 doubleMajorCourseData = jsonDM || [];
                 // Save DM course data on the curriculum instance so
                 // recalcEffectiveTypes() can trigger DM recalculation.

@@ -366,13 +366,15 @@ def main():
 
     programs = get_program_codes()
 
-    # Generate term codes starting from Fall 2019 up to two years ahead of the
-    # current academic year. Terms follow the pattern YYYY01 (Fall), YYYY02
-    # (Spring) and YYYY03 (Summer).
-    cur_year = datetime.datetime.now().year
+    # Generate term codes from Fall 2019 until Fall 2025 only. Terms follow the
+    # pattern YYYY01 (Fall), YYYY02 (Spring) and YYYY03 (Summer). Do not
+    # generate any terms beyond 2025 Fall to keep the dataset bounded.
     terms = []
-    for year in range(2019, cur_year + 3):
-        for suf in ('01', '02', '03'):
+    for year in range(2019, 2026):
+        suffixes = ('01', '02', '03')
+        if year == 2025:
+            suffixes = ('01',)  # stop at Fall 2025
+        for suf in suffixes:
             terms.append(f"{year}{suf}")
 
     majors_by_term = {}
@@ -384,8 +386,12 @@ def main():
         for code, fname in PROGRAM_FILES.items():
             if code not in programs:
                 continue
-            data = crawl_program(code, term)
-            if not data:
+            try:
+                data = crawl_program(code, term)
+                if not data:
+                    raise ValueError('no data parsed')
+            except Exception as e:
+                print(f"Failed {code} {term}: {e}")
                 continue
             majors_found.append(os.path.splitext(fname)[0])
             with open(os.path.join(term_dir, fname), 'w') as f:
