@@ -803,6 +803,9 @@ function SUrriculum(major_chosen_by_user) {
                 }
                 const parsedMajor = match[1];
                 const parsedCode = match[2];
+                // Keep a reference to the course object we create or update so
+                // that double major classification can reuse its credit values.
+                let sourceForDM = courseObj || null;
                 // Determine if we're updating an existing course or creating a new one
                 if (courseObj) {
                     // Update fields on the existing course object
@@ -845,6 +848,7 @@ function SUrriculum(major_chosen_by_user) {
                     };
                     // Append to in-memory course_data
                     course_data.push(newCourse);
+                    sourceForDM = newCourse;
                     // Persist to localStorage under current major
                     try {
                         const key = 'customCourses_' + major_chosen_by_user;
@@ -890,7 +894,9 @@ function SUrriculum(major_chosen_by_user) {
                             const nameForPrompt = courseObj ? (courseObj.Course_Name || combo) : (nameInput.value.trim() || combo);
                             showCourseTypeFormDM(combo, nameForPrompt, function(selectedType) {
                                 if (selectedType) {
-                                    // Create new DM course object with default zeros
+                                    // Create new DM course object using the same credit
+                                    // values as the main custom course so that DM totals
+                                    // count these credits correctly.
                                     const matchDM = combo.match(/^([A-Z]+)(\d+)/);
                                     const mDM = matchDM ? matchDM[1] : combo.replace(/\d+.*/, '');
                                     const nDM = matchDM ? matchDM[2] : combo.replace(/[A-Z]+/, '');
@@ -898,10 +904,10 @@ function SUrriculum(major_chosen_by_user) {
                                         Major: mDM,
                                         Code: nDM,
                                         Course_Name: nameForPrompt,
-                                        ECTS: '0',
-                                        Engineering: 0,
-                                        Basic_Science: 0,
-                                        SU_credit: '0',
+                                        ECTS: sourceForDM ? String(sourceForDM.ECTS || '0') : '0',
+                                        Engineering: sourceForDM ? parseFloat(sourceForDM.Engineering || '0') : 0,
+                                        Basic_Science: sourceForDM ? parseFloat(sourceForDM.Basic_Science || '0') : 0,
+                                        SU_credit: sourceForDM ? String(sourceForDM.SU_credit || '0') : '0',
                                         Faculty: '',
                                         EL_Type: selectedType,
                                         Faculty_Course: 'No'
