@@ -864,6 +864,30 @@ function s_curriculum()
                         break;
                     }
                 }
+                // If the course was not found in the provided course_data, it
+                // may be a custom course stored in localStorage.  Attempt to
+                // retrieve the custom course list for the current major and
+                // search for the matching code.
+                if (!infoMain) {
+                    try {
+                        if (typeof localStorage !== 'undefined') {
+                            const key = 'customCourses_' + this.major;
+                            const stored = localStorage.getItem(key);
+                            if (stored) {
+                                const parsed = JSON.parse(stored);
+                                if (Array.isArray(parsed)) {
+                                    for (let ci = 0; ci < parsed.length; ci++) {
+                                        const cc = parsed[ci];
+                                        if ((cc['Major'] + cc['Code']) === course.code) {
+                                            infoMain = cc;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (_) {}
+                }
                 let credit, scienceVal, engVal, ectsVal, staticType;
                 if (!infoMain) {
                     // Course does not exist in the main major's catalog.  Use
