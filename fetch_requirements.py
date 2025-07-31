@@ -60,22 +60,59 @@ def fetch_requirements(program, term, offline_dir=None):
         if h1:
             table = h1.find_parent('table')
     req = {}
-    if not table:
-        return req
+    if table:
+        headers = [th.get_text(strip=True).lower() for th in table.select('thead th')]
+        ects_idx = next((i for i,h in enumerate(headers) if 'ects' in h), 1)
+        su_idx = next((i for i,h in enumerate(headers) if 'su' in h), 2)
 
-    headers = [th.get_text(strip=True).lower() for th in table.select('thead th')]
-    for tr in table.find_all('tr'):
-        tds = [td.get_text(strip=True) for td in tr.find_all('td')]
-        if tds and re.search(r'total', tds[0], re.I):
-            for i, hdr in enumerate(headers[1:], start=1):
-                if i >= len(tds):
-                    continue
-                val = tds[i]
-                if 'ects' in hdr:
-                    req['ects'] = int(re.search(r'\d+', val).group())
-                elif 'su' in hdr:
-                    req['total'] = int(re.search(r'\d+', val).group())
-            break
+        for tr in table.find_all('tr'):
+            tds = [td.get_text(strip=True) for td in tr.find_all('td')]
+            if not tds:
+                continue
+            label = tds[0].lower()
+
+            val_ects = tds[ects_idx] if ects_idx < len(tds) else ''
+            val_su = tds[su_idx] if su_idx < len(tds) else ''
+
+            def extract(v):
+                m = re.search(r'\d+', v)
+                return int(m.group()) if m else 0
+
+            if re.search(r'total', label):
+                req['ects'] = extract(val_ects)
+                req['total'] = extract(val_su)
+            elif 'engineering' in label:
+                req['engineering'] = extract(val_ects)
+            elif 'basic' in label and 'science' in label:
+                req['science'] = extract(val_ects)
+            else:
+                field = None
+                if 'university' in label:
+                    field = 'university'
+                elif 'required' in label or 'philosophy' in label or 'mathematics' in label:
+                    field = 'required'
+                elif 'core' in label:
+                    field = 'core'
+                elif 'area' in label:
+                    field = 'area'
+                elif 'free' in label:
+                    field = 'free'
+
+                if field:
+                    req[field] = req.get(field, 0) + extract(val_su)
+
+    # Internship course: search the entire page for a pattern like CS395
+    major = PROGRAM_CODES.get(program, program)
+    text = soup.get_text(separator=' ')
+    pattern = re.compile(rf'{major}\s*395', re.I)
+    match = pattern.search(text)
+    if match:
+        req['internshipCourse'] = f'{major}395'
+    else:
+        # explicit PSY special case if not found
+        if major == 'PSY' and re.search(r'PSY\s*395', text, re.I):
+            req['internshipCourse'] = 'PSY395'
+
     return req
 
 def main():
