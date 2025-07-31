@@ -209,7 +209,7 @@ body
     z-index: 3;
 }
 
-.container_semester, .container_btn
+.container_semester
 {
     display: flex;
     flex-direction: column;
@@ -220,7 +220,36 @@ body
 
 }
 
-.total_credit, .head_btn
+.container_btn
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0px;
+    width: 410px;
+    height: 94vh;
+
+}
+
+.head_btn
+{
+    width: 225px;
+    margin: 0px;
+    display: flex;
+    flex-direction: row;
+    max-height: 5vh;
+}
+
+.head_btn_line
+{
+    width: 195px;
+    height: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #5aa874;
+}
+
+.total_credit
 {
     margin: 0px;
     display: flex;
@@ -228,7 +257,7 @@ body
     max-height: 5vh;
 }
 
-.total_credit_line, .head_btn_line, .head_btn_end
+.total_credit_line,  .head_btn_end
 {
     width: 100px;
     height: 10px;
@@ -240,11 +269,6 @@ body
 .total_credit_line
 {
     width: 90px;
-}
-
-.head_btn_line
-{
-    width: 140px;
 }
 
 .head_btn_end
