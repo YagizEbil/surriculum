@@ -14,9 +14,10 @@ function s_semester(id, course_data)
     this.totalECTS = 0.0;
     // Track the chronological order of this semester in the academic calendar. This index
     // corresponds to the position of the semester's term string within the global
-    // `terms` array defined in helper_functions.js. It will be set when the
-    // semester is created and whenever the user edits the term via the UI. A
-    // smaller index means the semester is earlier chronologically.
+    // `terms` array defined in helper_functions.js. The array lists the most
+    // recent term first, so a larger index represents an earlier semester.
+    // `termIndex` is set when the semester is created and whenever the user edits
+    // the term via the UI.
     this.termIndex = null;
 
     this.totalGPA = 0.0;
