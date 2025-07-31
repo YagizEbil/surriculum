@@ -105,7 +105,23 @@ function displaySummary(curriculum, major_chosen_by_user) {
     }
     const gpaMain = gpaCredits ? (gpaValue / gpaCredits).toFixed(3) : '0.000';
     // Determine limits from requirements for primary major
-    const reqMain = requirements[major_chosen_by_user] || {};
+    // Access the requirements object via the global scope to avoid reference
+    // errors when this script runs in environments without an imported
+    // variable.
+    const allReq = (typeof globalThis !== 'undefined' && globalThis.requirements)
+        ? globalThis.requirements
+        : {};
+
+    function lookupReq(major, term) {
+        if (allReq[major]) return allReq[major];
+        if (term && allReq[term] && allReq[term][major]) return allReq[term][major];
+        for (const t of Object.keys(allReq)) {
+            if (allReq[t] && allReq[t][major]) return allReq[t][major];
+        }
+        return {};
+    }
+
+    const reqMain = lookupReq(major_chosen_by_user, curriculum.entryTerm);
     const limitsMain = [
         '4.0',
         String(reqMain.total || 0),
@@ -151,7 +167,7 @@ function displaySummary(curriculum, major_chosen_by_user) {
         }
         const gpaDM = gpaCreditsDM ? (gpaValueDM / gpaCreditsDM).toFixed(3) : '0.000';
         // Determine limits for DM (SU +30, ECTS +60)
-        const dmReq = requirements[curriculum.doubleMajor] || {};
+        const dmReq = lookupReq(curriculum.doubleMajor, curriculum.entryTermDM);
         const limitsDM = [
             '4.0',
             String((dmReq.total || 0) + 30),

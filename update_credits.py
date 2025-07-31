@@ -85,12 +85,39 @@ def update_json_with_credits(json_path, credits_map):
         print(f"Error updating {json_path}: {e}")
 
 def update_all_program_files(credits_map, program_files):
+    """Update all program JSON files with Basic Science and Engineering credits.
+
+    The courses directory may contain subfolders for each academic term
+    (e.g. ``202401``). This function walks through each term folder as well as
+    the root and reports any files that could not be updated.
     """
-    Update all program JSON files with Basic Science and Engineering credits.
-    """
-    for program_file in program_files.values():
-        program_file_path = os.path.join(COURSES_DIR, program_file)
-        update_json_with_credits(program_file_path, credits_map)
+
+    term_dirs = ['.']
+    term_dirs += [d for d in os.listdir(COURSES_DIR) if re.match(r'\d{6}$', d)]
+
+    failed_terms = []
+
+    for term in term_dirs:
+        term_path = os.path.join(COURSES_DIR, term) if term != '.' else COURSES_DIR
+        term_ok = True
+        for program_file in program_files.values():
+            program_file_path = os.path.join(term_path, program_file)
+            if os.path.exists(program_file_path):
+                try:
+                    update_json_with_credits(program_file_path, credits_map)
+                except Exception as e:
+                    print(f"Failed updating {program_file_path}: {e}")
+                    term_ok = False
+            else:
+                print(f"Missing {program_file_path}")
+                term_ok = False
+        if not term_ok:
+            failed_terms.append(term)
+
+    if failed_terms:
+        print('Failed updates for terms: ' + ', '.join(failed_terms))
+    else:
+        print('All term updates completed successfully.')
 
 if __name__ == "__main__":
     csv_path = "Pre-Conversion Files/katalog_basic_eng_degerler_202401_yuklenen_07.05.2025 (1)-converted.csv"

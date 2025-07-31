@@ -106,7 +106,7 @@ function dynamic_click(e, curriculum, course_data)
             const infoAdd = getInfo(courseCode, course_data);
             if (infoAdd) {
                 // Course credit values
-                myCourse.credit = parseInt(infoAdd['SU_credit'] || '0');
+                myCourse.SU_credit = parseInt(infoAdd['SU_credit'] || '0');
                 myCourse.Basic_Science = parseFloat(infoAdd['Basic_Science'] || '0');
                 myCourse.Engineering = parseFloat(infoAdd['Engineering'] || '0');
                 myCourse.ECTS = parseFloat(infoAdd['ECTS'] || '0');

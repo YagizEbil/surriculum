@@ -15,6 +15,11 @@ function s_curriculum()
     this.semesters = [];
     this.major = '';
 
+    // Academic entry term codes (e.g., "202301") for the main major and
+    // optional double major. These control which requirement set is used
+    // when evaluating graduation status.
+    this.entryTerm = '';
+
     // When the user chooses a double major via the UI, this property is
     // assigned the second major's code (e.g., "EE").  When set, the
     // curriculum will compute a second set of effective course categories
@@ -22,6 +27,21 @@ function s_curriculum()
     // recalcEffectiveTypesDouble method.  If undefined or empty, no
     // double major processing occurs.
     this.doubleMajor = '';
+    this.entryTermDM = '';
+
+    // Helper to retrieve requirement object for a given major and term code.
+    // The global `requirements` may either be a flat object keyed by major or
+    // a nested object keyed by term then major. This function abstracts the
+    // lookup so both formats are supported during the transition to
+    // term-based data.
+    const getReq = (major, term) => {
+        if (typeof requirements === 'undefined') return {};
+        if (requirements[term] && requirements[term][major]) {
+            return requirements[term][major];
+        }
+        if (requirements[major]) return requirements[major];
+        return {};
+    };
 
     this.getTotalCredits = function ()
     {};
@@ -97,7 +117,7 @@ function s_curriculum()
             gpaValue += this.semesters[i].totalGPA;
         }
         // Generic requirement checks
-        const req = requirements[this.major] || {};
+        const req = getReq(this.major, this.entryTerm);
         if (university < req.university) return 1;
         if (req.internshipCourse && !this.hasCourse(req.internshipCourse)) return 4;
         if (total < req.total) return 5;
@@ -108,9 +128,11 @@ function s_curriculum()
         // Check core, area and free credits against requirements directly.
         // Do not perform dynamic reallocation here because the effective
         // categories have already been computed via recalcEffectiveTypes().
-        if (core < req.core) return 6;
-        if (area < req.area) return 7;
-        if (free < req.free) return 8;
+        // Flag codes must align with flagMessages.js:
+        // 3=core, 6=area, 7=free, 8=science.
+        if (core < req.core) return 3;
+        if (area < req.area) return 6;
+        if (free < req.free) return 7;
         // GPA check for graduation
         const gpaThresholdMainMajor = 2.00;
         let GPA = gpaCredits ? (gpaValue / gpaCredits).toFixed(3) : NaN;
@@ -731,8 +753,10 @@ function s_curriculum()
 
     /**
      * Recalculate the effective category (core/area/free) for every course
-     * across all semesters based on chronological order. This method sorts
-     * semesters by their `termIndex` values (earliest to latest) and then
+     * across all semesters based on chronological order. The `terms` array
+     * lists the most recent term first, so larger `termIndex` values represent
+     * earlier semesters. This method therefore sorts semesters in descending
+     * order of `termIndex` and then
      * allocates course credits to core, area and free categories according to
      * the major requirements. If the core requirement is filled, additional
      * core courses count toward the area requirement. Once area is filled,
@@ -750,7 +774,7 @@ function s_curriculum()
         // undefined (e.g., for non-engineering majors without a science
         // requirement), default to 0 so no credits are allocated to that
         // category.
-        const req = requirements[this.major] || {};
+        const req = getReq(this.major, this.entryTerm);
         const reqCore = req.core || 0;
         const reqArea = req.area || 0;
 
@@ -790,7 +814,7 @@ function s_curriculum()
         const sortedSemesters = this.semesters.slice().sort((a, b) => {
             const idxA = (a.termIndex !== null && a.termIndex !== undefined) ? a.termIndex : Number.MAX_SAFE_INTEGER;
             const idxB = (b.termIndex !== null && b.termIndex !== undefined) ? b.termIndex : Number.MAX_SAFE_INTEGER;
-            return idxA - idxB;
+            return idxB - idxA; // larger index = earlier term
         });
 
         // Running counters for how many credits have been allocated to core and
@@ -1070,7 +1094,7 @@ function s_curriculum()
         if (!this.doubleMajor) return;
         // Determine requirement thresholds for the double major.  Core and
         // area requirements are drawn from the second major's requirements.
-        const dmReq = (typeof requirements !== 'undefined' && requirements[this.doubleMajor]) || {};
+        const dmReq = getReq(this.doubleMajor, this.entryTermDM);
         const dmCoreReq = dmReq.core || 0;
         const dmAreaReq = dmReq.area || 0;
         // Acquire the getInfo helper.  If unavailable, skip processing.
@@ -1102,11 +1126,11 @@ function s_curriculum()
             sem.totalEngineeringDM = 0;
             sem.totalECTSDM = 0;
         }
-        // Sort semesters chronologically by termIndex
+        // Sort semesters chronologically by termIndex (larger index = earlier)
         const sorted = this.semesters.slice().sort((a, b) => {
             const aIdx = (a.termIndex !== null && a.termIndex !== undefined) ? a.termIndex : Number.MAX_SAFE_INTEGER;
             const bIdx = (b.termIndex !== null && b.termIndex !== undefined) ? b.termIndex : Number.MAX_SAFE_INTEGER;
-            return aIdx - bIdx;
+            return bIdx - aIdx;
         });
         // Walk semesters and courses allocating DM categories
         for (let i = 0; i < sorted.length; i++) {
@@ -1271,7 +1295,7 @@ function s_curriculum()
             gpaValueDM += sem.totalGPA;
         }
         // Fetch requirements for double major and adjust SU/ECTS thresholds
-        const req = requirements[this.doubleMajor] || {};
+        const req = getReq(this.doubleMajor, this.entryTermDM);
         const totalReq = (req.total || 0) + 30;
         const ectsReq = (req.ects || 0) + 60;
         // Generic checks
@@ -1282,10 +1306,11 @@ function s_curriculum()
         if (engineering < (req.engineering || 0)) return 9;
         if (ects < ectsReq) return 10;
         if (required < (req.required || 0)) return 2;
-        // Core/area/free requirements
-        if (core < (req.core || 0)) return 6;
-        if (area < (req.area || 0)) return 7;
-        if (free < (req.free || 0)) return 8;
+        // Core/area/free requirements. Flag codes mirror flagMessages.js
+        // where 3=core, 6=area, 7=free and 8=science.
+        if (core < (req.core || 0)) return 3;
+        if (area < (req.area || 0)) return 6;
+        if (free < (req.free || 0)) return 7;
         // GPA check for graduation
         const gpaThresholdDoubleMajor = 3.20;
         let GPA = gpaCreditsDM ? (gpaValueDM / gpaCreditsDM).toFixed(3) : NaN;
