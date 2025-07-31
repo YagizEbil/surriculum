@@ -1355,40 +1355,54 @@ function SUrriculum(major_chosen_by_user) {
          * against accidental deletion.
          */
         function handleDeleteCustomCourses() {
-            const key = 'customCourses_' + major_chosen_by_user;
-            let customList = [];
+            const keyMain = 'customCourses_' + major_chosen_by_user;
+            const keyDM = curriculum.doubleMajor ? 'customCourses_' + curriculum.doubleMajor : null;
+
+            let customMain = [];
+            let customDM = [];
             try {
-                customList = JSON.parse(localStorage.getItem(key) || '[]');
-            } catch (e) {
-                customList = [];
+                customMain = JSON.parse(localStorage.getItem(keyMain) || '[]');
+            } catch (_) { customMain = []; }
+            if (keyDM) {
+                try {
+                    customDM = JSON.parse(localStorage.getItem(keyDM) || '[]');
+                } catch (_) { customDM = []; }
             }
-            if (!customList || customList.length === 0) {
+
+            if ((!customMain || customMain.length === 0) && (!customDM || customDM.length === 0)) {
                 alert('There are no custom courses to delete for this major.');
                 return;
             }
-            if (!confirm('Are you sure you want to delete all custom courses for ' + major_chosen_by_user + '?')) {
+
+            let confirmMsg = 'Are you sure you want to delete all custom courses for ' + major_chosen_by_user;
+            if (curriculum.doubleMajor) confirmMsg += ' and ' + curriculum.doubleMajor;
+            confirmMsg += '?';
+            if (!confirm(confirmMsg)) {
                 return;
             }
-            // Build a set of combined codes (Major+Code) for quick lookup
-            const codeSet = new Set(customList.map(c => (c.Major + c.Code)));
-            // Remove these courses from in-memory course_data
-            course_data = course_data.filter(c => !codeSet.has(c.Major + c.Code));
-            // Remove from semesters in curriculum
+
+            const codeSetMain = new Set(customMain.map(c => c.Major + c.Code));
+            const codeSetDM = new Set(customDM.map(c => c.Major + c.Code));
+            const totalSet = new Set([...codeSetMain, ...codeSetDM]);
+
+            course_data = course_data.filter(c => !codeSetMain.has(c.Major + c.Code));
+            if (curriculum.doubleMajor) {
+                doubleMajorCourseData = doubleMajorCourseData.filter(c => !codeSetDM.has(c.Major + c.Code));
+                curriculum.doubleMajorCourseData = doubleMajorCourseData;
+            }
+
             if (curriculum && Array.isArray(curriculum.semesters)) {
                 curriculum.semesters.forEach(function(sem) {
                     if (Array.isArray(sem.courses)) {
                         sem.courses = sem.courses.filter(function(code) {
-                            return !codeSet.has(code);
+                            return !totalSet.has(code);
                         });
                     }
                 });
             }
-            // Remove the custom courses entry from localStorage
-            try {
-                localStorage.removeItem(key);
-            } catch (ex) {
-                // ignore
-            }
+
+            try { localStorage.removeItem(keyMain); } catch (_) {}
+            if (keyDM) { try { localStorage.removeItem(keyDM); } catch (_) {} }
             // Persist the updated curriculum to localStorage
             try {
                 if (typeof serializator === 'function') {
@@ -1403,12 +1417,18 @@ function SUrriculum(major_chosen_by_user) {
                 if (typeof curriculum.recalcEffectiveTypes === 'function') {
                     curriculum.recalcEffectiveTypes(course_data);
                 }
+                if (curriculum.doubleMajor && typeof curriculum.recalcEffectiveTypesDouble === 'function') {
+                    curriculum.recalcEffectiveTypesDouble(doubleMajorCourseData);
+                }
                 const optionsHTML = getCoursesDataList(course_data);
                 document.querySelectorAll('datalist').forEach(function(dl) {
                     if (dl.id === 'datalist') {
                         dl.innerHTML = optionsHTML;
                     }
                 });
+                if (curriculum.doubleMajor && typeof updateDatalistForDoubleMajor === 'function') {
+                    updateDatalistForDoubleMajor();
+                }
             } catch (err) {
                 // ignore
             }
