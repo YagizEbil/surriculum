@@ -37,7 +37,8 @@ try {
   if (typeof termNameToCode === 'function') termCode = termNameToCode(termName);
 } catch (_) {}
 const loadedReq = loadRequirements(termCode || 'default') || {};
-export const requirements = loadedReq;
+requirements = loadedReq;
+export { requirements, loadRequirements };
 
 // Expose the requirements object on the window in browser environments. This
 // allows other scripts to access `requirements` when modules are not
