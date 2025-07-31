@@ -82,20 +82,24 @@ if (currentMonth >= 7) { // August or later
 // past and future relative to the current academic year but never go earlier
 // than 2019 so that the earliest selectable term matches the scraped data.
 const startYear = Math.max(2019, academicYear - 6);
-const endYear = academicYear + 6;
+const endYear = Math.min(2025, academicYear + 6);
 for (let i = startYear; i <= endYear; i++) {
     // Create academic year string (e.g., "2022-2023")
     let yearRange = i + "-" + (i + 1);
 
-    // Add Spring, Fall, and optionally Summer to the list
-    date_list_InnerHTML += "<option value='" + yearRange + " Fall'>";
-    date_list_InnerHTML += "<option value='" + yearRange + " Spring'>";
-    date_list_InnerHTML += "<option value='" + yearRange + " Summer'>";
+    // Only allow Fall term for 2025-2026 academic year
+    if (i === 2025) {
+        date_list_InnerHTML += "<option value='" + yearRange + " Fall'>";
+        terms.push(yearRange + " Fall");
+    } else {
+        date_list_InnerHTML += "<option value='" + yearRange + " Fall'>";
+        date_list_InnerHTML += "<option value='" + yearRange + " Spring'>";
+        date_list_InnerHTML += "<option value='" + yearRange + " Summer'>";
 
-    // Add to terms array in chronological order: Fall, Spring, Summer
-    terms.push(yearRange + " Fall");
-    terms.push(yearRange + " Spring");
-    terms.push(yearRange + " Summer");
+        terms.push(yearRange + " Fall");
+        terms.push(yearRange + " Spring");
+        terms.push(yearRange + " Summer");
+    }
 }
 
 // Utility: convert a term name like "2023-2024 Fall" to its numeric code
