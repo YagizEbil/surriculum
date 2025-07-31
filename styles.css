@@ -634,6 +634,15 @@ input
     background-color: #435A74;
 }
 
+.doubleMajor > input,
+.entryTerm > input,
+.entryTermDM > input {
+    width: 180px;
+    height: 100%;
+    background-color: #435A74;
+    color: white;
+}
+
 /* Style the double major selection to match the appearance of the main
    major control.  The select element inherits the button-like look
    used throughout the app (same width, colours and border radius). */

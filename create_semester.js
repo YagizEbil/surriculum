@@ -48,25 +48,27 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
         // Get all existing semesters to determine the next logical one
         const existingSemesters = document.querySelectorAll('.date p');
         if (existingSemesters.length > 0) {
-            // Find the latest semester
-            let latestSemester = '';
+            // Determine the chronologically latest semester using the
+            // ordering of the global `terms` array (latest term has the
+            // smallest index).
+            let latestIdx = terms.length;
             existingSemesters.forEach(semElem => {
                 const semText = semElem.textContent;
-                if (semText > latestSemester) {
-                    latestSemester = semText;
+                const idx = terms.indexOf(semText);
+                if (idx !== -1 && idx < latestIdx) {
+                    latestIdx = idx;
                 }
             });
 
-            // Find this semester in the terms array
-            const currentIndex = terms.indexOf(latestSemester);
+            const currentIndex = latestIdx;
 
-            if (currentIndex !== -1) {
-                // Determine the next logical term index
-                // By default, we'll use the next non-summer term in sequence
+            if (currentIndex !== terms.length) {
+                // Determine the next logical term index in descending list
                 for (let i = 1; i < terms.length; i++) {
-                    const nextCandidate = terms[(currentIndex + i) % terms.length];
+                    const idx = (currentIndex - i + terms.length) % terms.length;
+                    const nextCandidate = terms[idx];
                     if (!nextCandidate.includes("Summer")) {
-                        nextTermIndex = (currentIndex + i) % terms.length;
+                        nextTermIndex = idx;
                         break;
                     }
                 }
@@ -79,13 +81,13 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
 
                 if (currentMonth >= 7) { // August-December: Fall semester
                     const currentYear = currentDate.getFullYear();
-                    termToUse = currentYear + "-" + (currentYear + 1) + " Fall";
+                    termToUse = 'Fall ' + currentYear + '-' + (currentYear + 1);
                 } else if (currentMonth >= 0 && currentMonth < 5) { // January-May: Spring semester
                     const currentYear = currentDate.getFullYear();
-                    termToUse = (currentYear - 1) + "-" + currentYear + " Spring";
+                    termToUse = 'Spring ' + (currentYear - 1) + '-' + currentYear;
                 } else { // June-July: Summer
                     const currentYear = currentDate.getFullYear();
-                    termToUse = (currentYear - 1) + "-" + currentYear + " Summer";
+                    termToUse = 'Summer ' + (currentYear - 1) + '-' + currentYear;
                 }
 
                 nextTermIndex = terms.indexOf(termToUse) !== -1 ? terms.indexOf(termToUse) : 0;

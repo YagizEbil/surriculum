@@ -104,9 +104,9 @@ function SUrriculum(major_chosen_by_user) {
             });
     }
     // Determine entry terms for main and double majors from localStorage. The
-    // terms are stored as display strings (e.g. "2023-2024 Fall"). We convert
+    // terms are stored as display strings (e.g. "Fall 2023-2024"). We convert
     // them to numeric codes to locate the scraped JSON files.
-    const entryTermName = localStorage.getItem('entryTerm') || terms[terms.length - 1];
+    const entryTermName = localStorage.getItem('entryTerm') || terms[0];
     const entryTermDMName = localStorage.getItem('entryTermDM') || entryTermName;
     const entryTermCode = termNameToCode(entryTermName);
     const entryTermDMCode = termNameToCode(entryTermDMName);
@@ -125,8 +125,8 @@ function SUrriculum(major_chosen_by_user) {
         let etElem = document.querySelector('.entryTerm');
         let etDmElem = document.querySelector('.entryTermDM');
     change_major_element.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
-        if (etElem) etElem.innerHTML = '<p>' + entryTermName + '</p>';
-        if (etDmElem) etDmElem.innerHTML = '<p>' + entryTermDMName + '</p>';
+        if (etElem) etElem.innerHTML = '<p>Admit Term: ' + entryTermName + '</p>';
+        if (etDmElem) etDmElem.innerHTML = '<p>Admit Term(DM): ' + entryTermDMName + '</p>';
 
     // ------------------------------------------------------------------
     // Build a double major selector below the primary major display.  This
@@ -327,12 +327,12 @@ function SUrriculum(major_chosen_by_user) {
         try {
             if (entry_term_el && !(e.target.classList.contains('entryTerm') || (e.target.parentNode && e.target.parentNode.classList.contains('entryTerm')))) {
                 if (!entry_term_el.querySelector('input')) {
-                    entry_term_el.innerHTML = '<p>' + entryTermName + '</p>';
+                    entry_term_el.innerHTML = '<p>Admit Term: ' + entryTermName + '</p>';
                 }
             }
             if (entry_term_dm_el && !(e.target.classList.contains('entryTermDM') || (e.target.parentNode && e.target.parentNode.classList.contains('entryTermDM')))) {
                 if (!entry_term_dm_el.querySelector('input')) {
-                    entry_term_dm_el.innerHTML = '<p>' + entryTermDMName + '</p>';
+                    entry_term_dm_el.innerHTML = '<p>Admit Term(DM): ' + entryTermDMName + '</p>';
                 }
             }
         } catch (_) {}
@@ -476,7 +476,7 @@ function SUrriculum(major_chosen_by_user) {
                             localStorage.setItem('entryTerm', ev.target.value);
                             location.reload();
                         } else {
-                            entry_term_el.innerHTML = `<p>${entryTermName}</p>`;
+                            entry_term_el.innerHTML = `<p>Admit Term: ${entryTermName}</p>`;
                         }
                     });
                 }
@@ -504,7 +504,7 @@ function SUrriculum(major_chosen_by_user) {
                             localStorage.setItem('entryTermDM', ev.target.value);
                             location.reload();
                         } else {
-                            entry_term_dm_el.innerHTML = `<p>${entryTermDMName}</p>`;
+                            entry_term_dm_el.innerHTML = `<p>Admit Term(DM): ${entryTermDMName}</p>`;
                         }
                     });
                 }
