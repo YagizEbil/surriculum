@@ -632,7 +632,10 @@ input
     width: 140px;
     margin-bottom: 0;
 }
-.major-row .change_major > input {
+.major-row .change_major > input,
+.major-row .entryTerm > input,
+.major-row .doubleMajor > input,
+.major-row .entryTermDM > input {
     width: 140px;
 }
 
