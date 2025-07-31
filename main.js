@@ -567,13 +567,34 @@ function SUrriculum(major_chosen_by_user) {
             return;
         }
 
+        // Determine the user's entry term so that the automatically added
+        // semesters start from that term rather than the earliest term in
+        // the list (Fall 2019-2020).
+        const entryTerm = localStorage.getItem('entryTerm') || entryTerms[0];
+        const entryCode = termNameToCode(entryTerm);
+
+        // Helper to compute the next chronological term code
+        function nextTermCode(code) {
+            const term = code.slice(4);
+            const year = parseInt(code.slice(0, 4), 10);
+            if (term === '01') return String(year) + '02'; // Fall -> Spring
+            if (term === '02') return String(year) + '03'; // Spring -> Summer
+            // Summer -> Fall of next academic year
+            return String(year + 1) + '01';
+        }
+
+        const nextCode = nextTermCode(entryCode);
+        const nextTerm = termCodeToName(nextCode);
+
         // Automatically insert the typical first year courses into two semesters.
-        // Fall semester courses: FS semester (first semester) and spring semester courses defined below.
         let fs_courses = ["MATH101","NS101","SPS101","IF100","TLL101","HIST191","CIP101N"];
         let ss_courses = ["MATH102","NS102","SPS102","AL102","TLL102","HIST192","PROJ201"];
-        // Insert spring courses first so that the subsequent fall courses appear earlier chronologically.
-        createSemeter(false, ss_courses, curriculum, course_data);
-        createSemeter(false, fs_courses, curriculum, course_data);
+
+        // Insert the next term first so that the entry term ends up at the top
+        // of the board. Pass explicit term names to createSemeter so that the
+        // semesters use the correct dates.
+        createSemeter(false, ss_courses, curriculum, course_data, [], nextTerm);
+        createSemeter(false, fs_courses, curriculum, course_data, [], entryTerm);
     })
 
     document.querySelector('.check>p').addEventListener('click', function(){document.querySelector('.check').click();})
@@ -1438,6 +1459,14 @@ function SUrriculum(major_chosen_by_user) {
 
         // Get from transcript:
         function handleAcademicRecordsImport() {
+        // Prevent import when semesters already exist, mirroring the
+        // behaviour of the "Add First Year Courses" button.
+        const existing = document.querySelectorAll('.semester');
+        if (existing.length > 0) {
+            alert('Error: Import only works when no semesters are present.');
+            return;
+        }
+
         const fileInput = document.getElementById('academicRecordsInput');
 
         if (fileInput.files.length > 0) {
