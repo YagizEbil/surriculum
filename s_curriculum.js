@@ -753,8 +753,10 @@ function s_curriculum()
 
     /**
      * Recalculate the effective category (core/area/free) for every course
-     * across all semesters based on chronological order. This method sorts
-     * semesters by their `termIndex` values (earliest to latest) and then
+     * across all semesters based on chronological order. The `terms` array
+     * lists the most recent term first, so larger `termIndex` values represent
+     * earlier semesters. This method therefore sorts semesters in descending
+     * order of `termIndex` and then
      * allocates course credits to core, area and free categories according to
      * the major requirements. If the core requirement is filled, additional
      * core courses count toward the area requirement. Once area is filled,
@@ -812,7 +814,7 @@ function s_curriculum()
         const sortedSemesters = this.semesters.slice().sort((a, b) => {
             const idxA = (a.termIndex !== null && a.termIndex !== undefined) ? a.termIndex : Number.MAX_SAFE_INTEGER;
             const idxB = (b.termIndex !== null && b.termIndex !== undefined) ? b.termIndex : Number.MAX_SAFE_INTEGER;
-            return idxA - idxB;
+            return idxB - idxA; // larger index = earlier term
         });
 
         // Running counters for how many credits have been allocated to core and
@@ -1124,11 +1126,11 @@ function s_curriculum()
             sem.totalEngineeringDM = 0;
             sem.totalECTSDM = 0;
         }
-        // Sort semesters chronologically by termIndex
+        // Sort semesters chronologically by termIndex (larger index = earlier)
         const sorted = this.semesters.slice().sort((a, b) => {
             const aIdx = (a.termIndex !== null && a.termIndex !== undefined) ? a.termIndex : Number.MAX_SAFE_INTEGER;
             const bIdx = (b.termIndex !== null && b.termIndex !== undefined) ? b.termIndex : Number.MAX_SAFE_INTEGER;
-            return aIdx - bIdx;
+            return bIdx - aIdx;
         });
         // Walk semesters and courses allocating DM categories
         for (let i = 0; i < sorted.length; i++) {
