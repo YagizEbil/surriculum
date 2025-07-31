@@ -114,12 +114,16 @@ for (let i = entryEndYear; i >= entryStartYear; i--) {
     // Allow admitting in any term of the academic year. Previously the most
     // recent year only listed the Fall term which forced new plans to start
     // from Fall 2025-2026 regardless of the user's actual admit term.
-    entry_date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
-    entry_date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
+    if (i !== 2025){
+        entry_date_list_InnerHTML += "<option value='Summer " + yearRange + "'>";
+        entry_date_list_InnerHTML += "<option value='Spring " + yearRange + "'>";
+    }
     entry_date_list_InnerHTML += "<option value='Fall " + yearRange + "'>";
 
-    entryTerms.push('Summer ' + yearRange);
-    entryTerms.push('Spring ' + yearRange);
+    if (i !== 2025) {
+        entryTerms.push("Summer " + yearRange);
+        entryTerms.push("Spring " + yearRange);
+    }
     entryTerms.push('Fall ' + yearRange);
 }
 
