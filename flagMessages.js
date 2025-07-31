@@ -12,7 +12,26 @@ export function buildFlagMessages(major) {
   const allReq = (typeof globalThis !== 'undefined' && globalThis.requirements)
     ? globalThis.requirements
     : {};
-  const req = allReq[major] || {};
+  let req = allReq[major];
+  if (!req) {
+    // When requirements are organized by term code, determine the correct
+    // term using the global curriculum object.
+    const curr = (typeof globalThis !== 'undefined' && globalThis.curriculum)
+      ? globalThis.curriculum
+      : {};
+    let term = '';
+    if (curr.major === major) term = curr.entryTerm;
+    else if (curr.doubleMajor === major) term = curr.entryTermDM;
+    if (term && allReq[term] && allReq[term][major]) {
+      req = allReq[term][major];
+    } else {
+      // Fallback: search all term groups
+      for (const t of Object.keys(allReq)) {
+        if (allReq[t] && allReq[t][major]) { req = allReq[t][major]; break; }
+      }
+    }
+  }
+  req = req || {};
 
   return {
       1: () => `Your University SU credit is less than ${req.university}.`,
