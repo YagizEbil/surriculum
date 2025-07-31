@@ -578,7 +578,6 @@ function SUrriculum(major_chosen_by_user) {
             const term = code.slice(4);
             const year = parseInt(code.slice(0, 4), 10);
             if (term === '01') return String(year) + '02'; // Fall -> Spring
-            if (term === '02') return String(year) + '03'; // Spring -> Summer
             // Summer -> Fall of next academic year
             return String(year + 1) + '01';
         }
