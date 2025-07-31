@@ -597,6 +597,21 @@ input
     align-items: center;
 }
 
+.major-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.major-row .btn {
+    width: 140px;
+    margin-bottom: 0;
+}
+.major-row .change_major > input {
+    width: 140px;
+}
+
 .btn
 {
     margin-bottom: 20px;
