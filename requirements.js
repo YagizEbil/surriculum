@@ -29,15 +29,30 @@ function loadRequirements(termCode) {
 }
 
 let termName = '';
+let termNameDM = '';
 try {
   termName = localStorage.getItem('entryTerm') || '';
+  termNameDM = localStorage.getItem('entryTermDM') || termName;
 } catch (_) {}
+
 let termCode = '';
+let termCodeDM = '';
 try {
-  if (typeof termNameToCode === 'function') termCode = termNameToCode(termName);
+  if (typeof termNameToCode === 'function') {
+    termCode = termNameToCode(termName);
+    termCodeDM = termNameToCode(termNameDM);
+  }
 } catch (_) {}
-const loadedReq = loadRequirements(termCode || 'default') || {};
-requirements = loadedReq;
+
+const loadedMain = loadRequirements(termCode || 'default') || {};
+let loadedDM = null;
+if (termCodeDM && termCodeDM !== termCode) {
+  loadedDM = loadRequirements(termCodeDM);
+}
+
+requirements = loadedDM
+  ? { [termCode || 'default']: loadedMain, [termCodeDM]: loadedDM }
+  : loadedMain;
 export { requirements, loadRequirements };
 
 // Expose the requirements object on the window in browser environments. This
