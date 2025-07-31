@@ -111,7 +111,7 @@ def fetch_requirements(program, term, offline_dir=None):
     else:
         # explicit PSY special case if not found
         if major == 'PSY' and re.search(r'PSY\s*395', text, re.I):
-            req['internshipCourse'] = 'PSY395'
+            req['internshipCourse'] = 'PSY300'
 
     return req
 
