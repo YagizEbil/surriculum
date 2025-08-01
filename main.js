@@ -9,6 +9,7 @@
 let course_data;
 //can only be CS, BIO, MAT, EE, ME, IE, ECON, DSA, MAN, PSIR, PSY, VACD:
 let initial_major_chosen = 'CS'
+let saveInterval;
 
 
 function SUrriculum(major_chosen_by_user) {
@@ -1001,8 +1002,8 @@ function SUrriculum(major_chosen_by_user) {
                     localStorage.removeItem('dates');
                     const customKey = 'customCourses_' + major_chosen_by_user;
                     localStorage.removeItem(customKey);
-                    localStorage.clear()
-                    localStorage.clear()
+                    clearInterval(saveInterval);
+                    localStorage.clear();
                 } catch (ex) {
                     console.error('Failed to clear localStorage:', ex);
                 }
@@ -1031,7 +1032,7 @@ function SUrriculum(major_chosen_by_user) {
         // ignore
     }
     //Save:
-    setInterval(function() {
+    saveInterval = setInterval(function() {
         localStorage.removeItem("curriculum");
         localStorage.setItem("curriculum", serializator(curriculum));
         localStorage.removeItem("grades");
