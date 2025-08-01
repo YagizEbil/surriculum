@@ -127,6 +127,10 @@ body
     flex-wrap: nowrap;
     overflow-x: auto;
     position: relative;
+
+    overflow-y: auto;
+    max-height: calc(100vh - 6vh); /* Adjust height based on viewport minus title height */
+    box-sizing: border-box;
 }
 
 .summary_modal, .graduation_modal
@@ -631,12 +635,20 @@ input
 .major-row .btn {
     width: 140px;
     margin-bottom: 0;
+    font-size: calc(0.6em + 0.4vw); /* Adjusted text size to fit within button */
+    text-align: center;
+    white-space: normal; /* Allow text wrapping */
+    overflow: visible; /* Remove overflow restrictions */
 }
 .major-row .change_major > input,
 .major-row .entryTerm > input,
 .major-row .doubleMajor > input,
 .major-row .entryTermDM > input {
     width: 140px;
+    font-size: calc(0.6em + 0.4vw); /* Adjusted text size to fit within input */
+    text-align: center;
+    white-space: normal; /* Allow text wrapping */
+    overflow: visible; /* Remove overflow restrictions */
 }
 
 .btn
