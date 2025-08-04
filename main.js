@@ -597,7 +597,14 @@ function SUrriculum(major_chosen_by_user) {
         createSemeter(false, fs_courses, curriculum, course_data, [], entryTerm);
     })
 
-    document.querySelector('.check>p').addEventListener('click', function(){document.querySelector('.check').click();})
+    // Older markup wrapped the text inside a <p> tag. Guard against that
+    // structure to avoid errors when clicking the button in the new UI.
+    const checkText = document.querySelector('.check>p');
+    if (checkText) {
+        checkText.addEventListener('click', function(){
+            document.querySelector('.check').click();
+        });
+    }
     const check_graduation = document.querySelector('.check');
     check_graduation.addEventListener('click', function(){
         displayGraduationResults(curriculum);
@@ -1505,8 +1512,8 @@ function SUrriculum(major_chosen_by_user) {
                     const queue = pendingList.slice();
                     processPendingCustomCourses(queue);
                 }
-                const importSection = document.querySelector('.import-section');
-                if (importSection) importSection.style.display = 'none';
+                const importDropdown = document.getElementById('importDropdown');
+                if (importDropdown) importDropdown.classList.remove('active');
             };
 
             reader.readAsText(file);
@@ -1518,23 +1525,19 @@ function SUrriculum(major_chosen_by_user) {
 
     // Add event listener for the import toggle button
     document.querySelector('.import-toggle').addEventListener('click', function() {
-        const importSection = document.querySelector('.import-section');
-        if (importSection.style.display === 'none' || !importSection.style.display) {
-            importSection.style.display = 'block';
-        } else {
-            importSection.style.display = 'none';
-        }
+        const dropdown = document.getElementById('importDropdown');
+        if (dropdown) dropdown.classList.toggle('active');
     });
 
     // Close import panel when clicking outside
     document.addEventListener('click', function(e) {
-        const importSection = document.querySelector('.import-section');
-        const importToggle = document.querySelector('.import-toggle');
+        const dropdown = document.getElementById('importDropdown');
+        const toggle = document.querySelector('.import-toggle');
 
-        if (importSection && importSection.style.display === 'block' &&
-            !importSection.contains(e.target) &&
-            !importToggle.contains(e.target)) {
-            importSection.style.display = 'none';
+        if (dropdown && dropdown.classList.contains('active') &&
+            !dropdown.contains(e.target) &&
+            !toggle.contains(e.target)) {
+            dropdown.classList.remove('active');
         }
     });
 
