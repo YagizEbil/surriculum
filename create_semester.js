@@ -152,7 +152,6 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
         newsem.termIndex = null;
     }
 
-    const btn = document.querySelector(".addSemester");
     let addCourse = document.createElement("button");
     addCourse.classList.add("addCourse");
     addCourse.innerHTML = "+ Add another course";
@@ -162,11 +161,11 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
     subcontainer.appendChild(addCourse);
     container.appendChild(subcontainer);
     
-    if(aslastelement) 
+    if(aslastelement)
     {
-        board.insertBefore(container, btn.parentNode.parentNode);
+        board.appendChild(container);
     }
-    else 
+    else
     {
         board.insertBefore(container, board.firstChild);
     }
