@@ -32,8 +32,8 @@
   },
   "EE": {
     "university": 41,
-    "required": 35,
-    "core": 25,
+    "required": 29,
+    "core": 31,
     "area": 9,
     "free": 15,
     "engineering": 90,
@@ -118,8 +118,8 @@
   "VACD": {
     "university": 44,
     "required": 15,
-    "core": 21,
-    "area": 24,
+    "core": 27,
+    "area": 18,
     "free": 21,
     "ects": 240,
     "total": 125

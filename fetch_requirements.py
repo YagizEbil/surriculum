@@ -130,7 +130,7 @@ def main():
         out = {}
         for prog, major in PROGRAM_CODES.items():
             try:
-                data = fetch_requirements(prog, term, DETAIL_PAGES_DIR)
+                data = fetch_requirements(prog, term, None)
                 if not data:
                     raise ValueError('no data parsed')
             except Exception as e:
