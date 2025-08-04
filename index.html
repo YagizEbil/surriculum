@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Your existing JavaScript files -->
+    <!-- Core scripts -->
     <script src="helper_functions.js"></script>
     <script src="mouse_and_drag.js"></script>
     <script src="s_semester.js"></script>
@@ -19,19 +19,17 @@
     <script src="click.js"></script>
     <script src="academic_records_parser.js"></script>
     <script src="https://unpkg.com/pdfjs-dist@2.10.377/build/pdf.js"></script>
-    <script type="module" src="../../Downloads/graduation_check.js"></script>
     <script type="module" src="flagMessages.js"></script>
-    <script src="../../Downloads/s_curriculum.js"></script>
-    <script type="module" src="../../Downloads/requirements.js"></script>
-    <script src="curriculum_manager.js"></script>
-
+    <script src="s_curriculum.js"></script>
+    <script src="requirements.js"></script>
+    <script src="graduation_check.js"></script>
 
     <script>
         // Specify the path to the worker script
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.10.377/build/pdf.worker.js';
     </script>
 
-    <script src="../../Downloads/main.js" defer></script>
+    <script src="main.js" defer></script>
     <script src="theme.js" defer></script>
 </head>
 <body class="light-theme">
