@@ -53,7 +53,6 @@ if (termCodeDM && termCodeDM !== termCode) {
 requirements = loadedDM
   ? { [termCode || 'default']: loadedMain, [termCodeDM]: loadedDM }
   : loadedMain;
-export { requirements, loadRequirements };
 
 // Expose the requirements object on the window in browser environments. This
 // allows other scripts to access `requirements` when modules are not
