@@ -851,12 +851,12 @@ html, body {
 .subcontainer_semester .semester {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
     flex: 1; /* Take remaining space in subcontainer */
     overflow-y: auto; /* Enable scrolling */
     overflow-x: hidden;
     min-height: 0; /* Allow shrinking below content size */
-    padding-right: 4px; /* Space for scrollbar */
+    padding-right: 2px; /* Space for scrollbar */
 }
 
 /* Individual course card - FIXED 3-COLUMN LAYOUT WITH LEFT 2-ROW STRUCTURE */
@@ -1167,7 +1167,7 @@ html, body {
 
 /* Updated summary_modal to be 50% bigger */
 .summary_modal {
-    width: 240px; /* Increased by 50% */
+    width: 360px; /* Increased by 50% */
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
