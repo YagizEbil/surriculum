@@ -152,9 +152,10 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
         newsem.termIndex = null;
     }
 
-    let addCourse = document.createElement("button");
+    // Ghost course placeholder similar to the ghost semester container
+    let addCourse = document.createElement("div");
     addCourse.classList.add("addCourse");
-    addCourse.innerHTML = "+ Add another course";
+    addCourse.innerHTML = "+ Add course";
 
 
     subcontainer.appendChild(semester);

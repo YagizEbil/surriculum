@@ -1007,24 +1007,20 @@ html, body {
 
 /* Add course button within a semester */
 .addCourse {
-    display: inline-flex;
+    margin: 8px 0;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    min-height: 60px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--primary);
-    background: var(--bg-surface);
-    border: 1px dashed var(--primary);
-    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.15s ease;
-    flex-shrink: 0; /* Keep button visible */
+    transition: background 0.15s ease;
 }
 
 .addCourse:hover {
-    background: var(--bg-main);
-    border-style: solid;
+    background: var(--bg-surface);
 }
 
 /* Input container for adding a course */
@@ -1100,7 +1096,8 @@ html, body {
 .change_major input,
 .doubleMajor input,
 .entryTerm input,
-.entryTermDM input {
+.entryTermDM input,
+.date input {
     padding: 4px 8px;
     font-size: 0.75rem;
     border: 1px solid var(--border);
@@ -1114,7 +1111,8 @@ html, body {
 .change_major input:focus,
 .doubleMajor input:focus,
 .entryTerm input:focus,
-.entryTermDM input:focus {
+.entryTermDM input:focus,
+.date input:focus {
     border-color: var(--primary);
 }
 
