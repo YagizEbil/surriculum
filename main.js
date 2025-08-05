@@ -694,9 +694,6 @@ function SUrriculum(major_chosen_by_user) {
         }
     }
 
-    // Create ghost container on initial load
-    ensureGhostSemester();
-
     // Sidebar collapse toggle
     const sidebar = document.querySelector('.sidebar');
     const sidebarToggle = document.querySelector('.sidebar-toggle');
@@ -1136,6 +1133,8 @@ function SUrriculum(major_chosen_by_user) {
     } catch(err) {
         // ignore
     }
+    // Ensure the ghost semester container is appended after reloading existing semesters
+    ensureGhostSemester();
     //Save:
     saveInterval = setInterval(function() {
         localStorage.removeItem("curriculum");

@@ -55,6 +55,8 @@ function dynamic_click(e, curriculum, course_data)
         });
 
         e.target.parentNode.insertBefore(input_container, e.target.parentNode.querySelector(".addCourse"));
+        // Automatically focus the input so the user can start typing immediately
+        input1.focus();
     }
     //CLICKED "OK" (for entering course input):
     else if(e.target.classList.contains("enter"))
