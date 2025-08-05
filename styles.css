@@ -1183,6 +1183,12 @@ html, body {
     color: var(--text-primary)
 }
 
+/* Title for the summary modal */
+.summary_modal_title {
+    text-align: center;
+    font-weight: bold;
+}
+
 /* Rows within the summary modal */
 .summary_modal_child {
     display: flex;
