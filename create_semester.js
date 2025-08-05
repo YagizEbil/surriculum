@@ -263,4 +263,5 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
     } catch (err) {
         // Silent failure if curriculum or recalc is undefined
     }
+    return container;
 }

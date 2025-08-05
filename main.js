@@ -664,8 +664,47 @@ function SUrriculum(major_chosen_by_user) {
     //NON-DYNAMIC BUTTONS:
     const addSemester = document.querySelector(".addSemester");
     addSemester.addEventListener('click', function(){
-        createSemeter(true, [], curriculum, course_data)
+        const board = document.querySelector('.board');
+        const newContainer = createSemeter(true, [], curriculum, course_data);
+        const ghost = document.querySelector('.add-semester-ghost');
+        if (ghost && board) {
+            board.insertBefore(newContainer, ghost);
+            const style = getComputedStyle(newContainer);
+            const width = newContainer.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);
+            board.scrollLeft += width;
+        }
     });
+
+    function ensureGhostSemester() {
+        const board = document.querySelector('.board');
+        if (!board) return;
+        let ghost = board.querySelector('.add-semester-ghost');
+        if (!ghost) {
+            ghost = document.createElement('div');
+            ghost.classList.add('add-semester-ghost');
+            ghost.textContent = '+ New Semester';
+            ghost.addEventListener('click', function() {
+                const newContainer = createSemeter(true, [], curriculum, course_data);
+                const style = getComputedStyle(newContainer);
+                const width = newContainer.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);
+                board.insertBefore(newContainer, ghost);
+                board.scrollLeft += width;
+            });
+            board.appendChild(ghost);
+        }
+    }
+
+    // Create ghost container on initial load
+    ensureGhostSemester();
+
+    // Sidebar collapse toggle
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    if (sidebar && sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+        });
+    }
 
     const auto_add = document.querySelector('.autoAdd');
     auto_add.addEventListener('click', function(){
@@ -734,66 +773,35 @@ function SUrriculum(major_chosen_by_user) {
             // Prevent multiple modals
             if (document.querySelector('.custom_course_modal')) return;
 
-        // Append the overlay to the document body rather than the board
-        // container so that it always covers the full viewport and is not
-        // clipped by the board's scroll container.  This also ensures the
-        // modal remains visible even if the board is scrolled horizontally.
+        // Append overlay to body so it covers the full viewport
         const boardDom = document.body;
 
-        // Create overlay with click-to-dismiss behaviour
+        // Create overlay container
         const overlay = document.createElement('div');
         overlay.classList.add('custom_course_overlay');
-        // Inline styling for overlay: darken background and capture clicks
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-        overlay.style.zIndex = '200';
-        overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
 
         // Create modal container
         const modal = document.createElement('div');
         modal.classList.add('custom_course_modal');
-        // Inline styling for modal: centre box with padding
-        modal.style.backgroundColor = '#f5f7fa';
-        modal.style.borderRadius = '6px';
-        modal.style.padding = '20px';
-        modal.style.minWidth = '300px';
-        modal.style.maxWidth = '500px';
-        modal.style.color = '#333';
-        modal.style.boxShadow = '0 3px 6px rgba(0,0,0,0.2)';
-        modal.style.zIndex = '201';
 
         // Title
         const title = document.createElement('h3');
         title.innerText = 'Add Custom Course';
-        title.style.marginTop = '0';
-        title.style.marginBottom = '15px';
         modal.appendChild(title);
 
         // Helper to create input row
         function createInputRow(labelText, inputType = 'text', placeholder = '', defaultValue = '') {
             const row = document.createElement('div');
-            row.style.display = 'flex';
-            row.style.flexDirection = 'column';
-            row.style.marginBottom = '10px';
+            row.classList.add('cc-row');
 
             const label = document.createElement('label');
             label.innerText = labelText;
-            label.style.marginBottom = '3px';
             row.appendChild(label);
 
             const input = document.createElement('input');
             input.type = inputType;
             input.placeholder = placeholder;
             input.value = defaultValue;
-            input.style.padding = '6px';
-            input.style.border = '1px solid #ccc';
-            input.style.borderRadius = '3px';
             row.appendChild(input);
 
             return { row, input };
@@ -827,12 +835,9 @@ function SUrriculum(major_chosen_by_user) {
 
             // EL Type dropdown
             const typeRow = document.createElement('div');
-            typeRow.style.display = 'flex';
-            typeRow.style.flexDirection = 'column';
-            typeRow.style.marginBottom = '10px';
+            typeRow.classList.add('cc-row');
             const typeLabel = document.createElement('label');
             typeLabel.innerText = 'Category (EL_Type):';
-            typeLabel.style.marginBottom = '3px';
             typeRow.appendChild(typeLabel);
             const typeSelect = document.createElement('select');
             ['core', 'area', 'university', 'free', 'required', 'none'].forEach(function(opt) {
@@ -841,9 +846,6 @@ function SUrriculum(major_chosen_by_user) {
                 option.innerText = opt.charAt(0).toUpperCase() + opt.slice(1);
                 typeSelect.appendChild(option);
             });
-            typeSelect.style.padding = '6px';
-            typeSelect.style.border = '1px solid #ccc';
-            typeSelect.style.borderRadius = '3px';
             typeRow.appendChild(typeSelect);
             modal.appendChild(typeRow);
 
@@ -893,18 +895,11 @@ function SUrriculum(major_chosen_by_user) {
 
         // Buttons container
         const buttonsRow = document.createElement('div');
-        buttonsRow.style.display = 'flex';
-        buttonsRow.style.justifyContent = 'flex-end';
-        buttonsRow.style.marginTop = '15px';
+        buttonsRow.classList.add('cc-buttons');
 
         const cancelBtn = document.createElement('button');
         cancelBtn.innerText = 'Cancel';
-        cancelBtn.style.marginRight = '10px';
-        cancelBtn.style.padding = '6px 12px';
-        cancelBtn.style.border = 'none';
-        cancelBtn.style.borderRadius = '3px';
-        cancelBtn.style.backgroundColor = '#ccc';
-        cancelBtn.style.cursor = 'pointer';
+        cancelBtn.classList.add('btn', 'btn-secondary', 'btn-sm');
             cancelBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 overlay.remove();
@@ -917,12 +912,7 @@ function SUrriculum(major_chosen_by_user) {
 
         const saveBtn = document.createElement('button');
         saveBtn.innerText = 'Save';
-        saveBtn.style.padding = '6px 12px';
-        saveBtn.style.border = 'none';
-        saveBtn.style.borderRadius = '3px';
-        saveBtn.style.backgroundColor = '#4caf50';
-        saveBtn.style.color = 'white';
-        saveBtn.style.cursor = 'pointer';
+        saveBtn.classList.add('btn', 'btn-primary', 'btn-sm');
             saveBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 // Read input values

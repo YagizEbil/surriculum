@@ -1,7 +1,14 @@
 // Theme management for SUrriculum
 document.addEventListener('DOMContentLoaded', function() {
-    // Get the current theme from localStorage or default to 'light-theme'
-    const currentTheme = localStorage.getItem('theme') || 'light-theme';
+    // Determine the theme to use. If the user has previously chosen a
+    // theme, use that. Otherwise detect the device preference and store
+    // it for subsequent loads so the choice persists across sessions.
+    let currentTheme = localStorage.getItem('theme');
+    if (!currentTheme) {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        currentTheme = prefersDark ? 'dark-theme' : 'light-theme';
+        localStorage.setItem('theme', currentTheme);
+    }
 
     // Apply the theme to the body
     document.body.className = currentTheme;
