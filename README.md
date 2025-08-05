@@ -1,4 +1,4 @@
-# [Surriculum v2.3 (beta)](https://beficent.github.io/surriculum/)
+# [Surriculum v2.4 (beta)](https://beficent.github.io/surriculum/)
 
 Surriculum is an interactive graduation planner for Sabanci University undergraduate programs. The entire application runs in the browser using plain HTML, CSS and JavaScript. It lets you build a semester-by-semester plan, track program requirements and check whether you are on course to graduate.
 
@@ -35,6 +35,6 @@ After updating data, manually test with various course combinations to ensure th
 
 ## Credits
 
-This repository continues the original Surriculum project and is maintained by **BEFICENT (Bilal M. G.)**. Major additions include double major support, Data Science and Analytics and several FASS programs, updated course lists and improved requirement checks.
+This repository started as a fork of the original Surriculum project (https://github.com/melih-kiziltoprak/surriculum) and is maintained by **BEFICENT (Bilal M. G.)**. Major additions include double major support, Data Science and Analytics and several FASS programs, updated course lists and improved requirement checks.
 
 
