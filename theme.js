@@ -1,51 +1,61 @@
 // Theme management for SUrriculum
-document.addEventListener('DOMContentLoaded', function() {
-    // Determine the theme to use. If the user has previously chosen a
-    // theme, use that. Otherwise detect the device preference and store
-    // it for subsequent loads so the choice persists across sessions.
-    let currentTheme = localStorage.getItem('theme');
-    if (!currentTheme) {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        currentTheme = prefersDark ? 'dark-theme' : 'light-theme';
-        localStorage.setItem('theme', currentTheme);
-    }
+// Detect the user's preferred color scheme on first load and persist
+// manual selections across sessions. Works on desktop and mobile browsers.
 
-    // Apply the theme to the body
-    document.body.className = currentTheme;
+document.addEventListener('DOMContentLoaded', function () {
+    const storedTheme = localStorage.getItem('theme');
+    const mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
-    // Function to toggle theme
-    function toggleTheme() {
-        const body = document.body;
-        const currentTheme = body.className;
-        const newTheme = currentTheme === 'light-theme' ? 'dark-theme' : 'light-theme';
+    // Apply the theme to the document and optionally persist it
+    function applyTheme(theme, persist) {
+        document.body.className = theme;
 
-        body.className = newTheme;
-        localStorage.setItem('theme', newTheme);
-
-        // Update button text
         const themeButton = document.getElementById('themeToggle');
         if (themeButton) {
-            themeButton.innerHTML = newTheme === 'dark-theme' ? '☀️ Light' : '🌙 Dark';
+            themeButton.innerHTML = theme === 'dark-theme' ? '☀️ Light' : '🌙 Dark';
         }
 
-        // Dispatch custom event for theme change
+        if (persist) {
+            localStorage.setItem('theme', theme);
+        }
+
         window.dispatchEvent(new CustomEvent('themeChanged', {
-            detail: { theme: newTheme }
+            detail: { theme: theme }
         }));
     }
 
-    // Connect theme button
-    const themeButton = document.getElementById('themeToggle');
-    if (themeButton) {
-        // Set initial button text
-        themeButton.innerHTML = currentTheme === 'dark-theme' ? '☀️ Light' : '🌙 Dark';
+    // Initial theme selection
+    if (storedTheme) {
+        applyTheme(storedTheme, false);
+    } else {
+        const preferred = mediaQuery && mediaQuery.matches ? 'dark-theme' : 'light-theme';
+        applyTheme(preferred, false);
 
-        // Add click handler
-        themeButton.addEventListener('click', toggleTheme);
+        // Update automatically if the system preference changes and the
+        // user has not chosen a theme yet.
+        if (mediaQuery) {
+            const updateFromSystem = function (e) {
+                if (!localStorage.getItem('theme')) {
+                    applyTheme(e.matches ? 'dark-theme' : 'light-theme', false);
+                }
+            };
+
+            if (typeof mediaQuery.addEventListener === 'function') {
+                mediaQuery.addEventListener('change', updateFromSystem);
+            } else if (typeof mediaQuery.addListener === 'function') {
+                mediaQuery.addListener(updateFromSystem);
+            }
+        }
     }
 
-    // Listen for theme changes from other scripts
-    window.addEventListener('themeChanged', function(event) {
-        console.log('Theme changed to:', event.detail.theme);
-    });
+    // Toggle theme on button click and persist user choice
+    const themeButton = document.getElementById('themeToggle');
+    if (themeButton) {
+        themeButton.addEventListener('click', function () {
+            const current = document.body.className;
+            const next = current === 'light-theme' ? 'dark-theme' : 'light-theme';
+            applyTheme(next, true);
+        });
+    }
 });
+
