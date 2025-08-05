@@ -1258,33 +1258,15 @@ function SUrriculum(major_chosen_by_user) {
             if (document.querySelector('.double_major_modal')) return;
             const overlay = document.createElement('div');
             overlay.classList.add('double_major_overlay');
-            overlay.style.position = 'fixed';
-            overlay.style.top = '0';
-            overlay.style.left = '0';
-            overlay.style.width = '100%';
-            overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
-            overlay.style.zIndex = '300';
-            overlay.style.display = 'flex';
-            overlay.style.justifyContent = 'center';
-            overlay.style.alignItems = 'center';
             const modal = document.createElement('div');
             modal.classList.add('double_major_modal');
-            modal.style.backgroundColor = '#f5f7fa';
-            modal.style.borderRadius = '6px';
-            modal.style.padding = '20px';
-            modal.style.minWidth = '250px';
-            modal.style.color = '#333';
-            modal.style.boxShadow = '0 3px 6px rgba(0,0,0,0.2)';
             // Title
             const h = document.createElement('h3');
             h.innerText = 'Set Category for Double Major';
-            h.style.marginTop = '0';
             modal.appendChild(h);
             // Info text
             const info = document.createElement('p');
             info.innerText = code + ' - ' + title;
-            info.style.marginBottom = '10px';
             modal.appendChild(info);
             // Select
             const select = document.createElement('select');
@@ -1294,22 +1276,13 @@ function SUrriculum(major_chosen_by_user) {
                 o.innerText = opt.charAt(0).toUpperCase() + opt.slice(1);
                 select.appendChild(o);
             });
-            select.style.padding = '6px';
-            select.style.border = '1px solid #ccc';
-            select.style.borderRadius = '3px';
-            select.style.marginBottom = '10px';
             modal.appendChild(select);
             // Buttons
             const buttons = document.createElement('div');
-            buttons.style.display = 'flex';
-            buttons.style.justifyContent = 'flex-end';
+            buttons.classList.add('dm-buttons');
             const save = document.createElement('button');
             save.innerText = 'Save';
-            save.style.backgroundColor = '#4caf50';
-            save.style.color = '#fff';
-            save.style.border = 'none';
-            save.style.padding = '6px 12px';
-            save.style.borderRadius = '3px';
+            save.classList.add('btn', 'btn-primary', 'btn-sm');
             save.onclick = function(e) {
                 e.stopPropagation();
                 const chosen = select.value;

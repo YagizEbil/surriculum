@@ -206,7 +206,7 @@ html, body {
 .sidebar-toggle {
     position: absolute;
     top: 8px;
-    right: -20px;
+    right: 0;
     width: 20px;
     height: 40px;
     background: var(--primary);
@@ -1246,6 +1246,54 @@ html, body {
 }
 
 .custom_course_modal .cc-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Double Major Category Modal */
+.double_major_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.double_major_modal {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+    min-width: 250px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.double_major_modal h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.double_major_modal select {
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.double_major_modal .dm-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
