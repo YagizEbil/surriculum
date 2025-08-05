@@ -6,15 +6,12 @@
 // Display graduation check results in a modal
 function displayGraduationResults(curriculum) {
     if(!document.querySelector('.graduation_modal')) {
-        const board_dom = document.querySelector(".board");
         const overlay = document.createElement("div");
         overlay.classList.add('graduation_modal_overlay');
         const modal = document.createElement("div");
         modal.classList.add('graduation_modal');
-        board_dom.appendChild(overlay);
-        board_dom.appendChild(modal);
-        const leftPosition = ((board_dom.offsetWidth) / 2) + board_dom.scrollLeft;
-        modal.style.left = leftPosition + 'px';
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
         // Compose results for primary major
         let html = '';
         const flagMain = curriculum.canGraduate();
@@ -48,25 +45,40 @@ function displayGraduationResults(curriculum) {
 function displaySummary(curriculum, major_chosen_by_user) {
     // Do not create more than one set of summary modals. If any exist, abort.
     if (document.querySelector('.summary_modal')) return;
+    const majorNames = {
+        CS: 'Computer Science and Engineering',
+        DSA: 'Data Science and Analytics',
+        ECON: 'Economics',
+        EE: 'Electronics Engineering',
+        IE: 'Industrial Engineering',
+        MAN: 'Management',
+        MAT: 'Materials Science and Nano Engineering',
+        ME: 'Mechatronics Engineering',
+        BIO: 'Molecular Biology, Genetics and Bioengineering',
+        PSIR: 'Political Science and International Relations',
+        PSY: 'Psychology',
+        VACD: 'Visual Arts and Visual Communications Design'
+    };
     // Helper to build a summary modal for a given set of totals and limits.
-    function buildSummaryModal(totals, limits, gpa, labelPrefix) {
-        const board_dom = document.querySelector(".board");
-        const modal = document.createElement("div");
-        modal.classList.add('summary_modal');
-        // Use the same overlay for both modals; create only if not present
+    function buildSummaryModal(totals, limits, gpa, majorCode) {
+        // Overlay is shared by all summary modals. Create it on demand and
+        // append to the body so it covers the full viewport. The overlay uses
+        // flexbox centering so modals appear in the middle of the screen.
         let overlay = document.querySelector('.summary_modal_overlay');
         if (!overlay) {
             overlay = document.createElement('div');
             overlay.classList.add('summary_modal_overlay');
-            board_dom.appendChild(overlay);
+            document.body.appendChild(overlay);
         }
-        board_dom.appendChild(modal);
-        // Position relative to board scroll; first modal centered, second offset
-        const leftBase = ((board_dom.offsetWidth) / 2) + board_dom.scrollLeft;
-        // Determine how many modals already exist to offset accordingly
-        const index = document.querySelectorAll('.summary_modal').length - 1;
-        // Each additional modal is shifted right by 400px to avoid overlap
-        modal.style.left = (leftBase + index * 400) + 'px';
+        const modal = document.createElement('div');
+        modal.classList.add('summary_modal');
+        overlay.appendChild(modal);
+        if (majorCode) {
+            const header = document.createElement('div');
+            header.classList.add('summary_modal_title');
+            header.textContent = majorNames[majorCode] || majorCode;
+            modal.appendChild(header);
+        }
         // Build content
         const labels = ['GPA: ', 'SU Credits: ', 'ECTS: ', 'University: ',  'Required: ', 'Core: ', 'Area: ', 'Free: ',  'Basic Science: ', 'Engineering: '];
         const total_values = [gpa, totals.total, totals.ects, totals.university, totals.required, totals.core, totals.area, totals.free, totals.science, totals.engineering];
@@ -135,7 +147,7 @@ function displaySummary(curriculum, major_chosen_by_user) {
         String(reqMain.engineering || 0)
     ];
     // Build primary summary modal
-    buildSummaryModal(totalsMain, limitsMain, gpaMain);
+    buildSummaryModal(totalsMain, limitsMain, gpaMain, major_chosen_by_user);
     // If a double major exists, compute totals for DM and show a second modal
     if (curriculum.doubleMajor) {
         let totalsDM = {
@@ -180,7 +192,7 @@ function displaySummary(curriculum, major_chosen_by_user) {
             String(dmReq.science || 0),
             String(dmReq.engineering || 0)
         ];
-        buildSummaryModal(totalsDM, limitsDM, gpaDM);
+        buildSummaryModal(totalsDM, limitsDM, gpaDM, curriculum.doubleMajor);
     }
 }
 

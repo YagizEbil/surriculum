@@ -152,21 +152,21 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
         newsem.termIndex = null;
     }
 
-    const btn = document.querySelector(".addSemester");
-    let addCourse = document.createElement("button");
+    // Ghost course placeholder similar to the ghost semester container
+    let addCourse = document.createElement("div");
     addCourse.classList.add("addCourse");
-    addCourse.innerHTML = "+ Add another course";
+    addCourse.innerHTML = "+ Add course";
 
 
     subcontainer.appendChild(semester);
     subcontainer.appendChild(addCourse);
     container.appendChild(subcontainer);
     
-    if(aslastelement) 
+    if(aslastelement)
     {
-        board.insertBefore(container, btn.parentNode.parentNode);
+        board.appendChild(container);
     }
-    else 
+    else
     {
         board.insertBefore(container, board.firstChild);
     }
@@ -223,9 +223,6 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
             else
             {
                 grade.innerHTML = grade_list[i];
-                grade.style.fontSize = '20px'
-                grade.style.paddingRight = '7px';
-                grade.style.paddingBottom = '7px';
                 // GPA is affected by all letter grades except transfers (T)
                 curriculum.getSemester(semester.id).totalGPA += (courseCredit * letter_grades_global_dic[grade_list[i]]);
                 if(grade_list[i] != 'T'){
@@ -267,4 +264,5 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
     } catch (err) {
         // Silent failure if curriculum or recalc is undefined
     }
+    return container;
 }

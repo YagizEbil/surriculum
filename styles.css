@@ -1,729 +1,1338 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+/* === CSS VARIABLES === */
+:root {
+    /* Light theme */
+    --primary: #0D47A1;
+    --primary-hover: #1565C0;
+    --primary-active: #0A3D91;
+    --secondary: #1976D2;
+    --accent: #4CAF50;
 
-*
-{
-    z-index: 1;
+    --bg-main: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --bg-surface: #F1F5F9;
+    --bg-header: linear-gradient(135deg, #0D47A1 0%, #1976D2 100%);
+
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --text-inverse: #FFFFFF;
+
+    --border: #E2E8F0;
+    --border-hover: #CBD5E1;
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --button-color-modifier: 0;
 }
 
-html, body 
-{
+.dark-theme {
+    --primary: #3B82F6;
+    --primary-hover: #2563EB;
+    --primary-active: #1D4ED8;
+    --secondary: #60A5FA;
+    --accent: #10B981;
+
+    --bg-main: #0F172A;
+    --bg-card: #1E293B;
+    --bg-surface: #334155;
+    --bg-header: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+
+    --text-primary: #F1F5F9;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --text-inverse: #0F172A;
+
+    --border: #334155;
+    --border-hover: #475569;
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+
+    --button-color-modifier: 1;
+}
+
+/* === RESET & BASE === */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background: var(--bg-main);
     overscroll-behavior: none;
 }
 
-body
-{
+/* === LAYOUT === */
+.app {
     display: flex;
     flex-direction: column;
-    margin: 0px;
-    font-family: 'Roboto', sans-serif;
-    background-color: rgb(0, 66, 136);
     height: 100vh;
 }
 
-.title
-{
-    background-color: rgb(0, 66, 136);
-    font-size: max(30px, 2vh);
-    font-weight: 500;
-    font-family: 'roboto', sans-serif;
-    color: white;
-    flex: 1;
+.header {
+    background: var(--bg-header);
+    color: var(--text-inverse);
+    padding: 0 24px;
+    height: 64px;
     display: flex;
     align-items: center;
-    height: 6vh;
-    margin: 0px;
-    padding-left: 10px;
-    z-index: 2;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: white;
+    letter-spacing: -0.025em;
+}
+
+.header-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    min-height: 0; /* Important for flex children to shrink */
     position: relative;
 }
 
-.import-container {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+.board {
+    flex: 1;
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    z-index: 10; /* Ensure it's above other elements */
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: var(--bg-main);
+    position: relative;
+    gap: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+    min-height: 0; /* Important for flex children to shrink */
+    margin-left: 320px;
+    transition: margin-left 0.3s ease;
 }
 
-.import-toggle {
-    width: auto !important;
-    height: 30px;
-    margin: 0 !important;
-    padding: 0 15px;
-    position: relative; /* Add position context */
-    z-index: 11; /* Higher than container */
+/* === BUTTONS === */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    white-space: nowrap;
+    min-height: 36px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    background: var(--primary-active);
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--bg-card);
+    color: white;
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-surface);
+    border-color: var(--border-hover);
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    min-height: 28px;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+    width: 320px;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: transform 0.3s ease;
+    z-index: 5;
+}
+
+.sidebar.collapsed {
+    transform: translateX(calc(-100% + 20px));
+}
+
+.sidebar-toggle {
+    position: absolute;
+    top: 16px; /* Matches the padding of .sidebar-header */
+    right: 0;
+    width: 20px;
+    height: 40px;
+    background: var(--primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
     cursor: pointer;
 }
 
-.import-section {
+.sidebar.collapsed .sidebar-toggle {
+    transform: rotate(180deg);
+}
+
+.sidebar.collapsed ~ .board {
+    margin-left: 20px;
+}
+
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.sidebar-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sidebar-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.control-group {
+    margin-bottom: 24px;
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+.control-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.control-row .btn {
+    flex: 1;
+    font-size: 0.8rem;
+}
+
+/* === SEMESTER CONTAINER - FIXED FOR SCROLLING === */
+.semester-container {
+    width: 300px;
+    margin: 20px;
+    flex-shrink: 0;
+}
+
+.semester {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    height: calc(100vh - 140px); /* Fixed height based on viewport */
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+}
+
+.semester-header {
+    background: var(--accent);
+    color: var(--text-inverse);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.semester-header input {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: var(--text-inverse);
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    width: 150px;
+}
+
+.semester-header input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.semester-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.semester-action-btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+}
+
+.semester-action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* === SCROLLABLE COURSE CONTAINER - KEY FIX === */
+.semester-courses {
+    flex: 1; /* Take remaining space */
+    padding: 16px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden;
+    min-height: 0; /* Allow shrinking below content size */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* === SEMESTER TOTALS STYLING === */
+.semester-totals {
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    flex-shrink: 0; /* Prevent totals from shrinking */
+}
+
+.semester-totals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+}
+
+.semester-total-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.semester-total-label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.semester-total-value {
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--bg-card);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+
+/* === COURSE CARDS === */
+.course-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    overflow: visible;
+    transition: all 0.15s ease;
+    flex-shrink: 0; /* Prevent individual cards from shrinking */
+}
+
+.course-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.course-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-surface);
+}
+
+.course-code {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.course-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* === GRADE STYLING === */
+.grade {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-width: 32px;
+    text-align: center;
+}
+
+.grade:hover {
+    border-color: var(--primary);
+    background: var(--bg-surface);
+}
+
+.grade:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.grade option {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.course-delete {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.15s ease;
+}
+
+.course-delete:hover {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.course-body {
+    padding: 12px 16px;
+}
+
+.course-name {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.course-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.course-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+.course-meta span {
+    background: var(--bg-surface);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+}
+
+/* === ADD COURSE === */
+.add-course {
+    padding: 12px;
+    text-align: center;
+    color: var(--primary);
+    cursor: pointer;
+    border-top: 1px dashed var(--border);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    flex-shrink: 0; /* Keep add button visible */
+    background: var(--bg-card);
+}
+
+.add-course:hover {
+    background: var(--bg-surface);
+    color: var(--primary-hover);
+}
+
+.add-course-form {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-surface);
+}
+
+.add-course-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.add-course-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+}
+
+.add-course-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+/* === IMPORT DROPDOWN === */
+.import-container {
+    position: relative;
+}
+
+.import-dropdown {
     position: absolute;
-    top: 40px;
+    top: calc(100% + 8px);
     right: 0;
-    width: 350px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    color: #333;
-    z-index: 100;
-    padding: 15px;
+    width: 400px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+    z-index: 50;
+    display: none;
 }
 
-.import-description {
-    margin-bottom: 15px;
+.import-dropdown.active {
+    display: block;
 }
 
-.import-description p {
-    font-size: 14px;
-    margin: 5px 0;
-    color: #444;
+.import-title {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-primary);
 }
 
-.import-description ol {
+.import-instructions {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.import-instructions ol {
     margin: 8px 0;
-    padding-left: 25px;
+    padding-left: 20px;
 }
 
-.import-description li {
-    font-size: 13px;
-    margin: 5px 0;
-    color: #555;
+.import-instructions li {
+    margin: 4px 0;
 }
 
 .import-controls {
     display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.import-file {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+/* === MODALS === */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+/* === FOOTER === */
+.footer {
+    background: var(--bg-header);
+    color: white;
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 0.875rem;
+    opacity: 0.9;
+    flex-shrink: 0;
+}
+
+/* === UTILITIES === */
+.hidden {
+    display: none !important;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 280px;
+    }
+
+    .semester-container {
+        width: 280px;
+    }
+
+    .import-dropdown {
+        width: 320px;
+    }
+
+    .header {
+        padding: 0 16px;
+    }
+
+    .header-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* === ANIMATIONS === */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* === MODERN SCROLLBAR STYLING === */
+.semester-courses::-webkit-scrollbar,
+.sidebar-content::-webkit-scrollbar,
+.subcontainer_semester .semester::-webkit-scrollbar,
+.board::-webkit-scrollbar{
+    width: 6px;
+}
+
+.semester-courses::-webkit-scrollbar-track,
+.sidebar-content::-webkit-scrollbar-track,
+.subcontainer_semester .semester::-webkit-scrollbar-track,
+.board::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+.semester-courses::-webkit-scrollbar-thumb,
+.sidebar-content::-webkit-scrollbar-thumb,
+.subcontainer_semester .semester::-webkit-scrollbar-thumb,
+.board::-webkit-scrollbar-thumb{
+    background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.semester-courses::-webkit-scrollbar-thumb:hover,
+.sidebar-content::-webkit-scrollbar-thumb:hover,
+.subcontainer_semester .semester::-webkit-scrollbar-thumb:hover,
+.board::-webkit-scrollbar-thumb{
+    background: linear-gradient(180deg, #00b4d8 0%, #0077b6 100%);
+}
+
+/* Firefox scrollbar */
+.semester-courses,
+.sidebar-content,
+.subcontainer_semester .semester,
+.board{
+    scrollbar-width: thin;
+    scrollbar-color: #4facfe transparent;
+}
+/* === LEGACY COMPATIBILITY - FIXED FOR SCROLLING === */
+
+/* Each semester column - FIXED HEIGHT AND FLEX LAYOUT */
+.container_semester {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin: 16px 8px;
+    flex: 0 0 320px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    height: calc(100vh - 140px); /* Fixed height for proper scrolling */
+}
+
+/* Placeholder container for adding new semesters inline */
+.add-semester-ghost {
+    margin: 16px 8px;
+    flex: 0 0 320px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.add-semester-ghost:hover {
+    background: var(--bg-surface);
+}
+
+/* Top bar showing total credits */
+.container_semester .total_credit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background: var(--primary);
+    color: var(--text-inverse);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.container_semester .total_credit_line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.container_semester .total_credit_text {
+    padding: 0 8px;
+}
+
+/* Body container - PROPER FLEX LAYOUT */
+.subcontainer_semester {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 12px;
+    flex: 1; /* Take remaining space */
+    overflow: hidden; /* Hide overflow from this container */
+    min-height: 0; /* Allow shrinking */
+}
+
+/* Date row with term label and action icons */
+.subcontainer_semester .date {
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 10px;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex-shrink: 0;
 }
 
-#academicRecordsInput {
-    max-width: 200px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+.subcontainer_semester .date p {
+    margin: 0;
 }
 
-#importAcademicRecords {
-    height: 30px;
-    margin: 0 !important;
-    padding: 0 15px;
-    width: auto !important;
+/* Icons container */
+.subcontainer_semester .icons {
+    display: flex;
+    gap: 8px;
 }
 
-.board
-{
-    background-color: rgb(216, 216, 216);
-    background-image: url('./assets/sabanci.jpg');
-    background-size: cover;
+.subcontainer_semester .semester_drag,
+.subcontainer_semester .semester_date_edit,
+.subcontainer_semester .delete_semester {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
     background-repeat: no-repeat;
     background-position: center;
-    margin: 0px;
-    height: 94vh;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    position: relative;
-
-    overflow-y: auto;
-    max-height: calc(100vh - 6vh); /* Adjust height based on viewport minus title height */
-    box-sizing: border-box;
+    background-size: contain;
+    filter: brightness(var(--button-color-modifier))
 }
 
-.summary_modal, .graduation_modal
-{
-    z-index: 4;
-    background-color: rgb(190, 219, 219);
-    border: 0px;
-    border-radius: 5px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
-    display: flex;
+.subcontainer_semester .delete_semester {
+    background-image: url('./assets/closedw.png');
 }
-.summary_modal
-{
-    padding-top: 20px;
-    padding-bottom: 20px;
-    width: 350px;
-    max-width: 75vw;
-    height: 563px;
-    transform: translate(-50%, -50%);
+.subcontainer_semester .semester_drag {
+    background-image: url('./assets/dragw.png');
+}
+.subcontainer_semester .semester_date_edit {
+    background-image: url('./assets/editw.png');
+}
 
+.subcontainer_semester .semester_drag:hover,
+.subcontainer_semester .semester_date_edit:hover,
+.subcontainer_semester .delete_semester:hover {
+    opacity: 1;
+}
+
+/* Course list container - THE KEY FIX */
+.subcontainer_semester .semester {
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 4px;
+    flex: 1; /* Take remaining space in subcontainer */
+    overflow-y: auto; /* Enable scrolling */
+    overflow-x: hidden;
+    min-height: 0; /* Allow shrinking below content size */
+    padding-right: 2px; /* Space for scrollbar */
 }
 
-.summary_modal_child
-{
-    width: 90%;
-    height: 41px;
-    margin-left: 5%;
-    margin-right: 5%;
-    background-color: rgb(245, 237, 252);
-    border-radius: 5px;
+/* Individual course card - FIXED 3-COLUMN LAYOUT WITH LEFT 2-ROW STRUCTURE */
+.course {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+}
 
+.course_container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 23px;
-    font-weight: 500;
-    z-index: 5;
-    color: gray;
+    align-items: stretch;
+    padding: 8px;
+    gap: 8px;
+    min-height: 50px;
 }
 
-.graduation_modal
-{
-    transform: translate(-50%, -80%);
-    max-width: 80vw;
-    min-width: 60vw;
-
-    justify-content: center;
+/* LEFT COLUMN - course_label with 2 rows */
+.course_label {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 4px;
+    min-width: 50px;
+    max-width: 70px;
 }
-.graduation_modal>div
-{
-    margin: 20px;
-    font-size: 25px;
-    color: rgb(109, 109, 109);
+
+/* Top row in left column - course code */
+.course_label div:first-child {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+/* Bottom row in left column - delete button */
+.course_label .delete_course {
+    width: 18px;
+    height: 18px;
+    border: none;
+    background: url('assets/closedb.png') center/contain no-repeat;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+    align-self: flex-start;
+}
+
+.course_label .delete_course:hover {
+    opacity: 1;
+}
+/* MIDDLE COLUMN - Course info */
+.course_info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    align-self: flex-start;
+}
+
+.course_info .course_name {
     font-weight: 600;
 }
 
+.course_info .course_type {
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-size: 0.675rem;
+}
 
+.course_info .course_credit {
+    color: var(--text-muted);
+}
 
-.overlay, .summary_modal_overlay, .graduation_modal_overlay
-{
-    background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity (0.5) as desired */
-    position: fixed;
-    overflow-x: auto;
+/* RIGHT COLUMN - Grade */
+.grade {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+    align-self: flex-start;
+    flex-basis: 36px;
+    max-width: 36px;
+    padding: 4px 2px;
+    position: relative;
+}
+
+.grade:hover {
+    border-color: var(--primary);
+    background: var(--bg-surface);
+}
+
+/* Style the grade input that gets created by JavaScript */
+.grade_input {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.summary_modal_overlay, .graduation_modal_overlay
-{
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 3;
-}
-
-.container_semester
-{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 0px;
-    width: 300px;
-    height: 94vh;
-
-}
-
-.container_btn
-{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 0px;
-    width: 410px;
-    height: 94vh;
-
-}
-
-.head_btn
-{
-    width: 225px;
-    margin: 0px;
-    display: flex;
-    flex-direction: row;
-    max-height: 5vh;
-}
-
-.head_btn_line
-{
-    width: 195px;
-    height: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: #5aa874;
-}
-
-.total_credit
-{
-    margin: 0px;
-    display: flex;
-    flex-direction: row;
-    max-height: 5vh;
-}
-
-.total_credit_line,  .head_btn_end
-{
-    width: 100px;
-    height: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: #5aa874;
-}
-
-.total_credit_line
-{
-    width: 90px;
-}
-
-.head_btn_end
-{
-    margin: 10px;
-    margin-left: -5px;
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-
-    align-items: center;
-    color: white;
-    font-size: 30px;
-}
-
-.head_btn_end > p
-{
-    margin-bottom: 35px;
-}
-
-.total_credit_text
-{
-    height: 30px;
-    width: 130px;
-    z-index: 2;
-    margin-left: -5px;
-    margin-right: -5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color:#5aa874;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    color: white;
-    border-radius: 15px;
-}
-
-.subcontainer_semester, .date, .semester, .course, .addCourse, input, .addCourse
-{
-    width: 260px;
-    margin: 20px;
-}
-
-.date
-{
-    background-color: #5aa874;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    height: 40px;
-    margin: 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-}
-
-.date > input
-{
-    width: 70%;
-    margin: 5px;
-    padding: 5px;
-    border: 0px;
-    background-color: #86b396;
-    color: white;
-}
-
-::placeholder
-{
-    color: white;
-}
-
-.tick 
-{
-    margin: 20px;
-}
-
-
-
-.date > p, .date > input
-{
+    border: none;
+    background: transparent;
+    font-size: 0.75rem;
     font-weight: 600;
-    font-size: 20px;
-    margin-left: 10px;
-}
-
-
-
-.semester
-{
-    margin: 0px;
-    background: #c7d6e7;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    max-height: 68vh;
-    overflow-y: scroll;
-    overflow-x:hidden;
-}
-
-.course
-{
-    border: 1px solid grey;
-    border-radius: 5px;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    font-size: 25px;
-}
-
-.addCourse
-{
+    color: var(--text-primary);
     text-align: center;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    border: 0px;
-    font-weight: 500;
-    color:rgb(36, 112, 193);
-    font-size:15px;
-    margin:0px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-color: #c7d6e7;
-    height: 40px;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    cursor: pointer;
 }
 
-
-input
-{
-    margin: 0px;
-    padding: 7px;
-    font-size: 17px;
-    font-weight: 600;
+/* Auto-focus and open the grade input dropdown immediately */
+.grade .grade_input:focus {
+    background: var(--bg-card);
+    border: 1px solid var(--primary);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.1);
 }
 
-.course
-{
-    display: flex;
-    width: 90%;
-    position: relative;
-    background: white;
-    border: 0px;
+/* Hide the placeholder text */
+.grade .grade_input::placeholder {
+    opacity: 0;
 }
 
-.course_container
-{
-    width: 100%;
-    height: 100px;
-    display: flex;
-    flex-direction: column;
-}
-
-.course_label
-{
-    margin: 0px;
-    height: 32px;
-    width: 100%;
-    /*background-color: rgb(42, 85, 123);*/
-    border-bottom: 1px solid gray;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.course_label > div
-{
-    margin-left: 10px;
-    font-size: 17px;
-    font-weight: 600;
-    /*font-family: 'Montserrat';*/
-}
-
-.course_info
-{
-    margin: 0px;
-    height: 75px;
-    width: 100%;
-    font-weight: 300;
-    position: relative;
-}
-
-.course_name
-{
-    font-size: 14px;
-    
-    width: 225px;
-    margin: 5px;
-    margin-left: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.course_type
-{
-    font-size: 12px;
-    margin: 5px;
-    margin-left: 10px;
-    font-style: italic;
-    color: grey
-}
-/*
-.grade_container
-{
-    display: flex;
-    margin: 5px;
-    justify-content: space-between;
-}*/
-.course_credit
-{
-    font-size: 12px;
-    margin-left: 10px;
-}
-.grade
-{
-    font-size: 12px;
-    margin: 0px;
-    margin-right: 5px;
-    color:rgb(36, 112, 193);
-
+/* Style the datalist dropdown positioning */
+.grade datalist {
     position: absolute;
-    bottom: 0;
+    top: 100%;
+    left: 0;
     right: 0;
-    width: 70px;
-    height: 20px;
-    margin-left: 0px;
-    text-align: right;
-    padding-right: 7px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    z-index: 100;
 }
-.grade_input
-{
-    height: 0px;
-    width: 70px;
+
+/* Add course button within a semester */
+.addCourse {
+    margin: 8px 0;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.15s ease;
 }
 
-.grade_input::placeholder
-{
-    color:gray;
-    font-size: 10px;
+.addCourse:hover {
+    background: var(--bg-surface);
 }
 
-.input_container
-{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background: #c7d6e7;
-    height: 37px;
-}
-
-
-.input_container > input
-{
-    max-width: 60%;
-    border-radius: 5px;
-    border: 0px;
-}
-.input_container > input::placeholder
-{
-    color:gray;
-    font-size: 15px;
-}
-.enter, .delete_add_course
-{
-    background-image: url('./assets/tick.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-
-    width: 30px;
-    height: 30px;
-    z-index: 2;
-
-    background-color: #c7d6e7;
-    
-}
-
-.delete_add_course
-{
-    background-image: url('./assets/closed.png');
-}
-
-.input_container > input, .enter
-{
-    margin: 0px;
-}
-
-.delete_course
-{
-    width: 15px;
-    height: 15px;
-    margin-right: 10px;
-    
-    background-image: url('./assets/closed.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: 0px;
-    z-index: 2;
-    background-color: white;
-}
-
-.icons
-{
+/* Input container for adding a course */
+.input_container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
+    margin: 4px 0;
+    flex-shrink: 0;
 }
 
-.delete_semester, .semester_drag, .semester_date_edit, .date > .tick
-{
+.input_container input {
+    flex: 1;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.input_container .enter,
+.input_container .delete_add_course {
     width: 20px;
     height: 20px;
-    z-index: 2;
-    margin-right: 10px;
-    background-color: #5aa874;
-    border: 0px;
-    background-size: cover;
+    border: none;
+    background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
 }
 
-.delete_semester
-{
-    background-image: url('./assets/closedw.png');
+.input_container .enter {
+    background-image: url('assets/tickb.png');
 }
 
-.semester_drag
-{
-    background-image: url('./assets/dragw.png');
-}
-.semester_date_edit
-{
-    background-image: url('./assets/editw.png'); 
+.input_container .delete_add_course {
+    background-image: url('assets/closedb.png');
 }
 
-.btns
-{
-    display:flex;
-    margin: 60px;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+.input_container .enter:hover,
+.input_container .delete_add_course:hover {
+    opacity: 1;
 }
 
-.major-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    margin-bottom: 20px;
-}
-.major-row .btn {
-    width: 140px;
-    margin-bottom: 0;
-    font-size: calc(0.6em + 0.4vw); /* Adjusted text size to fit within button */
-    text-align: center;
-    white-space: normal; /* Allow text wrapping */
-    overflow: visible; /* Remove overflow restrictions */
-}
-.major-row .change_major > input,
-.major-row .entryTerm > input,
-.major-row .doubleMajor > input,
-.major-row .entryTermDM > input {
-    width: 140px;
-    font-size: calc(0.6em + 0.4vw); /* Adjusted text size to fit within input */
-    text-align: center;
-    white-space: normal; /* Allow text wrapping */
-    overflow: visible; /* Remove overflow restrictions */
+/* Grade input styling */
+.grade_input {
+    padding: 2px 4px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    width: 50px;
 }
 
-.btn
-{
-    margin-bottom: 20px;
-
-    width: 180px;
-    border-radius: 3px;
-    font-size: 15px;
-    border: 0px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #435A74;
-    color: white;
-}
-.change_major > input
-{
-    width: 180px;
-    height: 100%;
-    background-color: #435A74;
+/* Tick icon for editing semester dates */
+.tick {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
 }
 
-.doubleMajor > input,
-.entryTerm > input,
-.entryTermDM > input {
-    width: 180px;
-    height: 100%;
-    background-color: #435A74;
-    color: white;
+.tick:hover {
+    opacity: 1;
 }
 
-/* Style the double major selection to match the appearance of the main
-   major control.  The select element inherits the button-like look
-   used throughout the app (same width, colours and border radius). */
+/* Styling for inputs in buttons */
+.change_major input,
+.doubleMajor input,
+.entryTerm input,
+.entryTermDM input,
+.date input {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    outline: none;
+    min-width: 120px;
+}
+
+.change_major input:focus,
+.doubleMajor input:focus,
+.entryTerm input:focus,
+.entryTermDM input:focus,
+.date input:focus {
+    border-color: var(--primary);
+}
+
+/* Double major select styling */
 .doubleMajorSelect {
-    width: 180px;
-    border-radius: 3px;
-    font-size: 15px;
-    border: 0;
-    background-color: #435A74;
-    color: white;
-    height: 30px;
-    padding-left: 4px;
-    padding-right: 4px;
-}
-.doubleMajorSelect option {
-    color: black;
-    background-color: white;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    outline: none;
+    cursor: pointer;
+    min-width: 100px;
 }
 
-.change_major > input::placeholder
-{
-    color: gray;
+.doubleMajorSelect:focus {
+    border-color: var(--primary);
 }
 
-@keyframes shake {
-    0% { transform: translate(0, 0) rotate(0); }
-    10% { transform: translate(-1px, 0) rotate(-3deg); }
-    20% { transform: translate(1px, 0) rotate(3deg); }
-    30% { transform: translate(-1px, 0) rotate(-3deg); }
-    40% { transform: translate(1px, 0) rotate(3deg); }
-    50% { transform: translate(-1px, 0) rotate(-3deg); }
-    60% { transform: translate(1px, 0) rotate(3deg); }
-    70% { transform: translate(-1px, 0) rotate(-3deg); }
-    80% { transform: translate(1px, 0) rotate(3deg); }
-    90% { transform: translate(-1px, 0) rotate(-3deg); }
-    100% { transform: translate(0, 0) rotate(0); }
-  }
-  
-  .shake {
-    animation: shake 2s infinite;
-  }
+/* Modal overlays */
+.graduation_modal_overlay,
+.summary_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
 
-footer p {
-    color: white;
+/* Graduation modal */
+
+.graduation_modal {
+    width: 640px; /* Doubled the width */
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 32px; /* Adjusted padding proportionally */
+    color: var(--text-primary);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Adjusted gap between elements */
+    font-size: 1.75rem; /* Increased font size proportionally */
+}
+
+/* Updated summary_modal to be 50% bigger */
+.summary_modal {
+    width: 360px; /* Increased by 50% */
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 24px; /* Adjusted padding proportionally */
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Adjusted gap between elements */
+    font-size: 1.2rem; /* Increased font size proportionally */
+    color: var(--text-primary)
+}
+
+/* Title for the summary modal */
+.summary_modal_title {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Rows within the summary modal */
+.summary_modal_child {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.summary_modal_child:last-child {
+    border-bottom: none;
+}
+
+.custom_course_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.custom_course_modal {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+    min-width: 300px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.custom_course_modal h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.custom_course_modal label {
+    margin-bottom: 3px;
+}
+
+.custom_course_modal input,
+.custom_course_modal select {
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.custom_course_modal .cc-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.custom_course_modal .cc-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Double Major Category Modal */
+.double_major_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.double_major_modal {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+    min-width: 250px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.double_major_modal h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.double_major_modal select {
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.double_major_modal .dm-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.semester-summary-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.semester-summary-wrapper.active {
+    max-height: 500px;
+}
+
+/* Legacy compatibility classes */
+.change_major, .entryTerm, .doubleMajor, .entryTermDM,
+.addSemester, .check, .summary, .autoAdd, .customCourse,
+.deleteCustom, .resetLocal {
+    /* Styles already applied via .btn classes */
+}
+
+.semester_date_edit, .semester_drag, .delete_semester {
+    /* Styles already applied via .semester-action-btn classes */
+}
+
+/* Input styles for dynamic content */
+input[type="text"], input[type="file"], select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Ensure proper focus styles */
+input:focus, select:focus, button:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
