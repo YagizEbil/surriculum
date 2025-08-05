@@ -1,5 +1,23 @@
 function dynamic_click(e, curriculum, course_data)
 {
+    // Guard against early interaction before course data is available.  If
+    // the course list has not yet been loaded (e.g., the user clicked
+    // "Add Course" while the data is still fetching), prevent
+    // interaction and notify the user.  This avoids an empty datalist
+    // and confusing "Course Not Found" errors.
+    if (!Array.isArray(course_data) || course_data.length === 0) {
+        // When no course data is available (either still fetching or failed
+        // to load due to browser security constraints), disable
+        // course-related actions and inform the user.  Accessing local
+        // JSON files via file:// is blocked in many browsers.  Running
+        // SUrriculum from a local web server or launching Chrome with
+        // --allow-file-access-from-files will resolve this.
+        if (e.target.classList.contains('addCourse') || e.target.classList.contains('enter')) {
+            alert('Course data is unavailable. Please serve SUrriculum via a local web server or enable file access to load course lists.');
+            return;
+        }
+    }
+
     //CLICKED "+ Add Course":
     if(e.target.classList.contains("addCourse"))
     {
@@ -289,10 +307,12 @@ function dynamic_click(e, curriculum, course_data)
     {
         e.target.parentNode.remove();
     }
-    //CLICKED ADD GRADE:
+//CLICKED ADD GRADE:
     else if(e.target.classList.contains("grade"))
     {
         var prevGrade;
+        var gradeElement = e.target; // Store reference to the grade element
+
         if(e.target.innerHTML.length <= 2)
         {
             prevGrade = e.target.innerHTML;
@@ -305,71 +325,90 @@ function dynamic_click(e, curriculum, course_data)
             if(prevGrade != 'T'){curriculum.getSemester(sem.id).totalGPACredits -= credit;}
         }
 
-        let input = document.createElement('input');
-        input.classList.add('grade_input')
-        input.placeholder = 'choose'
-        input.setAttribute("list", 'grade_data_list');
-        let list = document.createElement("datalist");
-        list.innerHTML = grade_list_InnerHTML;
-        list.id = 'grade_data_list';
-        e.target.innerHTML = ''
-        e.target.style.paddingRight = '20px';
+        // Create modern dropdown
+        const dropdown = document.createElement('div');
+        dropdown.className = 'grade-dropdown-modern';
 
-        e.target.appendChild(input);
-        e.target.appendChild(list);
+        // Create options container (removed header to save space)
+        const optionsContainer = document.createElement('div');
+        optionsContainer.className = 'grade-dropdown-options';
 
-        input.addEventListener("input", function(e){
-            let grade = input.value;
-            e.target.parentNode.style.fontSize = '20px'
-            e.target.parentNode.style.paddingRight = '7px';
-            e.target.parentNode.style.paddingBottom = '7px';
-            let sem = e.target.parentNode.parentNode.parentNode.parentNode;
-            let courseName = e.target.parentNode.parentNode.querySelector('.course_label').firstChild.innerHTML;
-            let credit = parseInt(getInfo(courseName, course_data)['SU_credit']);
-            let semObj = curriculum.getSemester(sem.id);
-            semObj.totalGPA += (letter_grades_global_dic[grade] * credit);
-            if(grade != 'T'){semObj.totalGPACredits += credit;}
-            // Adjust earned credits based on grade change
-            let info = getInfo(courseName, course_data);
-            if(prevGrade === 'F' && grade !== 'F'){
-                adjustSemesterTotals(semObj, info, 1);
-            } else if(prevGrade !== 'F' && grade === 'F'){
-                adjustSemesterTotals(semObj, info, -1);
-            }
-            prevGrade = grade;
-            e.target.parentNode.innerHTML = grade;
+        // Most common grades in order of frequency
+        const commonGrades = ['S', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'F'];
 
-            // Recalculate effective categories when the grade changes so
-            // that courses that were previously failed (F) or newly
-            // passed are allocated correctly.
-            try {
-                if (typeof curriculum.recalcEffectiveTypes === 'function') {
-                    curriculum.recalcEffectiveTypes(course_data);
-                }
-                if (typeof curriculum.recalcEffectiveTypesDouble === 'function' && curriculum.doubleMajor) {
-                    curriculum.recalcEffectiveTypesDouble(curriculum.doubleMajorCourseData);
-                }
-            } catch (_) {}
-
-            //alert(curriculum.getSemester(sem.id).totalGPA / curriculum.getSemester(sem.id).totalGPACredits)
+        commonGrades.forEach(grade => {
+            const gradeOption = document.createElement('div');
+            gradeOption.className = 'grade-option';
+            gradeOption.dataset.value = grade;
+            gradeOption.textContent = grade;
+            optionsContainer.appendChild(gradeOption);
         });
 
-        // Allow leaving the grade empty by blurring the input
-        input.addEventListener('blur', function(e){
-            const val = input.value.trim();
-            if(!val){
-                let sem = input.parentNode.parentNode.parentNode.parentNode;
-                let courseName = input.parentNode.parentNode.querySelector('.course_label').firstChild.innerHTML;
+        dropdown.appendChild(optionsContainer);
+
+        gradeElement.innerHTML = '';
+        gradeElement.appendChild(dropdown);
+        gradeElement.classList.add('grade-active');
+
+        // Handle grade selection
+        optionsContainer.addEventListener('click', (evt) => {
+            if(evt.target.classList.contains('grade-option')) {
+                evt.stopPropagation();
+                const grade = evt.target.dataset.value;
+
+                // Use stored reference instead of e.target
+                let sem = gradeElement.parentNode.parentNode.parentNode;
+                let courseName = gradeElement.parentNode.querySelector('.course_label').firstChild.innerHTML;
+                let credit = parseInt(getInfo(courseName, course_data)['SU_credit']);
                 let semObj = curriculum.getSemester(sem.id);
-                // If there was a previous grade remove its effects already subtracted above
+                semObj.totalGPA += (letter_grades_global_dic[grade] * credit);
+                if(grade != 'T'){semObj.totalGPACredits += credit;}
+
+                // Adjust earned credits
+                let info = getInfo(courseName, course_data);
+                if(prevGrade === 'F' && grade !== 'F'){
+                    adjustSemesterTotals(semObj, info, 1);
+                } else if(prevGrade !== 'F' && grade === 'F'){
+                    adjustSemesterTotals(semObj, info, -1);
+                }
+
+                // Update display
+                gradeElement.innerHTML = grade;
+                gradeElement.classList.remove('grade-active');
+
+                // Remove the outside click listener
+                document.removeEventListener('click', closeDropdown);
+
+                // Recalculate effective categories
+                try {
+                    if (typeof curriculum.recalcEffectiveTypes === 'function') {
+                        curriculum.recalcEffectiveTypes(course_data);
+                    }
+                    if (typeof curriculum.recalcEffectiveTypesDouble === 'function' && curriculum.doubleMajor) {
+                        curriculum.recalcEffectiveTypesDouble(curriculum.doubleMajorCourseData);
+                    }
+                } catch (_) {}
+            }
+        });
+
+        // Handle clicking outside to close (with longer delay)
+        const closeDropdown = (evt) => {
+            if (!gradeElement.contains(evt.target)) {
+                // Handle empty selection
+                let sem = gradeElement.parentNode.parentNode.parentNode;
+                let courseName = gradeElement.parentNode.querySelector('.course_label').firstChild.innerHTML;
+                let semObj = curriculum.getSemester(sem.id);
+
                 if(prevGrade === 'F'){
                     let info = getInfo(courseName, course_data);
                     adjustSemesterTotals(semObj, info, 1);
                 }
-                input.parentNode.style.fontSize = '';
-                input.parentNode.style.paddingRight = '7px';
-                input.parentNode.style.paddingBottom = '';
-                input.parentNode.innerHTML = 'Add grade';
+
+                gradeElement.innerHTML = 'Add grade';
+                gradeElement.classList.remove('grade-active');
+
+                document.removeEventListener('click', closeDropdown);
+
                 try{
                     if (typeof curriculum.recalcEffectiveTypes === 'function') {
                         curriculum.recalcEffectiveTypes(course_data);
@@ -379,6 +418,9 @@ function dynamic_click(e, curriculum, course_data)
                     }
                 }catch(_){}
             }
-        });
+        };
+
+        // Longer delay before enabling outside click
+        setTimeout(() => document.addEventListener('click', closeDropdown), 200);
     }
 }

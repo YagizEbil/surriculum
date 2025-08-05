@@ -47,62 +47,72 @@ function SUrriculum(major_chosen_by_user) {
     // root if the term-specific file is not found to preserve backward
     // compatibility with older deployments.
     function fetchCourseData(major, termCode) {
-        const primaryPath = `./courses/${termCode}/${major}.json`;
-        const fallbackPath = `./courses/${major}.json`;
-        const rootPath = `./${major}.json`;
+        // Build relative paths for the course JSON files. We avoid
+        // computing absolute file URLs for file:// origins because
+        // Chrome treats different file paths as different origins,
+        // blocking cross-file requests. Using relative paths keeps
+        // requests within the same origin (the directory of index.html).
+        const primaryPath = `courses/${termCode}/${major}.json`;
+        const fallbackPath = `courses/${major}.json`;
+        const rootPath = `${major}.json`;
 
-        // Helper to synchronously read JSON via XMLHttpRequest. This
-        // approach works for file:// origins where fetch() may be blocked.
+        // Helper to synchronously read JSON via XMLHttpRequest.  When
+        // accessing resources under the file:// protocol many browsers
+        // block fetch() due to CORS or security restrictions.  A
+        // synchronous XHR is still permitted in these scenarios and
+        // returns status 0 on success.  This helper returns a parsed
+        // array of courses or null if the file could not be read.
         const tryRead = (path) => {
             try {
                 const xhr = new XMLHttpRequest();
                 xhr.open('GET', path, false);
                 xhr.overrideMimeType('application/json');
                 xhr.send(null);
-                // status 0 indicates success for file:// scheme in many browsers
                 if (xhr.status === 200 || xhr.status === 0) {
-                    return JSON.parse(xhr.responseText);
+                    const parsed = JSON.parse(xhr.responseText);
+                    return Array.isArray(parsed) ? parsed : [];
                 }
             } catch (_) {
-                // ignore
+                // ignore errors and fall through
             }
             return null;
         };
 
-        // First: attempt to read via synchronous XHR from primary and fallback.
-        const dataPrimary = tryRead(primaryPath);
-        if (dataPrimary) {
-            return Promise.resolve(dataPrimary);
-        }
-        const dataFallback = tryRead(fallbackPath);
-        if (dataFallback) {
-            return Promise.resolve(dataFallback);
-        }
-        const dataRoot = tryRead(rootPath);
-        if (dataRoot) {
-            return Promise.resolve(dataRoot);
-        }
+        // Paths to attempt loading the course data.  We try the term
+        // specific location first, followed by a fallback (no term) and
+        // finally the root.  This preserves compatibility with older
+        // deployments where the JSON files live in the top level.
+        const paths = [primaryPath, fallbackPath, rootPath];
 
-        // If synchronous reads failed, fall back to fetch API. This path
-        // supports http(s) origins where fetch is permitted. We'll try
-        // primary then fallback.
-        return fetch(primaryPath)
-            .then(res => {
-                if (!res.ok) throw new Error('Primary course JSON not found');
-                return res.json();
-            })
-            .catch(async () => {
+        // If running under file://, prefer synchronous XHR to bypass
+        // fetch() restrictions.  We iterate each candidate path and
+        // return on the first successful read.  If all attempts
+        // fail, return an empty array.  For http(s) origins we still
+        // attempt fetch() but only after synchronous reads fail.
+        return (async () => {
+            for (const p of paths) {
+                const read = tryRead(p);
+                if (read) {
+                    return read;
+                }
+            }
+            // If synchronous reads failed (likely under http(s)), fall
+            // back to fetch.  Check res.ok and parse JSON.  Note: fetch
+            // does not reject on 404; we must inspect ok.  If the
+            // parsed value is not an array, return an empty list.
+            for (const p of paths) {
                 try {
-                    const res = await fetch(fallbackPath);
-                    if (res.ok) return res.json();
-                } catch (_) {}
-                try {
-                    const res2 = await fetch(rootPath);
-                    if (res2.ok) return res2.json();
-                } catch (_) {}
-                // All attempts failed; return empty array
-                return [];
-            });
+                    const res = await fetch(p);
+                    if (res.ok) {
+                        const data = await res.json();
+                        return Array.isArray(data) ? data : [];
+                    }
+                } catch (_) {
+                    // ignore errors and continue
+                }
+            }
+            return [];
+        })();
     }
     // Determine entry terms for main and double majors from localStorage. The
     // terms are stored as display strings (e.g. "Fall 2023-2024"). We convert
@@ -118,16 +128,52 @@ function SUrriculum(major_chosen_by_user) {
 
     fetchCourseData(major_chosen_by_user, entryTermCode)
     .then(async json => {
+        // If the course list could not be loaded, log a warning instead of
+        // blocking the UI with an alert.  In some environments the
+        // synchronous XHR may fail to resolve file:// URLs even when
+        // the JSON exists, producing a false negative.  Logging a
+        // warning allows the app to continue and display whatever
+        // information could be retrieved.
         if (!json || json.length === 0) {
-            alert('No course data available for ' + major_chosen_by_user + ' in ' + entryTermName + '.');
+            console.warn('No course data available for ' + major_chosen_by_user + ' in ' + entryTermName + '.');
         }
     //START OF PROGRAM
         let change_major_element = document.querySelector('.change_major');
         let etElem = document.querySelector('.entryTerm');
         let etDmElem = document.querySelector('.entryTermDM');
-    change_major_element.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
-        if (etElem) etElem.innerHTML = '<p>Admit Term: ' + entryTermName + '</p>';
-        if (etDmElem) etDmElem.innerHTML = '<p>Admit Term(DM): ' + entryTermDMName + '</p>';
+        // Update the UI controls with the currently selected major and entry terms.
+        // The revamped UI uses a <button> with a nested <span> for the label.  To
+        // preserve the button styling, update the span's text when present
+        // instead of overwriting the entire innerHTML.  Fall back to setting
+        // textContent on the button if no span exists.  This ensures the
+        // label reflects the selected values without breaking the layout.
+        if (change_major_element) {
+            const span = change_major_element.querySelector('span');
+            const label = 'Major: ' + major_chosen_by_user;
+            if (span) {
+                span.textContent = label;
+            } else {
+                change_major_element.textContent = label;
+            }
+        }
+        if (etElem) {
+            const span = etElem.querySelector('span');
+            const label = 'Admit Term: ' + entryTermName;
+            if (span) {
+                span.textContent = label;
+            } else {
+                etElem.textContent = label;
+            }
+        }
+        if (etDmElem) {
+            const span = etDmElem.querySelector('span');
+            const label = 'Admit Term(DM): ' + entryTermDMName;
+            if (span) {
+                span.textContent = label;
+            } else {
+                etDmElem.textContent = label;
+            }
+        }
 
     // ------------------------------------------------------------------
     // Build a double major selector below the primary major display.  This
@@ -307,10 +353,21 @@ function SUrriculum(major_chosen_by_user) {
         try {
             // If click is outside change_major, restore its label
             if (!(e.target.classList.contains('change_major') || (e.target.parentNode && e.target.parentNode.classList.contains('change_major')))) {
-                major_change_element.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
+                // Update the span inside the major button rather than replacing the whole
+                const span = major_change_element ? major_change_element.querySelector('span') : null;
+                const label = 'Major: ' + major_chosen_by_user;
+                if (span) {
+                    span.textContent = label;
+                } else if (major_change_element) {
+                    major_change_element.textContent = label;
+                }
             }
         } catch {
-            major_change_element.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
+            if (major_change_element) {
+                const span = major_change_element.querySelector('span');
+                const label = 'Major: ' + major_chosen_by_user;
+                if (span) span.textContent = label; else major_change_element.textContent = label;
+            }
         }
         // If click is outside doubleMajor element, restore its label to saved DM or None
         try {
@@ -320,7 +377,13 @@ function SUrriculum(major_chosen_by_user) {
                 if (!(e.target.classList.contains('doubleMajor') || (e.target.parentNode && e.target.parentNode.classList.contains('doubleMajor')))) {
                     // Only reset when no input present to avoid clearing user typing
                     if (!double_major_element.querySelector('input')) {
-                        double_major_element.innerHTML = '<p>Double Major: ' + dmDisplay + '</p>';
+                        const span = double_major_element.querySelector('span');
+                        const label = 'Double Major: ' + dmDisplay;
+                        if (span) {
+                            span.textContent = label;
+                        } else {
+                            double_major_element.textContent = label;
+                        }
                     }
                 }
             }
@@ -328,12 +391,24 @@ function SUrriculum(major_chosen_by_user) {
         try {
             if (entry_term_el && !(e.target.classList.contains('entryTerm') || (e.target.parentNode && e.target.parentNode.classList.contains('entryTerm')))) {
                 if (!entry_term_el.querySelector('input')) {
-                    entry_term_el.innerHTML = '<p>Admit Term: ' + entryTermName + '</p>';
+                    const span = entry_term_el.querySelector('span');
+                    const label = 'Admit Term: ' + entryTermName;
+                    if (span) {
+                        span.textContent = label;
+                    } else {
+                        entry_term_el.textContent = label;
+                    }
                 }
             }
             if (entry_term_dm_el && !(e.target.classList.contains('entryTermDM') || (e.target.parentNode && e.target.parentNode.classList.contains('entryTermDM')))) {
                 if (!entry_term_dm_el.querySelector('input')) {
-                    entry_term_dm_el.innerHTML = '<p>Admit Term(DM): ' + entryTermDMName + '</p>';
+                    const span = entry_term_dm_el.querySelector('span');
+                    const label = 'Admit Term(DM): ' + entryTermDMName;
+                    if (span) {
+                        span.textContent = label;
+                    } else {
+                        entry_term_dm_el.textContent = label;
+                    }
                 }
             }
         } catch (_) {}
@@ -345,33 +420,50 @@ function SUrriculum(major_chosen_by_user) {
         } catch {}
         // Targeting primary major change
         if (element.classList.contains('change_major')) {
+            // Only add an input if one is not already present
             if (!change_major_element.querySelector('input')) {
+                // Clear the button and insert an input + datalist for selection
                 change_major_element.innerHTML = '';
-                let input_major = document.createElement('input');
-                input_major.placeholder = 'choose a major';
-                input_major.setAttribute('list', 'datalist_majors');
-                let datalist = document.createElement('datalist');
+                const inputMajor = document.createElement('input');
+                inputMajor.placeholder = 'choose a major';
+                inputMajor.setAttribute('list', 'datalist_majors');
+                const datalist = document.createElement('datalist');
+                datalist.id = 'datalist_majors';
                 const majorsList = getMajorsForTerm(entryTermCode);
                 majorsList.forEach(function(m) {
-                    datalist.innerHTML += "<option value='" + m + "'>";
+                    datalist.innerHTML += `<option value='${m}'>`;
                 });
-                datalist.id = 'datalist_majors';
-                change_major_element.appendChild(input_major);
+                change_major_element.appendChild(inputMajor);
                 change_major_element.appendChild(datalist);
-                input_major.addEventListener('input', function(e2) {
-                    const major_chosen_new = (e2.target.value).toUpperCase();
+                inputMajor.addEventListener('input', function(e2) {
+                    const majorChosenNew = (e2.target.value || '').toUpperCase();
+                    // Validate against available majors in the datalist
                     let majorIsValid = false;
-                    const options = document.getElementById('datalist_majors').children;
-                    for (let i = 0; i < options.length; i++) {
-                        if (options[i].value === major_chosen_new) majorIsValid = true;
+                    const opts = document.getElementById('datalist_majors').children;
+                    for (let i = 0; i < opts.length; i++) {
+                        if (opts[i].value === majorChosenNew) {
+                            majorIsValid = true;
+                            break;
+                        }
                     }
                     if (majorIsValid) {
-                        change_major_element.innerHTML = '<p>Major: ' + major_chosen_new + '</p>';
-                        localStorage.removeItem('major');
-                        localStorage.setItem('major', major_chosen_new);
+                        // Update the button to display the selected major using a span
+                        change_major_element.innerHTML = '';
+                        const span = document.createElement('span');
+                        span.textContent = 'Major: ' + majorChosenNew;
+                        change_major_element.appendChild(span);
+                        // Persist selection and reload
+                        try {
+                            localStorage.removeItem('major');
+                            localStorage.setItem('major', majorChosenNew);
+                        } catch (_) {}
                         location.reload();
                     } else {
-                        e2.target.parentNode.innerHTML = '<p>Major: ' + major_chosen_by_user + '</p>';
+                        // Invalid input; restore previous label
+                        e2.target.parentNode.innerHTML = '';
+                        const span = document.createElement('span');
+                        span.textContent = 'Major: ' + major_chosen_by_user;
+                        e2.target.parentNode.appendChild(span);
                     }
                 });
             }
@@ -409,7 +501,12 @@ function SUrriculum(major_chosen_by_user) {
                         let newVal = (e2.target.value || '').toUpperCase();
                         if (newVal === 'NONE' || newVal === '') {
                             // Clear double major
-                            double_major_element.innerHTML = '<p>Double Major: None</p>';
+                            // Update double major button to show None using its span
+                            if (double_major_element) {
+                                const span = double_major_element.querySelector('span');
+                                const label = 'Double Major: None';
+                                if (span) span.textContent = label; else double_major_element.textContent = label;
+                            }
                             // Remove DM from localStorage
                             try {
                                 localStorage.removeItem('doubleMajor');
@@ -441,14 +538,25 @@ function SUrriculum(major_chosen_by_user) {
                                 }
                             }
                             if (valid) {
-                                double_major_element.innerHTML = '<p>Double Major: ' + newVal + '</p>';
+                                // Display the selected double major on the button span
+                                if (double_major_element) {
+                                    const span = double_major_element.querySelector('span');
+                                    const label = 'Double Major: ' + newVal;
+                                    if (span) span.textContent = label; else double_major_element.textContent = label;
+                                }
                                 try {
                                     localStorage.setItem('doubleMajor', newVal);
                                 } catch (_) {}
                                 setDoubleMajor(newVal);
                             } else {
                                 // Invalid selection resets display
-                                double_major_element.innerHTML = '<p>Double Major: ' + ((localStorage.getItem('doubleMajor') || '') || 'None') + '</p>';
+                                // Restore DM label from localStorage or None
+                                if (double_major_element) {
+                                    const dmVal = (localStorage.getItem('doubleMajor') || '') || 'None';
+                                    const span = double_major_element.querySelector('span');
+                                    const label = 'Double Major: ' + dmVal;
+                                    if (span) span.textContent = label; else double_major_element.textContent = label;
+                                }
                             }
                         }
                     });
@@ -1556,14 +1664,21 @@ function SUrriculum(major_chosen_by_user) {
             // Update the button display for the custom DM control
             const dmBtn = document.querySelector('.doubleMajor');
             if (dmBtn) {
-                dmBtn.innerHTML = '<p>Double Major: ' + savedDMInit + '</p>';
+                // Update the label on the double major button using its span
+                const span = dmBtn.querySelector('span');
+                const label = 'Double Major: ' + savedDMInit;
+                if (span) span.textContent = label; else dmBtn.textContent = label;
             }
             // setDoubleMajor expects uppercase codes
             setDoubleMajor(savedDMInit.toUpperCase());
         } else {
             // If none saved, ensure the button displays None
             const dmBtn = document.querySelector('.doubleMajor');
-            if (dmBtn) dmBtn.innerHTML = '<p>Double Major: None</p>';
+            if (dmBtn) {
+                const span = dmBtn.querySelector('span');
+                const label = 'Double Major: None';
+                if (span) span.textContent = label; else dmBtn.textContent = label;
+            }
         }
     } catch (e) {
         // ignore
