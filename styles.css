@@ -205,7 +205,7 @@ html, body {
 
 .sidebar-toggle {
     position: absolute;
-    top: 8px;
+    top: 16px; /* Matches the padding of .sidebar-header */
     right: 0;
     width: 20px;
     height: 40px;
@@ -1154,33 +1154,33 @@ html, body {
 /* Graduation modal */
 
 .graduation_modal {
-    width: 320px;
+    width: 640px; /* Doubled the width */
     background: var(--bg-card);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    padding: 16px;
+    padding: 32px; /* Adjusted padding proportionally */
     color: var(--text-primary);
     z-index: 1001;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    font-size: 0.875rem;
+    gap: 24px; /* Adjusted gap between elements */
+    font-size: 1.75rem; /* Increased font size proportionally */
 }
 
-/* Summary modal */
+/* Updated summary_modal to be 50% bigger */
 .summary_modal {
-    width: 340px;
+    width: 240px; /* Increased by 50% */
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    padding: 16px;
-    color: var(--text-primary);
+    padding: 24px; /* Adjusted padding proportionally */
     z-index: 1001;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    font-size: 0.8rem;
+    gap: 12px; /* Adjusted gap between elements */
+    font-size: 1.2rem; /* Increased font size proportionally */
+    color: var(--text-primary)
 }
 
 /* Rows within the summary modal */
