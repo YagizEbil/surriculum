@@ -1047,6 +1047,7 @@ html, body {
     gap: 8px;
     margin: 4px 0;
     flex-shrink: 0;
+    max-width: 291px;
 }
 
 .input_container input,
@@ -1058,6 +1059,7 @@ html, body {
     border-radius: var(--radius-sm);
     background: var(--bg-card);
     color: var(--text-primary);
+    max-width: 250px;
 }
 
 .input_container .enter,
