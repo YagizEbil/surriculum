@@ -188,6 +188,7 @@ html, body {
     background: var(--bg-card);
     color: var(--text-primary);
     cursor: pointer;
+    width: 230px;
 }
 
 /* === SIDEBAR === */
@@ -273,6 +274,11 @@ html, body {
 
 .control-row .select-control {
     flex: 1;
+    font-size: 0.8rem;
+}
+
+.select-control {
+    flex-grow: 1;
     font-size: 0.8rem;
 }
 
@@ -1089,7 +1095,7 @@ html, body {
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-md);
-    max-height: 200px;
+    max-height: 400px;
     overflow-y: auto;
     z-index: 100;
     display: none;

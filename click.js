@@ -49,7 +49,7 @@ function dynamic_click(e, curriculum, course_data)
         function renderOptions(filter) {
             dropdown.innerHTML = '';
             const normalized = filter ? filter.toUpperCase() : '';
-            const filtered = options.filter(o => o.toUpperCase().includes(normalized)).slice(0, 20);
+            const filtered = options.filter(o => o.toUpperCase().includes(normalized));
             filtered.forEach(text => {
                 const opt = document.createElement('div');
                 opt.classList.add('course-option');
