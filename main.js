@@ -435,6 +435,7 @@ function SUrriculum(major_chosen_by_user) {
                 });
                 change_major_element.appendChild(inputMajor);
                 change_major_element.appendChild(datalist);
+                inputMajor.focus();
                 inputMajor.addEventListener('input', function(e2) {
                     const majorChosenNew = (e2.target.value || '').toUpperCase();
                     // Validate against available majors in the datalist
@@ -497,6 +498,7 @@ function SUrriculum(major_chosen_by_user) {
                     });
                     double_major_element.appendChild(dmInput);
                     double_major_element.appendChild(dmDatalist);
+                    dmInput.focus();
                     dmInput.addEventListener('input', function(e2) {
                         let newVal = (e2.target.value || '').toUpperCase();
                         if (newVal === 'NONE' || newVal === '') {
@@ -580,6 +582,7 @@ function SUrriculum(major_chosen_by_user) {
                     dl.id = 'datalist_terms';
                     entryTerms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
                     entry_term_el.appendChild(inp); entry_term_el.appendChild(dl);
+                    inp.focus();
                     inp.addEventListener('input', function(ev){
                         if (entryTerms.indexOf(ev.target.value) !== -1) {
                             localStorage.setItem('entryTerm', ev.target.value);
@@ -608,6 +611,7 @@ function SUrriculum(major_chosen_by_user) {
                     dl.id = 'datalist_terms_dm';
                     entryTerms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
                     entry_term_dm_el.appendChild(inp); entry_term_dm_el.appendChild(dl);
+                    inp.focus();
                     inp.addEventListener('input', function(ev){
                         if (entryTerms.indexOf(ev.target.value) !== -1) {
                             localStorage.setItem('entryTermDM', ev.target.value);
