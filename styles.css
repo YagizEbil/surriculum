@@ -1062,6 +1062,38 @@ html, body {
     max-width: 250px;
 }
 
+/* Wrapper for custom course dropdown */
+.input_container .input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+/* Custom dropdown for course suggestions */
+.input_container .course-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+}
+
+.input_container .course-option {
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.input_container .course-option:hover,
+.input_container .course-option.active {
+    background: var(--bg-surface);
+}
+
 .input_container .enter,
 .input_container .delete_add_course {
     width: 20px;

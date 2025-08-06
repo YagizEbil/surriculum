@@ -195,6 +195,28 @@ function getCoursesDataList(course_data)
     return datalistInnerHTML;
 }
 
+// Return an array of course strings ("MAJORCODE Course Name") used to
+// populate custom dropdowns for course selection. This mirrors the data
+// returned by getCoursesDataList but in array form so it can be rendered
+// manually instead of relying on the browser's default datalist styling.
+function getCoursesList(course_data) {
+    let combined = Array.isArray(course_data) ? course_data.slice() : [];
+    try {
+        const cur = (typeof window !== 'undefined') ? window.curriculum : null;
+        if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
+            const mainSet = new Set(combined.map(c => c.Major + c.Code));
+            cur.doubleMajorCourseData.forEach(dm => {
+                const key = dm.Major + dm.Code;
+                if (!mainSet.has(key)) {
+                    combined.push(dm);
+                }
+            });
+        }
+    } catch (_) {}
+
+    return combined.map(item => item['Major'] + item['Code'] + ' ' + item['Course_Name']);
+}
+
 // Adjust semester totals by adding or subtracting the specified course's
 // credit, science/engineering values and category totals. `multiplier`
 // should be +1 to add credits or -1 to remove them.
