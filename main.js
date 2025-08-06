@@ -633,10 +633,8 @@ function SUrriculum(major_chosen_by_user) {
                 // Update any open dropdowns so the new or updated course appears as an option
                 try {
                     const optionsHTML = getCoursesDataList(course_data);
-                    document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
-                        if (dl.id === 'datalist' || dl.classList.contains('course_select')) {
-                            dl.innerHTML = optionsHTML;
-                        }
+                    document.querySelectorAll('datalist.course_list').forEach(function(dl) {
+                        dl.innerHTML = optionsHTML;
                     });
                 } catch (ex) {
                     // ignore if lists not present
@@ -1059,8 +1057,8 @@ function SUrriculum(major_chosen_by_user) {
                 // If no double major is selected, reset to primary data
                 if (!curriculum.doubleMajor) {
                     const optionsHTML = getCoursesDataList(course_data);
-                    document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
-                        if (dl.id === 'datalist' || dl.classList.contains('course_select')) dl.innerHTML = optionsHTML;
+                    document.querySelectorAll('datalist.course_list').forEach(function(dl) {
+                        dl.innerHTML = optionsHTML;
                     });
                     return;
                 }
@@ -1077,8 +1075,8 @@ function SUrriculum(major_chosen_by_user) {
                 // Combine arrays
                 const combined = course_data.concat(dmUnique);
                 const html = getCoursesDataList(combined);
-                document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
-                    if (dl.id === 'datalist' || dl.classList.contains('course_select')) dl.innerHTML = html;
+                document.querySelectorAll('datalist.course_list').forEach(function(dl) {
+                    dl.innerHTML = html;
                 });
             } catch (ex) {
                 // ignore errors
@@ -1167,10 +1165,8 @@ function SUrriculum(major_chosen_by_user) {
                     curriculum.recalcEffectiveTypesDouble(doubleMajorCourseData);
                 }
                 const optionsHTML = getCoursesDataList(course_data);
-                document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
-                    if (dl.id === 'datalist' || dl.classList.contains('course_select')) {
-                        dl.innerHTML = optionsHTML;
-                    }
+                document.querySelectorAll('datalist.course_list').forEach(function(dl) {
+                    dl.innerHTML = optionsHTML;
                 });
                 if (curriculum.doubleMajor && typeof updateDatalistForDoubleMajor === 'function') {
                     updateDatalistForDoubleMajor();
@@ -1267,28 +1263,13 @@ function SUrriculum(major_chosen_by_user) {
     // the stored double major choice.
     try {
         const savedDMInit = localStorage.getItem('doubleMajor') || '';
+        const dmSelect = document.querySelector('.doubleMajor');
+        if (dmSelect && dmSelect.tagName === 'SELECT') {
+            dmSelect.value = savedDMInit;
+        }
         if (savedDMInit) {
-            // If using the select-based fallback, update its value
-            const sel = document.querySelector('.doubleMajorSelect');
-            if (sel) sel.value = savedDMInit;
-            // Update the button display for the custom DM control
-            const dmBtn = document.querySelector('.doubleMajor');
-            if (dmBtn) {
-                // Update the label on the double major button using its span
-                const span = dmBtn.querySelector('span');
-                const label = 'Double Major: ' + savedDMInit;
-                if (span) span.textContent = label; else dmBtn.textContent = label;
-            }
             // setDoubleMajor expects uppercase codes
             setDoubleMajor(savedDMInit.toUpperCase());
-        } else {
-            // If none saved, ensure the button displays None
-            const dmBtn = document.querySelector('.doubleMajor');
-            if (dmBtn) {
-                const span = dmBtn.querySelector('span');
-                const label = 'Double Major: None';
-                if (span) span.textContent = label; else dmBtn.textContent = label;
-            }
         }
     } catch (e) {
         // ignore
