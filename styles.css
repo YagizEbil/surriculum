@@ -603,6 +603,7 @@ html, body {
     border-radius: var(--radius-sm);
     background: var(--bg-card);
     color: var(--text-primary);
+    max-width: 200px; /* Limit width to prevent overflow */
 }
 
 /* === MODALS === */
