@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://beficent.github.io/surriculum/sitemap.xml
+Signmap: https://beficent.github.io/surriculum/signmap.xml
