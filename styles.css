@@ -27,7 +27,6 @@
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 12px;
-    --button-color-modifier: 0;
 }
 
 .dark-theme {
@@ -53,8 +52,6 @@
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-
-    --button-color-modifier: 1;
 }
 
 /* === RESET & BASE === */
@@ -290,7 +287,8 @@ html, body {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
-    overflow: hidden;
+    /* Allow dropdowns to extend outside the semester card */
+    overflow: visible;
     height: calc(100vh - 140px); /* Fixed height based on viewport */
     display: flex;
     flex-direction: column;
@@ -845,16 +843,27 @@ html, body {
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    filter: brightness(var(--button-color-modifier))
 }
 
+/* Default icons for light theme */
 .subcontainer_semester .delete_semester {
-    background-image: url('./assets/closedw.png');
+    background-image: url('./assets/closedb.png');
 }
 .subcontainer_semester .semester_drag {
-    background-image: url('./assets/dragw.png');
+    background-image: url('./assets/dragb.png');
 }
 .subcontainer_semester .semester_date_edit {
+    background-image: url('./assets/editb.png');
+}
+
+/* Icon overrides for dark theme */
+.dark-theme .subcontainer_semester .delete_semester {
+    background-image: url('./assets/closedw.png');
+}
+.dark-theme .subcontainer_semester .semester_drag {
+    background-image: url('./assets/dragw.png');
+}
+.dark-theme .subcontainer_semester .semester_date_edit {
     background-image: url('./assets/editw.png');
 }
 
