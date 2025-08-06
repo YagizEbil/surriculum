@@ -37,4 +37,7 @@ After updating data, manually test with various course combinations to ensure th
 
 This repository started as a fork of the original Surriculum project (https://github.com/melih-kiziltoprak/surriculum) and is maintained by **BEFICENT (Bilal M. G.)**. Major additions include double major support, Data Science and Analytics and several FASS programs, updated course lists and improved requirement checks.
 
+## License
 
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0).  
+See the [LICENSE](./LICENSE) file for more information.
