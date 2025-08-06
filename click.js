@@ -24,20 +24,31 @@ function dynamic_click(e, curriculum, course_data)
         let input_container =  document.createElement("div");
         input_container.classList.add("input_container")
 
-        let select = document.createElement("select");
-        select.classList.add("course_select");
-        select.innerHTML = getCoursesDataList(course_data);
+        let input = document.createElement("input");
+        input.classList.add("course_select");
+        const listId = 'course_list_' + Date.now();
+        input.setAttribute('list', listId);
+        let datalist = document.createElement('datalist');
+        datalist.id = listId;
+        datalist.classList.add('course_list');
+        datalist.innerHTML = getCoursesDataList(course_data);
         let enter = document.createElement("div");
         enter.classList.add("enter");
         let delete_ac = document.createElement("div");
         delete_ac.classList.add("delete_add_course");
 
-        input_container.appendChild(select);
+        input_container.appendChild(input);
+        input_container.appendChild(datalist);
         input_container.appendChild(enter);
         input_container.appendChild(delete_ac);
 
         e.target.parentNode.insertBefore(input_container, e.target.parentNode.querySelector(".addCourse"));
-        select.focus();
+        input.focus();
+        input.addEventListener('keydown', function(evt){
+            if(evt.key === 'Enter') {
+                enter.click();
+            }
+        });
     }
     //CLICKED "OK" (for entering course input):
     else if(e.target.classList.contains("enter"))
@@ -49,7 +60,7 @@ function dynamic_click(e, curriculum, course_data)
         // valid, we attempt to match the entire input against course names
         // in both the primary major and the double major. If a match is
         // found, we derive the code accordingly.
-        let inputValue = e.target.parentNode.querySelector("select").value.trim();
+        let inputValue = e.target.parentNode.querySelector("input").value.trim();
         let tentativeCode = inputValue.split(' ')[0].toUpperCase();
         let courseCode = tentativeCode;
         let courseObj = new s_course(courseCode, '');
@@ -88,7 +99,7 @@ function dynamic_click(e, curriculum, course_data)
         // If still invalid after name search, show error
         if (!isCourseValid(courseObj, course_data)) {
             alert("ERROR: Course Not Found!");
-            e.target.parentNode.querySelector("select").value = '';
+            e.target.parentNode.querySelector("input").value = '';
             return;
         }
         // Now we have a valid courseCode. Generate a unique id for the new
@@ -147,8 +158,7 @@ function dynamic_click(e, curriculum, course_data)
             // changing total credits element in DOM:
             let dom_tc = e.target.parentNode.parentNode.parentNode.querySelector('span');
             dom_tc.innerHTML = 'Total: ' + sem.totalCredit + ' credits';
-            // Remove select and container after adding course
-            e.target.parentNode.querySelector("select").remove();
+            // Remove input container after adding course
             e.target.parentNode.remove();
             // Recalculate categories for main (and DM via recalc) after adding
             try {
@@ -158,7 +168,7 @@ function dynamic_click(e, curriculum, course_data)
             } catch(err) {}
         } else {
             alert("You have already added " + myCourse.code);
-            e.target.parentNode.querySelector("select").value = '';
+            e.target.parentNode.querySelector("input").value = '';
         }
     }
     //CLICKED "<semester delete>"
@@ -232,25 +242,23 @@ function dynamic_click(e, curriculum, course_data)
     else if(e.target.classList.contains("semester_date_edit"))
     {
         let date = e.target.parentNode.parentNode;
-        date.innerHTML = ''
-        let input_date = document.createElement("input");
-        input_date.placeholder = 'choose term...'
-        input_date.setAttribute("list", 'date_list');
-        let date_list = document.createElement("datalist");
-        date_list.innerHTML = date_list_InnerHTML;
-        date_list.id = 'date_list';
+        const current = date.querySelector('p') ? date.querySelector('p').textContent : '';
+        date.innerHTML = '';
+        let select = document.createElement('select');
+        select.classList.add('select-control');
+        select.innerHTML = terms.map(t => `<option value="${t}">${t}</option>`).join('');
+        select.value = current;
         let tick = document.createElement("div");
         tick.classList.add("tick");
         tick.style.backgroundImage = "url('./assets/tickw.png')";
-        date.appendChild(input_date);
-        date.appendChild(date_list);
+        date.appendChild(select);
         date.appendChild(tick);
     }
     //CLICKED tick in date
     else if(e.target.classList.contains("tick"))
     {
         let date = e.target.parentNode;
-        date.innerHTML = '<p>' + date.querySelector("input").value + '</p>';
+        date.innerHTML = '<p>' + date.querySelector("select").value + '</p>';
         let closebtn = document.createElement("button");
         closebtn.classList.add("delete_semester");
         let drag = document.createElement("div");
