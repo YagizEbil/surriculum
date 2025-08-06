@@ -1,17 +1,8 @@
 function mouseover(e)
 {
-    if(e.target.classList.contains("delete_semester"))
+    if(e.target.classList.contains("semester_drag"))
     {
-        e.target.style.backgroundImage = "url('./assets/closedb.png')";
-    }
-    else if(e.target.classList.contains("semester_drag"))
-    {
-        e.target.style.backgroundImage = "url('./assets/dragb.png')";
         e.target.parentNode.parentNode.parentNode.parentNode.setAttribute('draggable','true');
-    }
-    else if(e.target.classList.contains("semester_date_edit"))
-    {
-        e.target.style.backgroundImage = "url('./assets/editb.png')";
     }
     else if(e.target.classList.contains("tick"))
     {
@@ -19,11 +10,11 @@ function mouseover(e)
     }
     else if(e.target.classList.contains("addCourse"))
     {
-        e.target.style.textDecoration = "underline"
+        e.target.style.textDecoration = "underline";
     }
     else if(e.target.classList.contains("grade"))
     {
-        e.target.style.textDecoration = "underline"
+        e.target.style.textDecoration = "underline";
     }
     else if(e.target.classList.contains("delete_add_course") || e.target.classList.contains("delete_course"))
     {
@@ -37,18 +28,9 @@ function mouseover(e)
 
 function mouseout(e)
 {
-    if(e.target.classList.contains("delete_semester"))
+    if(e.target.classList.contains("semester_drag"))
     {
-        e.target.style.backgroundImage = "url('./assets/closedw.png')";
-    }
-    else if(e.target.classList.contains("semester_drag"))
-    {
-        e.target.style.backgroundImage = "url('./assets/dragw.png')";
         e.target.parentNode.parentNode.parentNode.parentNode.setAttribute('draggable','false');
-    }
-    else if(e.target.classList.contains("semester_date_edit"))
-    {
-        e.target.style.backgroundImage = "url('./assets/editw.png')";
     }
     else if(e.target.classList.contains("tick"))
     {
@@ -56,11 +38,11 @@ function mouseout(e)
     }
     else if(e.target.classList.contains("addCourse"))
     {
-        e.target.style.textDecoration = "none"
+        e.target.style.textDecoration = "none";
     }
     else if(e.target.classList.contains("grade"))
     {
-        e.target.style.textDecoration = "none"
+        e.target.style.textDecoration = "none";
     }
     else if(e.target.classList.contains("delete_add_course") || e.target.classList.contains("delete_course"))
     {
