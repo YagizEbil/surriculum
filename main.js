@@ -272,13 +272,11 @@ function SUrriculum(major_chosen_by_user) {
         mouseover(e);
         if (e.target.classList.contains('btn'))
         {e.target.style.backgroundColor = '#7a9dc9';}
-        else if(e.target.parentNode.classList.contains('btn'))
+        else if(e.target.parentNode.classList && e.target.parentNode.classList.contains('btn'))
         {e.target.parentNode.style.backgroundColor = '#7a9dc9';}
         else
         {
             document.querySelectorAll('.btn').forEach( element => {element.style.backgroundColor = '#526e8f'});
-            if(!e.target.classList.contains('semester_drag'))
-            {document.querySelectorAll('.semester_drag').forEach( element => {element.style.backgroundImage = 'url("./assets/dragw.png")'});}
         }
     })
     document.addEventListener('mouseout', function(e){
