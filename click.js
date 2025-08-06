@@ -25,7 +25,8 @@ function dynamic_click(e, curriculum, course_data)
         input_container.classList.add("input_container")
 
         let input = document.createElement("input");
-        input.classList.add("course_select");
+        // Use same styling as other dropdowns for a consistent UI
+        input.classList.add("course_select", "select-control");
         const listId = 'course_list_' + Date.now();
         input.setAttribute('list', listId);
         let datalist = document.createElement('datalist');
@@ -43,7 +44,20 @@ function dynamic_click(e, curriculum, course_data)
         input_container.appendChild(delete_ac);
 
         e.target.parentNode.insertBefore(input_container, e.target.parentNode.querySelector(".addCourse"));
-        input.focus();
+
+        // Automatically focus and open the course list so the user can start typing immediately
+        setTimeout(() => {
+            input.focus();
+            // showPicker is supported in modern browsers; fall back to simulating
+            // a key press for others to trigger the datalist suggestions
+            if (typeof input.showPicker === 'function') {
+                try { input.showPicker(); } catch (_) {}
+            } else {
+                const evt = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true });
+                input.dispatchEvent(evt);
+            }
+        }, 0);
+
         input.addEventListener('keydown', function(evt){
             if(evt.key === 'Enter') {
                 enter.click();
