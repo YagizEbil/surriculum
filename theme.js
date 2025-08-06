@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const themeButton = document.getElementById('themeToggle');
         if (themeButton) {
-            themeButton.innerHTML = theme === 'dark-theme' ? '☀️ Light' : '🌙 Dark';
+            themeButton.innerHTML = theme === 'dark-theme' ? '<i class="fa-solid fa-sun"></i> Light' : '<i class="fa-solid fa-moon"></i> Dark';
         }
 
         if (persist) {
