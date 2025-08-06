@@ -22,47 +22,96 @@ function dynamic_click(e, curriculum, course_data)
     if(e.target.classList.contains("addCourse"))
     {
         let input_container =  document.createElement("div");
-        input_container.classList.add("input_container")
+        input_container.classList.add("input_container");
+
+        // Wrapper to position the custom dropdown relative to the input
+        let wrapper = document.createElement('div');
+        wrapper.classList.add('input-wrapper');
 
         let input = document.createElement("input");
         // Use same styling as other dropdowns for a consistent UI
         input.classList.add("course_select", "select-control");
+
+        // Hidden datalist maintained for backwards compatibility but not used
         const listId = 'course_list_' + Date.now();
-        input.setAttribute('list', listId);
         let datalist = document.createElement('datalist');
         datalist.id = listId;
         datalist.classList.add('course_list');
         datalist.innerHTML = getCoursesDataList(course_data);
+
+        // Custom dropdown container
+        let dropdown = document.createElement('div');
+        dropdown.classList.add('course-dropdown');
+
+        // Build array of course options for filtering
+        const options = getCoursesList(course_data);
+
+        function renderOptions(filter) {
+            dropdown.innerHTML = '';
+            const normalized = filter ? filter.toUpperCase() : '';
+            const filtered = options.filter(o => o.toUpperCase().includes(normalized)).slice(0, 20);
+            filtered.forEach(text => {
+                const opt = document.createElement('div');
+                opt.classList.add('course-option');
+                opt.textContent = text;
+                opt.addEventListener('mousedown', () => {
+                    input.value = text;
+                    dropdown.style.display = 'none';
+                });
+                dropdown.appendChild(opt);
+            });
+            dropdown.style.display = filtered.length ? 'block' : 'none';
+            activeIndex = -1;
+        }
+
+        let activeIndex = -1;
+        function updateActive(items) {
+            items.forEach((el, idx) => {
+                if (idx === activeIndex) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+        }
+
+        input.addEventListener('input', () => renderOptions(input.value));
+        input.addEventListener('focus', () => renderOptions(input.value));
+        input.addEventListener('blur', () => {
+            setTimeout(() => { dropdown.style.display = 'none'; }, 100);
+        });
+
+        input.addEventListener('keydown', function(evt){
+            const items = dropdown.querySelectorAll('.course-option');
+            if (evt.key === 'ArrowDown') {
+                activeIndex = Math.min(activeIndex + 1, items.length - 1);
+                updateActive(items);
+                evt.preventDefault();
+            } else if (evt.key === 'ArrowUp') {
+                activeIndex = Math.max(activeIndex - 1, 0);
+                updateActive(items);
+                evt.preventDefault();
+            } else if (evt.key === 'Enter') {
+                if (activeIndex >= 0 && items[activeIndex]) {
+                    input.value = items[activeIndex].textContent;
+                }
+                enter.click();
+            }
+        });
+
         let enter = document.createElement("div");
         enter.classList.add("enter");
         let delete_ac = document.createElement("div");
         delete_ac.classList.add("delete_add_course");
 
-        input_container.appendChild(input);
-        input_container.appendChild(datalist);
+        wrapper.appendChild(input);
+        wrapper.appendChild(dropdown);
+        wrapper.appendChild(datalist);
+        input_container.appendChild(wrapper);
         input_container.appendChild(enter);
         input_container.appendChild(delete_ac);
 
         e.target.parentNode.insertBefore(input_container, e.target.parentNode.querySelector(".addCourse"));
 
-        // Automatically focus and open the course list so the user can start typing immediately
-        setTimeout(() => {
-            input.focus();
-            // showPicker is supported in modern browsers; fall back to simulating
-            // a key press for others to trigger the datalist suggestions
-            if (typeof input.showPicker === 'function') {
-                try { input.showPicker(); } catch (_) {}
-            } else {
-                const evt = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true });
-                input.dispatchEvent(evt);
-            }
-        }, 0);
-
-        input.addEventListener('keydown', function(evt){
-            if(evt.key === 'Enter') {
-                enter.click();
-            }
-        });
+        // Automatically focus so the user can start typing immediately
+        setTimeout(() => { input.focus(); renderOptions(''); }, 0);
     }
     //CLICKED "OK" (for entering course input):
     else if(e.target.classList.contains("enter"))
