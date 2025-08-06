@@ -1,5 +1,6 @@
-# Exclude specific files and directories from language statistics
-Academic Records Summary_ex.html linguist-generated
-Degree Detail Pages (for inspect)/* linguist-generated
-Pre-Conversion Files/* linguist-generated
+# Mark specific file as generated
+Academic\ Records\ Summary_ex.html linguist-generated=true
 
+# Mark entire directories as generated
+Degree\ Detail\ Pages\/* linguist-generated=true
+Pre-Conversion\ Files\/* linguist-generated=true
