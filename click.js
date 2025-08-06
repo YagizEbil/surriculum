@@ -1,9 +1,9 @@
 function dynamic_click(e, curriculum, course_data)
 {
-    // Guard against early interaction before course data is available.  If
+    // Guard against early interaction before course data is available. If
     // the course list has not yet been loaded (e.g., the user clicked
     // "Add Course" while the data is still fetching), prevent
-    // interaction and notify the user.  This avoids an empty datalist
+    // interaction and notify the user. This avoids an empty dropdown
     // and confusing "Course Not Found" errors.
     if (!Array.isArray(course_data) || course_data.length === 0) {
         // When no course data is available (either still fetching or failed
@@ -24,39 +24,20 @@ function dynamic_click(e, curriculum, course_data)
         let input_container =  document.createElement("div");
         input_container.classList.add("input_container")
 
-        let input1 = document.createElement("input");
-        input1.placeholder = "choose a course";
-        input1.setAttribute("list", 'datalist');
-        
-        let datalist = document.createElement("datalist");
-        datalist.innerHTML = getCoursesDataList(course_data);
-        datalist.id = 'datalist';
+        let select = document.createElement("select");
+        select.classList.add("course_select");
+        select.innerHTML = getCoursesDataList(course_data);
         let enter = document.createElement("div");
         enter.classList.add("enter");
         let delete_ac = document.createElement("div");
         delete_ac.classList.add("delete_add_course");
 
-
-        input_container.appendChild(input1);
-        input_container.appendChild(datalist);
+        input_container.appendChild(select);
         input_container.appendChild(enter);
         input_container.appendChild(delete_ac);
-        // Allow pressing Enter in the input to trigger the same action as
-        // clicking the tick icon. Without this, users must click the
-        // enter button manually. We listen for the keydown event and
-        // simulate a click on the `.enter` element when Enter is pressed.
-        input1.addEventListener('keydown', function(evt) {
-            if (evt.key === 'Enter') {
-                evt.preventDefault();
-                // If the enter button exists in this input container, click it
-                const btn = this.parentNode.querySelector('.enter');
-                if (btn) btn.click();
-            }
-        });
 
         e.target.parentNode.insertBefore(input_container, e.target.parentNode.querySelector(".addCourse"));
-        // Automatically focus the input so the user can start typing immediately
-        input1.focus();
+        select.focus();
     }
     //CLICKED "OK" (for entering course input):
     else if(e.target.classList.contains("enter"))
@@ -68,7 +49,7 @@ function dynamic_click(e, curriculum, course_data)
         // valid, we attempt to match the entire input against course names
         // in both the primary major and the double major. If a match is
         // found, we derive the code accordingly.
-        let inputValue = e.target.parentNode.querySelector("input").value.trim();
+        let inputValue = e.target.parentNode.querySelector("select").value.trim();
         let tentativeCode = inputValue.split(' ')[0].toUpperCase();
         let courseCode = tentativeCode;
         let courseObj = new s_course(courseCode, '');
@@ -107,7 +88,7 @@ function dynamic_click(e, curriculum, course_data)
         // If still invalid after name search, show error
         if (!isCourseValid(courseObj, course_data)) {
             alert("ERROR: Course Not Found!");
-            e.target.parentNode.querySelector("input").value = '';
+            e.target.parentNode.querySelector("select").value = '';
             return;
         }
         // Now we have a valid courseCode. Generate a unique id for the new
@@ -166,8 +147,8 @@ function dynamic_click(e, curriculum, course_data)
             // changing total credits element in DOM:
             let dom_tc = e.target.parentNode.parentNode.parentNode.querySelector('span');
             dom_tc.innerHTML = 'Total: ' + sem.totalCredit + ' credits';
-            // Remove input and container after adding course
-            e.target.parentNode.querySelector("input").remove();
+            // Remove select and container after adding course
+            e.target.parentNode.querySelector("select").remove();
             e.target.parentNode.remove();
             // Recalculate categories for main (and DM via recalc) after adding
             try {
@@ -177,7 +158,7 @@ function dynamic_click(e, curriculum, course_data)
             } catch(err) {}
         } else {
             alert("You have already added " + myCourse.code);
-            e.target.parentNode.querySelector("input").value = '';
+            e.target.parentNode.querySelector("select").value = '';
         }
     }
     //CLICKED "<semester delete>"
