@@ -48,27 +48,56 @@ function s_semester(id, course_data)
         {
             if(this.courses[a].id == id_c)
             {
+                let info = null;
                 for(let i = 0; i < course_data.length; i++)
                 {
                     if ( (course_data[i]['Major'] + course_data[i]['Code']) == (this.courses[a].code) )
                     {
-                        this.totalScience -= parseFloat(course_data[i]['Basic_Science']);
-                        this.totalEngineering -= parseFloat(course_data[i]['Engineering']);
-                        this.totalECTS -= parseFloat(course_data[i]['ECTS']);
-                        let credit = parseInt(course_data[i]['SU_credit']);
-                        this.totalCredit = this.totalCredit - credit;
-                        if (course_data[i]['EL_Type'] == "free") {this.totalFree = this.totalFree - credit;}
-                        else if (course_data[i]['EL_Type'] == "area") {this.totalArea = this.totalArea - credit;}
-                        else if (course_data[i]['EL_Type'] == "core") {this.totalCore = this.totalCore - credit;}
-                        else if (course_data[i]['EL_Type'] == "university") {this.totalUniversity = this.totalUniversity - credit;}
-                        else if (course_data[i]['EL_Type'] == "required") {this.totalRequired = this.totalRequired - credit;}
-                        this.courses.splice(a,1);
-                        return;
+                        info = course_data[i];
+                        break;
                     }
                 }
+
+                let credit = 0;
+                let science = 0;
+                let engineering = 0;
+                let ects = 0;
+
+                if(info)
+                {
+                    science = parseFloat(info['Basic_Science'] || 0);
+                    engineering = parseFloat(info['Engineering'] || 0);
+                    ects = parseFloat(info['ECTS'] || 0);
+                    credit = parseInt(info['SU_credit'] || 0);
+                    if (info['EL_Type'] == "free") {this.totalFree -= credit;}
+                    else if (info['EL_Type'] == "area") {this.totalArea -= credit;}
+                    else if (info['EL_Type'] == "core") {this.totalCore -= credit;}
+                    else if (info['EL_Type'] == "university") {this.totalUniversity -= credit;}
+                    else if (info['EL_Type'] == "required") {this.totalRequired -= credit;}
+                }
+                else
+                {
+                    const course = this.courses[a];
+                    science = parseFloat(course.Basic_Science || 0);
+                    engineering = parseFloat(course.Engineering || 0);
+                    ects = parseFloat(course.ECTS || 0);
+                    credit = parseInt(course.SU_credit || 0);
+                    if (course.effective_type == "free") {this.totalFree -= credit;}
+                    else if (course.effective_type == "area") {this.totalArea -= credit;}
+                    else if (course.effective_type == "core") {this.totalCore -= credit;}
+                    else if (course.effective_type == "university") {this.totalUniversity -= credit;}
+                    else if (course.effective_type == "required") {this.totalRequired -= credit;}
+                }
+
+                this.totalScience -= science;
+                this.totalEngineering -= engineering;
+                this.totalECTS -= ects;
+                this.totalCredit -= credit;
+                this.courses.splice(a,1);
+                return;
             }
         }
-        
+
     }
 }
 

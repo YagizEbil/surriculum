@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Core scripts -->
     <script src="helper_functions.js"></script>
@@ -42,12 +43,12 @@
 
         <div class="header-controls">
             <button id="themeToggle" class="btn btn-secondary btn-sm">
-                🌙 Theme
+                <i class="fa-solid fa-moon"></i> Theme
             </button>
 
             <div class="import-container">
                 <button class="btn btn-secondary btn-sm import-toggle">
-                    📁 Import Records
+                    <i class="fa-solid fa-folder-open"></i> Import Records
                 </button>
 
                 <div class="import-dropdown" id="importDropdown">
@@ -76,9 +77,9 @@
     <div class="main-content">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <button class="sidebar-toggle">⮜</button>
+            <button class="sidebar-toggle"><i class="fa-solid fa-chevron-left"></i></button>
             <div class="sidebar-header">
-                <h2 class="sidebar-title">📚 Controls</h2>
+                <h2 class="sidebar-title"><i class="fa-solid fa-book"></i> Controls</h2>
             </div>
 
             <div class="sidebar-content">
@@ -104,34 +105,34 @@
 
                 <div class="control-group">
                     <button class="btn btn-primary addSemester" style="width: 100%; margin-bottom: 12px;">
-                        ➕ New Semester
+                        <i class="fa-solid fa-plus"></i> New Semester
                     </button>
 
                     <div class="control-row">
                         <button class="btn btn-secondary check">
-                            ✅ Check Graduation
+                            <i class="fa-solid fa-check"></i> Check Graduation
                         </button>
                         <button class="btn btn-secondary summary">
-                            📊 Summary
+                            <i class="fa-solid fa-chart-bar"></i> Summary
                         </button>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <button class="btn btn-secondary autoAdd" style="width: 100%; margin-bottom: 12px;">
-                        🎓 Add First Year Courses
+                        <i class="fa-solid fa-graduation-cap"></i> Add First Year Courses
                     </button>
                     <button class="btn btn-secondary customCourse" style="width: 100%; margin-bottom: 12px;">
-                        ➕ Add Custom Course
+                        <i class="fa-solid fa-plus"></i> Add Custom Course
                     </button>
                 </div>
 
                 <div class="control-group">
                     <button class="btn btn-secondary deleteCustom" style="width: 100%; margin-bottom: 12px; color: #DC2626;">
-                        🗑️ Delete Custom Courses
+                        <i class="fa-solid fa-trash"></i> Delete Custom Courses
                     </button>
                     <button class="btn btn-secondary resetLocal" style="width: 100%; color: #DC2626;">
-                        ↻ Reset Local Data
+                        <i class="fa-solid fa-rotate-right"></i> Reset Local Data
                     </button>
                 </div>
             </div>
@@ -144,7 +145,7 @@
             <!-- Semester template -->
             <template id="semester-template">
                 <section class="semester">
-                    <button class="add-course" onclick="openCourseModal()">＋ Add course</button>
+                    <button class="add-course" onclick="openCourseModal()"><i class="fa-solid fa-plus"></i> Add course</button>
                     <div class="semester-courses"><!-- course cards --></div>
                 </section>
             </template>
