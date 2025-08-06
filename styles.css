@@ -1053,10 +1053,10 @@ html, body {
 .input_container input,
 .input_container select {
     flex: 1;
-    padding: 4px 8px;
+    padding: 6px 12px;
     font-size: 0.75rem;
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     background: var(--bg-card);
     color: var(--text-primary);
     max-width: 250px;
