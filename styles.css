@@ -873,7 +873,7 @@ html, body {
     overflow-y: auto; /* Enable scrolling */
     overflow-x: hidden;
     min-height: 0; /* Allow shrinking below content size */
-    padding-right: 2px; /* Space for scrollbar */
+    padding-right: 0; /* Space for scrollbar */
 }
 
 /* Individual course card - FIXED 3-COLUMN LAYOUT WITH LEFT 2-ROW STRUCTURE */
