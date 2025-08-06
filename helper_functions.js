@@ -182,12 +182,15 @@ function getCoursesDataList(course_data)
     } catch (ex) {
         // ignore any errors in DM detection
     }
-    // Build the datalist HTML using the combined courses. Each option
-    // value starts with the course code followed by the course name.
+    // Build the option list HTML using the combined courses. Each option
+    // displays the course code followed by the course name and uses the
+    // same text as its value so it can populate both datalists and select
+    // dropdowns.
     let datalistInnerHTML = '';
     for (let i = 0; i < combined.length; i++) {
         const item = combined[i];
-        datalistInnerHTML += "<option value='" + item['Major'] + item['Code'] + ' ' + item['Course_Name'] + "'>";
+        const text = item['Major'] + item['Code'] + ' ' + item['Course_Name'];
+        datalistInnerHTML += `<option value='${text}'>${text}</option>`;
     }
     return datalistInnerHTML;
 }

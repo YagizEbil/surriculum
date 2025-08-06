@@ -141,114 +141,47 @@ function SUrriculum(major_chosen_by_user) {
         let change_major_element = document.querySelector('.change_major');
         let etElem = document.querySelector('.entryTerm');
         let etDmElem = document.querySelector('.entryTermDM');
-        // Update the UI controls with the currently selected major and entry terms.
-        // The revamped UI uses a <button> with a nested <span> for the label.  To
-        // preserve the button styling, update the span's text when present
-        // instead of overwriting the entire innerHTML.  Fall back to setting
-        // textContent on the button if no span exists.  This ensures the
-        // label reflects the selected values without breaking the layout.
-        if (change_major_element) {
-            const span = change_major_element.querySelector('span');
-            const label = 'Major: ' + major_chosen_by_user;
-            if (span) {
-                span.textContent = label;
-            } else {
-                change_major_element.textContent = label;
-            }
+        let dmElem = document.querySelector('.doubleMajor');
+        // Populate and bind dropdown controls for major and entry terms
+        if (change_major_element && change_major_element.tagName === 'SELECT') {
+            const majorsList = getMajorsForTerm(entryTermCode);
+            change_major_element.innerHTML = majorsList.map(m => `<option value="${m}">${m}</option>`).join('');
+            change_major_element.value = major_chosen_by_user;
+            change_major_element.addEventListener('change', function(e) {
+                localStorage.setItem('major', e.target.value);
+                location.reload();
+            });
         }
-        if (etElem) {
-            const span = etElem.querySelector('span');
-            const label = 'Admit Term: ' + entryTermName;
-            if (span) {
-                span.textContent = label;
-            } else {
-                etElem.textContent = label;
-            }
+        if (etElem && etElem.tagName === 'SELECT') {
+            etElem.innerHTML = entryTerms.map(t => `<option value="${t}">${t}</option>`).join('');
+            etElem.value = entryTermName;
+            etElem.addEventListener('change', function(e) {
+                localStorage.setItem('entryTerm', e.target.value);
+                location.reload();
+            });
         }
-        if (etDmElem) {
-            const span = etDmElem.querySelector('span');
-            const label = 'Admit Term(DM): ' + entryTermDMName;
-            if (span) {
-                span.textContent = label;
-            } else {
-                etDmElem.textContent = label;
-            }
-        }
-
-    // ------------------------------------------------------------------
-    // Build a double major selector below the primary major display.  This
-    // select allows the user to choose a second major or select "None" to
-    // disable the double major.  We insert it on first load and persist
-    // the selection in localStorage.  When the selection changes we
-    // activate or clear the double major accordingly.  The dropdown is
-    // populated with all majors and a default "None" option.
-    (function initDoubleMajorSelector() {
-        // Skip creation if a custom doubleMajor button exists.  This
-        // allows the HTML to define its own DM selector that mimics the
-        // primary major control.  If the page already contains an
-        // element with class 'doubleMajor', we leave DM selection to
-        // custom event handlers.
-        if (document.querySelector('.doubleMajor')) return;
-        // Otherwise fallback to the select-based implementation (not
-        // executed for current UI)
-        if (document.querySelector('.doubleMajorSelect')) return;
-        const container = document.createElement('div');
-        container.style.marginTop = '6px';
-        container.style.display = 'flex';
-        container.style.alignItems = 'center';
-        const label = document.createElement('span');
-        label.innerText = 'Double Major: ';
-        label.style.marginRight = '4px';
-        container.appendChild(label);
-        const select = document.createElement('select');
-        select.classList.add('doubleMajorSelect');
-        const opts = ['None','BIO','CS','EE','IE','MAT','ME','ECON','DSA','MAN','PSIR','PSY','VACD'];
-        opts.forEach(function(opt) {
-            const optionEl = document.createElement('option');
-            optionEl.value = (opt === 'None') ? '' : opt;
-            optionEl.textContent = opt;
-            select.appendChild(optionEl);
-        });
-        let savedDM = '';
-        try {
-            savedDM = localStorage.getItem('doubleMajor') || '';
-        } catch (_) {}
-        select.value = savedDM || '';
-        select.addEventListener('change', function(e) {
-            const val = e.target.value.toUpperCase();
-            try {
+        if (dmElem && dmElem.tagName === 'SELECT') {
+            const dmList = ['None'].concat(getMajorsForTerm(entryTermDMCode));
+            dmElem.innerHTML = dmList.map(m => `<option value="${m === 'None' ? '' : m}">${m}</option>`).join('');
+            dmElem.value = localStorage.getItem('doubleMajor') || '';
+            dmElem.addEventListener('change', function(e) {
+                const val = e.target.value;
                 if (val) {
                     localStorage.setItem('doubleMajor', val);
                 } else {
                     localStorage.removeItem('doubleMajor');
                 }
-            } catch (_) {}
-            if (!val) {
-                curriculum.doubleMajor = '';
-                try {
-                    for (let i = 0; i < curriculum.semesters.length; i++) {
-                        for (let j = 0; j < curriculum.semesters[i].courses.length; j++) {
-                            const c = curriculum.semesters[i].courses[j];
-                            c.effective_type_dm = '';
-                        }
-                    }
-                    curriculum.recalcEffectiveTypes(course_data);
-                    curriculum.recalcEffectiveTypesDouble([]);
-                    curriculum.doubleMajorCourseData = [];
-                    const optionsHTML = getCoursesDataList(course_data);
-                    document.querySelectorAll('datalist').forEach(function(dl) {
-                        if (dl.id === 'datalist') {
-                            dl.innerHTML = optionsHTML;
-                        }
-                    });
-                } catch (_) {}
-            } else {
-                setDoubleMajor(val);
-            }
-        });
-        container.appendChild(select);
-        change_major_element.parentNode.insertBefore(container, change_major_element.nextSibling);
-    })();
+                location.reload();
+            });
+        }
+        if (etDmElem && etDmElem.tagName === 'SELECT') {
+            etDmElem.innerHTML = entryTerms.map(t => `<option value="${t}">${t}</option>`).join('');
+            etDmElem.value = entryTermDMName;
+            etDmElem.addEventListener('change', function(e) {
+                localStorage.setItem('entryTermDM', e.target.value);
+                location.reload();
+            });
+        }
 
     course_data = json;
 
@@ -321,309 +254,20 @@ function SUrriculum(major_chosen_by_user) {
 
     //Targetting dynamically created elements:
     document.addEventListener('click', function(e){
-        dynamic_click(e, curriculum, course_data)
-        // CLICKED outside of any summary modal:
-        // If the click target is not inside a summary modal (child or container) and
-        // is not the summary button itself, remove all summary modals and their
-        // overlays. Previously this removed only the first modal, which broke
-        // double major summaries that display two modals. Now iterate all
-        // summary modals and overlays for cleanup.
+        dynamic_click(e, curriculum, course_data);
         if (!(e.target.parentNode.classList.contains('summary_modal_child')) &&
             !e.target.classList.contains('summary_modal_child') &&
             !e.target.classList.contains('summary_modal') &&
             !e.target.classList.contains('summary') &&
             !e.target.classList.contains('summary_p')) {
-            try {
-                document.querySelectorAll('.summary_modal').forEach(function(mod) { mod.remove(); });
-            } catch {}
-            try {
-                document.querySelectorAll('.summary_modal_overlay').forEach(function(ov) { ov.remove(); });
-            } catch {}
+            try { document.querySelectorAll('.summary_modal').forEach(function(mod){ mod.remove(); }); } catch {}
+            try { document.querySelectorAll('.summary_modal_overlay').forEach(function(ov){ ov.remove(); }); } catch {}
         }
-        if(!(e.target.parentNode.classList.contains('graduation_modal'))  && !e.target.classList.contains('graduation_modal') && !e.target.classList.contains('check') && !e.target.parentNode.classList.contains('check'))
-        {
+        if(!(e.target.parentNode.classList.contains('graduation_modal')) && !e.target.classList.contains('graduation_modal') && !e.target.classList.contains('check') && !e.target.parentNode.classList.contains('check')) {
             try{document.querySelector('.graduation_modal').remove();} catch{}
             try{document.querySelector('.graduation_modal_overlay').remove();} catch{}
         }
-        //NON-dynamic Click:
-        let major_change_element = document.querySelector('.change_major');
-        let double_major_element = document.querySelector('.doubleMajor');
-        let entry_term_el = document.querySelector('.entryTerm');
-        let entry_term_dm_el = document.querySelector('.entryTermDM');
-        try {
-            // If click is outside change_major, restore its label
-            if (!(e.target.classList.contains('change_major') || (e.target.parentNode && e.target.parentNode.classList.contains('change_major')))) {
-                // Update the span inside the major button rather than replacing the whole
-                const span = major_change_element ? major_change_element.querySelector('span') : null;
-                const label = 'Major: ' + major_chosen_by_user;
-                if (span) {
-                    span.textContent = label;
-                } else if (major_change_element) {
-                    major_change_element.textContent = label;
-                }
-            }
-        } catch {
-            if (major_change_element) {
-                const span = major_change_element.querySelector('span');
-                const label = 'Major: ' + major_chosen_by_user;
-                if (span) span.textContent = label; else major_change_element.textContent = label;
-            }
-        }
-        // If click is outside doubleMajor element, restore its label to saved DM or None
-        try {
-            if (double_major_element) {
-                const dmSaved = localStorage.getItem('doubleMajor') || '';
-                const dmDisplay = dmSaved ? dmSaved : 'None';
-                if (!(e.target.classList.contains('doubleMajor') || (e.target.parentNode && e.target.parentNode.classList.contains('doubleMajor')))) {
-                    // Only reset when no input present to avoid clearing user typing
-                    if (!double_major_element.querySelector('input')) {
-                        const span = double_major_element.querySelector('span');
-                        const label = 'Double Major: ' + dmDisplay;
-                        if (span) {
-                            span.textContent = label;
-                        } else {
-                            double_major_element.textContent = label;
-                        }
-                    }
-                }
-            }
-        } catch (_) {}
-        try {
-            if (entry_term_el && !(e.target.classList.contains('entryTerm') || (e.target.parentNode && e.target.parentNode.classList.contains('entryTerm')))) {
-                if (!entry_term_el.querySelector('input')) {
-                    const span = entry_term_el.querySelector('span');
-                    const label = 'Admit Term: ' + entryTermName;
-                    if (span) {
-                        span.textContent = label;
-                    } else {
-                        entry_term_el.textContent = label;
-                    }
-                }
-            }
-            if (entry_term_dm_el && !(e.target.classList.contains('entryTermDM') || (e.target.parentNode && e.target.parentNode.classList.contains('entryTermDM')))) {
-                if (!entry_term_dm_el.querySelector('input')) {
-                    const span = entry_term_dm_el.querySelector('span');
-                    const label = 'Admit Term(DM): ' + entryTermDMName;
-                    if (span) {
-                        span.textContent = label;
-                    } else {
-                        entry_term_dm_el.textContent = label;
-                    }
-                }
-            }
-        } catch (_) {}
-        let element = e.target;
-        try {
-            if (element.parentNode.classList.contains('change_major')) {
-                element = element.parentNode;
-            }
-        } catch {}
-        // Targeting primary major change
-        if (element.classList.contains('change_major')) {
-            // Only add an input if one is not already present
-            if (!change_major_element.querySelector('input')) {
-                // Clear the button and insert an input + datalist for selection
-                change_major_element.innerHTML = '';
-                const inputMajor = document.createElement('input');
-                inputMajor.placeholder = 'choose a major';
-                inputMajor.setAttribute('list', 'datalist_majors');
-                const datalist = document.createElement('datalist');
-                datalist.id = 'datalist_majors';
-                const majorsList = getMajorsForTerm(entryTermCode);
-                majorsList.forEach(function(m) {
-                    datalist.innerHTML += `<option value='${m}'>`;
-                });
-                change_major_element.appendChild(inputMajor);
-                change_major_element.appendChild(datalist);
-                inputMajor.focus();
-                inputMajor.addEventListener('input', function(e2) {
-                    const majorChosenNew = (e2.target.value || '').toUpperCase();
-                    // Validate against available majors in the datalist
-                    let majorIsValid = false;
-                    const opts = document.getElementById('datalist_majors').children;
-                    for (let i = 0; i < opts.length; i++) {
-                        if (opts[i].value === majorChosenNew) {
-                            majorIsValid = true;
-                            break;
-                        }
-                    }
-                    if (majorIsValid) {
-                        // Update the button to display the selected major using a span
-                        change_major_element.innerHTML = '';
-                        const span = document.createElement('span');
-                        span.textContent = 'Major: ' + majorChosenNew;
-                        change_major_element.appendChild(span);
-                        // Persist selection and reload
-                        try {
-                            localStorage.removeItem('major');
-                            localStorage.setItem('major', majorChosenNew);
-                        } catch (_) {}
-                        location.reload();
-                    } else {
-                        // Invalid input; restore previous label
-                        e2.target.parentNode.innerHTML = '';
-                        const span = document.createElement('span');
-                        span.textContent = 'Major: ' + major_chosen_by_user;
-                        e2.target.parentNode.appendChild(span);
-                    }
-                });
-            }
-        }
-        // Targeting double major change
-        // Mirror the primary major input behaviour for the doubleMajor button.
-        // When the user clicks the doubleMajor button, replace its text
-        // with an input field that allows selecting a second major or
-        // clearing it (None).
-        if (double_major_element) {
-            let targetDM = e.target;
-            try {
-                if (targetDM.parentNode.classList.contains('doubleMajor')) {
-                    targetDM = targetDM.parentNode;
-                }
-            } catch {}
-            if (targetDM.classList.contains('doubleMajor')) {
-                // Avoid adding another input if one already exists
-                if (!double_major_element.querySelector('input')) {
-                    double_major_element.innerHTML = '';
-                    const dmInput = document.createElement('input');
-                    dmInput.placeholder = 'choose double major';
-                    dmInput.setAttribute('list', 'datalist_dm');
-                    const dmDatalist = document.createElement('datalist');
-                    dmDatalist.id = 'datalist_dm';
-                    // Add None option (empty value) and majors
-                    dmDatalist.innerHTML += "<option value='None'>";
-                    const majors = getMajorsForTerm(entryTermDMCode);
-                    majors.forEach(function(m) {
-                        dmDatalist.innerHTML += "<option value='" + m + "'>";
-                    });
-                    double_major_element.appendChild(dmInput);
-                    double_major_element.appendChild(dmDatalist);
-                    dmInput.focus();
-                    dmInput.addEventListener('input', function(e2) {
-                        let newVal = (e2.target.value || '').toUpperCase();
-                        if (newVal === 'NONE' || newVal === '') {
-                            // Clear double major
-                            // Update double major button to show None using its span
-                            if (double_major_element) {
-                                const span = double_major_element.querySelector('span');
-                                const label = 'Double Major: None';
-                                if (span) span.textContent = label; else double_major_element.textContent = label;
-                            }
-                            // Remove DM from localStorage
-                            try {
-                                localStorage.removeItem('doubleMajor');
-                            } catch (_) {}
-                            curriculum.doubleMajor = '';
-                            // Clear DM types and datalist
-                            try {
-                                for (let i = 0; i < curriculum.semesters.length; i++) {
-                                    const sem = curriculum.semesters[i];
-                                    for (let j = 0; j < sem.courses.length; j++) {
-                                        sem.courses[j].effective_type_dm = '';
-                                    }
-                                }
-                                curriculum.recalcEffectiveTypes(course_data);
-                                curriculum.recalcEffectiveTypesDouble([]);
-                                curriculum.doubleMajorCourseData = [];
-                                const html = getCoursesDataList(course_data);
-                                document.querySelectorAll('datalist').forEach(function(dl) {
-                                    if (dl.id === 'datalist') dl.innerHTML = html;
-                                });
-                            } catch (_) {}
-                        } else {
-                            // Validate against majors list
-                            let valid = false;
-                            const opts2 = dmDatalist.children;
-                            for (let i = 0; i < opts2.length; i++) {
-                                if (opts2[i].value.toUpperCase() === newVal) {
-                                    valid = true; break;
-                                }
-                            }
-                            if (valid) {
-                                // Display the selected double major on the button span
-                                if (double_major_element) {
-                                    const span = double_major_element.querySelector('span');
-                                    const label = 'Double Major: ' + newVal;
-                                    if (span) span.textContent = label; else double_major_element.textContent = label;
-                                }
-                                try {
-                                    localStorage.setItem('doubleMajor', newVal);
-                                } catch (_) {}
-                                setDoubleMajor(newVal);
-                            } else {
-                                // Invalid selection resets display
-                                // Restore DM label from localStorage or None
-                                if (double_major_element) {
-                                    const dmVal = (localStorage.getItem('doubleMajor') || '') || 'None';
-                                    const span = double_major_element.querySelector('span');
-                                    const label = 'Double Major: ' + dmVal;
-                                    if (span) span.textContent = label; else double_major_element.textContent = label;
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        }
-
-        // Entry term (main major) selector
-        if (entry_term_el) {
-            let targetET = e.target;
-            if (targetET.parentNode && targetET.parentNode.classList.contains('entryTerm')) {
-                targetET = targetET.parentNode;
-            }
-            if (targetET.classList.contains('entryTerm')) {
-                if (!entry_term_el.querySelector('input')) {
-                    entry_term_el.innerHTML = '';
-                    const inp = document.createElement('input');
-                    inp.placeholder = 'choose term';
-                    inp.setAttribute('list','datalist_terms');
-                    const dl = document.createElement('datalist');
-                    dl.id = 'datalist_terms';
-                    entryTerms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
-                    entry_term_el.appendChild(inp); entry_term_el.appendChild(dl);
-                    inp.focus();
-                    inp.addEventListener('input', function(ev){
-                        if (entryTerms.indexOf(ev.target.value) !== -1) {
-                            localStorage.setItem('entryTerm', ev.target.value);
-                            location.reload();
-                        } else {
-                            entry_term_el.innerHTML = `<p>Admit Term: ${entryTermName}</p>`;
-                        }
-                    });
-                }
-            }
-        }
-
-        // Entry term for double major
-        if (entry_term_dm_el) {
-            let targetDT = e.target;
-            if (targetDT.parentNode && targetDT.parentNode.classList.contains('entryTermDM')) {
-                targetDT = targetDT.parentNode;
-            }
-            if (targetDT.classList.contains('entryTermDM')) {
-                if (!entry_term_dm_el.querySelector('input')) {
-                    entry_term_dm_el.innerHTML = '';
-                    const inp = document.createElement('input');
-                    inp.placeholder = 'choose term';
-                    inp.setAttribute('list','datalist_terms_dm');
-                    const dl = document.createElement('datalist');
-                    dl.id = 'datalist_terms_dm';
-                    entryTerms.forEach(function(t){ dl.innerHTML += `<option value='${t}'>`; });
-                    entry_term_dm_el.appendChild(inp); entry_term_dm_el.appendChild(dl);
-                    inp.focus();
-                    inp.addEventListener('input', function(ev){
-                        if (entryTerms.indexOf(ev.target.value) !== -1) {
-                            localStorage.setItem('entryTermDM', ev.target.value);
-                            location.reload();
-                        } else {
-                            entry_term_dm_el.innerHTML = `<p>Admit Term(DM): ${entryTermDMName}</p>`;
-                        }
-                    });
-                }
-            }
-        }
-    })
+    });
     document.addEventListener('mouseover', function(e){
         mouseover(e);
         if (e.target.classList.contains('btn'))
@@ -986,16 +630,16 @@ function SUrriculum(major_chosen_by_user) {
                         console.error('Failed to save custom course:', ex);
                     }
                 }
-                // Update any open datalists so the new or updated course appears as an option
+                // Update any open dropdowns so the new or updated course appears as an option
                 try {
                     const optionsHTML = getCoursesDataList(course_data);
-                    document.querySelectorAll('datalist').forEach(function(dl) {
-                        if (dl.id === 'datalist') {
+                    document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
+                        if (dl.id === 'datalist' || dl.classList.contains('course_select')) {
                             dl.innerHTML = optionsHTML;
                         }
                     });
                 } catch (ex) {
-                    // ignore if datalists not present
+                    // ignore if lists not present
                 }
                 // Recalculate effective types since new course attributes may affect totals
                 try {
@@ -1415,8 +1059,8 @@ function SUrriculum(major_chosen_by_user) {
                 // If no double major is selected, reset to primary data
                 if (!curriculum.doubleMajor) {
                     const optionsHTML = getCoursesDataList(course_data);
-                    document.querySelectorAll('datalist').forEach(function(dl) {
-                        if (dl.id === 'datalist') dl.innerHTML = optionsHTML;
+                    document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
+                        if (dl.id === 'datalist' || dl.classList.contains('course_select')) dl.innerHTML = optionsHTML;
                     });
                     return;
                 }
@@ -1433,8 +1077,8 @@ function SUrriculum(major_chosen_by_user) {
                 // Combine arrays
                 const combined = course_data.concat(dmUnique);
                 const html = getCoursesDataList(combined);
-                document.querySelectorAll('datalist').forEach(function(dl) {
-                    if (dl.id === 'datalist') dl.innerHTML = html;
+                document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
+                    if (dl.id === 'datalist' || dl.classList.contains('course_select')) dl.innerHTML = html;
                 });
             } catch (ex) {
                 // ignore errors
@@ -1523,8 +1167,8 @@ function SUrriculum(major_chosen_by_user) {
                     curriculum.recalcEffectiveTypesDouble(doubleMajorCourseData);
                 }
                 const optionsHTML = getCoursesDataList(course_data);
-                document.querySelectorAll('datalist').forEach(function(dl) {
-                    if (dl.id === 'datalist') {
+                document.querySelectorAll('datalist, select.course_select').forEach(function(dl) {
+                    if (dl.id === 'datalist' || dl.classList.contains('course_select')) {
                         dl.innerHTML = optionsHTML;
                     }
                 });
