@@ -64,7 +64,11 @@ function mouseout(e)
     }
     else if(e.target.classList.contains("delete_add_course") || e.target.classList.contains("delete_course"))
     {
-        e.target.style.backgroundImage = "url('./assets/closed.png')";
+        // Restore the original delete icon color when the pointer leaves
+        // the element. Previously this used `closed.png`, which left the
+        // icon black after the first hover. Matching the default
+        // `closedb.png` ensures the icon returns to its initial blue tint.
+        e.target.style.backgroundImage = "url('./assets/closedb.png')";
     }
     else if(e.target.classList.contains("enter"))
     {
