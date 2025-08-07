@@ -58,12 +58,24 @@ function mouseout(e)
     }
 }
 
-function drop(e, curriculum, dragged_item, course_data)
+function drop(e, curriculum, dragged_item, course_data, touchPos)
 {
-    let container = getAncestor(e.target, "container_semester");
+    // Prevent default browser behavior (such as scrolling) during a drop
+    if(e && typeof e.preventDefault === 'function'){
+        e.preventDefault();
+    }
+
+    // Determine the drop target. For mouse events we use e.target directly.
+    // For touch interactions we resolve the element at the touch coordinates
+    // supplied via touchPos.
+    let targetElement = e.target;
+    if(touchPos && typeof document !== 'undefined' && document.elementFromPoint){
+        targetElement = document.elementFromPoint(touchPos.x, touchPos.y);
+    }
+    let container = getAncestor(targetElement, "container_semester");
     if(container)
     {
-        let target_id = extractNumericValue(container.id); 
+        let target_id = extractNumericValue(container.id);
         let dragged_id = extractNumericValue(dragged_item.id);
 
         if(target_id > dragged_id)

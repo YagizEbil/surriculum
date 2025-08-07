@@ -300,6 +300,28 @@ function SUrriculum(major_chosen_by_user) {
         // curriculum.recalcEffectiveTypes() when semesters are reordered.
         drop(e, curriculum, dragged_item, course_data);
     })
+
+    // Touch-based dragging support mirrors the desktop drag events so that
+    // semesters can be reordered on touch devices.  We leverage touch
+    // coordinates on touchend to determine the drop target and prevent the
+    // page from scrolling while a semester is being dragged.
+    document.addEventListener('touchstart', function(e){
+        const container = getAncestor(e.target, 'container_semester');
+        if(container){ dragged_item = container; }
+    })
+    document.addEventListener('touchmove', function(e){
+        if(dragged_item){
+            // Prevent viewport scrolling while dragging a semester
+            e.preventDefault();
+        }
+    }, {passive:false})
+    document.addEventListener('touchend', function(e){
+        if(dragged_item){
+            const touch = e.changedTouches[0];
+            drop(e, curriculum, dragged_item, course_data, {x: touch.clientX, y: touch.clientY});
+            dragged_item = null;
+        }
+    })
     /*
     document.addEventListener("input", function(e){
         if(e.target.classList.contains())
