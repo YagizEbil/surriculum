@@ -298,7 +298,7 @@ html, body {
     box-shadow: var(--shadow-md);
     /* Allow dropdowns to extend outside the semester card */
     overflow: visible;
-    height: 100%; /* Take remaining height between header and footer */
+    height: 95%; /* Take remaining height between header and footer */
     display: flex;
     flex-direction: column;
     min-height: 300px;
@@ -826,7 +826,7 @@ html, body {
     flex-direction: column;
     box-shadow: var(--shadow-sm);
     overflow: hidden;
-    height: 100%; /* Take remaining height between header and footer */
+    height: 95%; /* Take remaining height between header and footer */
 }
 
 /* Placeholder container for adding new semesters inline */
@@ -835,7 +835,7 @@ html, body {
     flex: 0 0 var(--semester-width);
     border: 2px dashed var(--border);
     border-radius: var(--radius-md);
-    height: 100%;
+    height: 95%;
     display: flex;
     align-items: center;
     justify-content: center;
