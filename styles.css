@@ -27,6 +27,8 @@
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 12px;
+    --sidebar-width: 25%;
+    --semester-width: 25%;
 }
 
 .dark-theme {
@@ -124,7 +126,7 @@ html, body {
     padding-left: 8px;
     padding-right: 8px;
     min-height: 0; /* Important for flex children to shrink */
-    margin-left: 320px;
+    margin-left: var(--sidebar-width);
     transition: margin-left 0.3s ease;
 }
 
@@ -193,7 +195,7 @@ html, body {
 
 /* === SIDEBAR === */
 .sidebar {
-    width: 320px;
+    width: var(--sidebar-width);
     background: var(--bg-card);
     border-right: 1px solid var(--border);
     display: flex;
@@ -284,7 +286,7 @@ html, body {
 
 /* === SEMESTER CONTAINER - FIXED FOR SCROLLING === */
 .semester-container {
-    width: 300px;
+    width: var(--semester-width);
     margin: 20px;
     flex-shrink: 0;
 }
@@ -677,16 +679,18 @@ html, body {
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 280px;
+    :root {
+        --sidebar-width: 70%;
+        --semester-width: 90%;
     }
 
-    .semester-container {
-        width: 280px;
+    .board {
+        margin-left: 0;
+        width: 100%;
     }
 
     .import-dropdown {
-        width: 320px;
+        width: 90%;
     }
 
     .header {
@@ -756,7 +760,7 @@ html, body {
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     margin: 16px 8px;
-    flex: 0 0 320px;
+    flex: 0 0 var(--semester-width);
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-sm);
@@ -767,7 +771,7 @@ html, body {
 /* Placeholder container for adding new semesters inline */
 .add-semester-ghost {
     margin: 16px 8px;
-    flex: 0 0 320px;
+    flex: 0 0 var(--semester-width);
     border: 2px dashed var(--border);
     border-radius: var(--radius-md);
     height: calc(100vh - 140px);
