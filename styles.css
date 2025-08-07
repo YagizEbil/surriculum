@@ -709,15 +709,15 @@ html, body {
     .graduation_modal,
     .summary_modal {
         width: 90vw;
-        padding: 16px;
+        padding: 8px;
     }
 
     .graduation_modal {
-        font-size: 1.25rem;
+        font-size: 1.0rem;
     }
 
     .summary_modal {
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
 }
 
@@ -751,15 +751,15 @@ html, body {
     .graduation_modal,
     .summary_modal {
         width: 90vw;
-        padding: 12px;
+        padding: 5px;
     }
 
     .graduation_modal {
-        font-size: 1.1rem;
+        font-size: 0.8rem;
     }
 
     .summary_modal {
-        font-size: 0.9rem;
+        font-size: 0.6rem;
     }
 }
 
