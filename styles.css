@@ -696,10 +696,14 @@ html, body {
 
     .header {
         padding: 0 16px;
+        height: 5%;
     }
 
     .header-title {
         font-size: 1.25rem;
+    }
+    .footer{
+        font-size: 0.65rem;
     }
 }
 
@@ -720,10 +724,14 @@ html, body {
 
     .header {
         padding: 0 16px;
+        height: 5%;
     }
 
     .header-title {
         font-size: 1.25rem;
+    }
+    .footer{
+        font-size: 0.40rem;
     }
 }
 
