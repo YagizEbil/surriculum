@@ -306,8 +306,11 @@ function SUrriculum(major_chosen_by_user) {
     // coordinates on touchend to determine the drop target and prevent the
     // page from scrolling while a semester is being dragged.
     document.addEventListener('touchstart', function(e){
-        const container = getAncestor(e.target, 'container_semester');
-        if(container){ dragged_item = container; }
+        // Only begin dragging if the user taps the dedicated drag handle.
+        const handle = getAncestor(e.target, 'semester_drag');
+        if(handle){
+            dragged_item = getAncestor(handle, 'container_semester');
+        }
     })
     document.addEventListener('touchmove', function(e){
         if(dragged_item){
