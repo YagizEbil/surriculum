@@ -121,6 +121,102 @@ function parseAcademicRecords(htmlContent) {
     result.courses = Object.values(latestMap);
     return result;
 }
+/**
+ * Parses text extracted from an Academic Records Summary PDF and extracts course information
+ * @param {string} pdfText - Text content extracted from the PDF
+ * @returns {Object} An object containing parsed course data
+ */
+function parseAcademicRecordsPdf(pdfText) {
+    const lines = pdfText.replace(/\r/g, '').split('\n').map(l => l.trim()).filter(Boolean);
+    const courseCodeRegex = /^[A-Z]+\s*\d{3,}[A-Z0-9]*$/;
+    const semesterRegex = /^(Fall|Spring|Summer)\s+\d{4}-\d{4}$/;
+    // PDF transcripts include a "level" column such as UG/GR which we ignore.
+    const levelTokens = new Set(['UG', 'GR', 'FDY', 'PG', 'PR', 'SA', 'SR', 'MS', 'MD', 'DR']);
+    // Grades mirror the options used elsewhere in the app (helper_functions.js)
+    // and include special entries for transfer and in-progress courses.
+    const gradeRegex = /^(S|A|A-|B\+|B|B-|C\+|C|C-|D\+|D|F|T|P|I|W|NA|U|Registered)$/;
+
+    const result = { courses: [], notFoundCourses: [] };
+    let currentSemester = 'Unknown Semester';
+
+    for (let i = 0; i < lines.length;) {
+        const line = lines[i];
+
+        if (semesterRegex.test(line)) {
+            currentSemester = line;
+            i++;
+            continue;
+        }
+
+        if (courseCodeRegex.test(line)) {
+            let code = line.replace(/\s+/g, '');
+            i++;
+
+            const titleTokens = [];
+            while (i < lines.length &&
+                   !levelTokens.has(lines[i]) &&
+                   !courseCodeRegex.test(lines[i]) &&
+                   !semesterRegex.test(lines[i])) {
+                titleTokens.push(lines[i]);
+                i++;
+            }
+            const courseTitle = titleTokens.join(' ').trim();
+
+            if (i >= lines.length) break;
+
+            if (levelTokens.has(lines[i])) {
+                i++;
+            }
+
+            let grade = '';
+            if (i < lines.length && gradeRegex.test(lines[i])) {
+                grade = lines[i];
+                i++;
+            }
+
+            let suCredits = 0;
+            if (i < lines.length && !isNaN(parseFloat(lines[i]))) {
+                suCredits = parseFloat(lines[i]);
+                i++;
+            }
+
+            let ects = 0;
+            if (i < lines.length && !isNaN(parseFloat(lines[i]))) {
+                ects = parseFloat(lines[i]);
+                i++;
+            }
+
+            const statusTokens = [];
+            while (i < lines.length &&
+                   !courseCodeRegex.test(lines[i]) &&
+                   !semesterRegex.test(lines[i])) {
+                statusTokens.push(lines[i]);
+                i++;
+            }
+            const statusText = statusTokens.join(' ').toLowerCase();
+            if (statusText.includes('repeated') || statusText.includes('excluded')) {
+                continue;
+            }
+            if (['W', 'NA'].includes(grade)) {
+                continue;
+            }
+
+            result.courses.push({
+                code: code,
+                title: courseTitle,
+                grade: grade === 'Registered' ? '' : grade,
+                semester: currentSemester,
+                suCredits: suCredits,
+                ects: ects
+            });
+            continue;
+        }
+
+        i++;
+    }
+
+    return result;
+}
 
 /**
  * Checks if parsed courses exist in the course data and creates semesters with valid courses
@@ -367,5 +463,6 @@ function importParsedCourses(parsedCourses, courseData, curriculum) {
 // Export functions for use in main.js
 window.academicRecordsParser = {
     parseAcademicRecords,
+    parseAcademicRecordsPdf,
     importParsedCourses
 };
