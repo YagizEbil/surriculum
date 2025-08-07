@@ -1,4 +1,4 @@
-# [Surriculum v2.4 (beta)](https://beficent.github.io/surriculum/)
+# [Surriculum v2.5](https://beficent.github.io/surriculum/)
 
 Surriculum is an interactive graduation planner for Sabanci University undergraduate programs. The entire application runs in the browser using plain HTML, CSS and JavaScript. It lets you build a semester-by-semester plan, track program requirements and check whether you are on course to graduate.
 
@@ -12,14 +12,14 @@ The interface allows you to:
 
 - Select your major and an optional double major
 - Add semesters and drag courses from the catalog
-- Import your Academic Records Summary (HTML) to prefill taken courses
+- Import your Academic Records Summary (HTML or PDF) to prefill taken courses
 - Add custom courses manually
 - Check graduation status and view a summary of remaining requirements for each major
 - Toggle between light and dark themes or follow your system preference
 - Collapse the sidebar to maximize planning space
 - Insert new semesters and courses using "+ New Semester" and "+ Add course" ghosts
 
-Always verify graduation requirements yourself. For issues or suggestions, contact [bilal.gebenoglu@sabanciuniv.edu](mailto:bilal.gebenoglu@sabanciuniv.edu).
+Always verify graduation requirements yourself. For issues or suggestions, contact [bilal.gebenoglu@sabanciuniv.edu](mailto:bilal.gebenoglu@sabanciuniv.edu), or start a discussion/issue on the repository.
 
 ## Updating course data
 
@@ -35,7 +35,7 @@ After updating data, manually test with various course combinations to ensure th
 
 ## Credits
 
-This repository started as a fork of the original Surriculum project (https://github.com/melih-kiziltoprak/surriculum) and is maintained by **BEFICENT (Bilal M. G.)**. Major additions include double major support, Data Science and Analytics and several FASS programs, updated course lists and improved requirement checks.
+This repository started as a fork of the original Surriculum project (https://github.com/melih-kiziltoprak/surriculum) and is maintained by **BEFICENT (Bilal M. G.)**. Major additions include double major support, Data Science and Analytics and several FASS programs, UI overhaul, updated course lists and improved requirement checks.
 
 ## License
 
