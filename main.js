@@ -11,6 +11,12 @@ let course_data;
 let initial_major_chosen = 'CS'
 let saveInterval;
 
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js');
+    });
+}
+
 
 function SUrriculum(major_chosen_by_user) {
     /**
