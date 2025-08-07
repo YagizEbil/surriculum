@@ -151,7 +151,6 @@ function parseAcademicRecordsPdf(pdfText) {
         if (courseCodeRegex.test(line)) {
             let code = line.replace(/\s+/g, '');
             i++;
-
             const titleTokens = [];
             while (i < lines.length &&
                    !levelTokens.has(lines[i]) &&
@@ -189,14 +188,26 @@ function parseAcademicRecordsPdf(pdfText) {
             const statusTokens = [];
             while (i < lines.length &&
                    !courseCodeRegex.test(lines[i]) &&
-                   !semesterRegex.test(lines[i])) {
+                   !semesterRegex.test(lines[i]) && lines[i] !== 'SABANCI UNIVERSITY ACADEMIC RECORDS GUIDE')
+            {
                 statusTokens.push(lines[i]);
                 i++;
             }
             const statusText = statusTokens.join(' ').toLowerCase();
-            if (statusText.includes('repeated') || statusText.includes('excluded')) {
+            if ((statusText.includes('repeated') || statusText.includes('excluded')) && !statusText.includes('regardless of whether the course is repeated later')) {
                 continue;
             }
+
+            // Replace CS210 with DSA210
+            if (code === 'CS210') {
+                code = 'DSA210';
+            }
+
+            // Correct the condition to skip courses with ELAE code
+            if (code.includes('ELAE')) {
+                return; // Skip this iteration
+            }
+
             if (['W', 'NA'].includes(grade)) {
                 continue;
             }
