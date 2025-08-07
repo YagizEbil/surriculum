@@ -662,6 +662,62 @@ html, body {
     flex-shrink: 0;
 }
 
+
+/* Modal overlays */
+.graduation_modal_overlay,
+.summary_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Graduation modal */
+
+.graduation_modal {
+    width: 640px; /* Doubled the width */
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 32px; /* Adjusted padding proportionally */
+    color: var(--text-primary);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Adjusted gap between elements */
+    font-size: 1.75rem; /* Increased font size proportionally */
+}
+
+/* Updated summary_modal to be 50% bigger */
+.summary_modal {
+    width: 360px; /* Increased by 50% */
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 24px; /* Adjusted padding proportionally */
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Adjusted gap between elements */
+    font-size: 1.2rem; /* Increased font size proportionally */
+    color: var(--text-primary)
+}
+
+
 /* === UTILITIES === */
 .hidden {
     display: none !important;
@@ -714,11 +770,11 @@ html, body {
     }
 
     .graduation_modal {
-        font-size: 1.0rem;
+        font-size: 1.4rem;
     }
 
     .summary_modal {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 }
 
@@ -756,11 +812,11 @@ html, body {
     }
 
     .graduation_modal {
-        font-size: 0.8rem;
+        font-size: 1.2rem;
     }
 
     .summary_modal {
-        font-size: 0.6rem;
+        font-size: 0.8rem;
     }
 }
 
@@ -1267,60 +1323,6 @@ html, body {
 
 .doubleMajorSelect:focus {
     border-color: var(--primary);
-}
-
-/* Modal overlays */
-.graduation_modal_overlay,
-.summary_modal_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-/* Graduation modal */
-
-.graduation_modal {
-    width: 640px; /* Doubled the width */
-    max-width: 90vw;
-    max-height: 90vh;
-    overflow: auto;
-    background: var(--bg-card);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    padding: 32px; /* Adjusted padding proportionally */
-    color: var(--text-primary);
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    gap: 24px; /* Adjusted gap between elements */
-    font-size: 1.75rem; /* Increased font size proportionally */
-}
-
-/* Updated summary_modal to be 50% bigger */
-.summary_modal {
-    width: 360px; /* Increased by 50% */
-    max-width: 90vw;
-    max-height: 90vh;
-    overflow: auto;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    padding: 24px; /* Adjusted padding proportionally */
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Adjusted gap between elements */
-    font-size: 1.2rem; /* Increased font size proportionally */
-    color: var(--text-primary)
 }
 
 /* Title for the summary modal */
