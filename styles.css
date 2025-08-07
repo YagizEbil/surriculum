@@ -28,7 +28,8 @@
     --radius-md: 8px;
     --radius-lg: 12px;
     --sidebar-width: 20%;
-    --semester-width: 300px;
+    --semester-width-default: 300px;
+    --semester-width: var(--semester-width-default);
 }
 
 .dark-theme {
@@ -678,10 +679,34 @@ html, body {
 }
 
 /* === RESPONSIVE === */
-@media (max-width: 768px) {
+@media (max-aspect-ratio: 1.2){
+    :root {
+        --sidebar-width: 50%;
+        --semester-width: calc(var(--semester-width-default));
+    }
+
+    .board {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .import-dropdown {
+        width: 90%;
+    }
+
+    .header {
+        padding: 0 16px;
+    }
+
+    .header-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-aspect-ratio: 10/14) {
     :root {
         --sidebar-width: 70%;
-        --semester-width: 70%;
+        --semester-width: calc(var(--semester-width-default));
     }
 
     .board {
@@ -1078,11 +1103,12 @@ html, body {
     border-radius: var(--radius-md);
     background: var(--bg-card);
     color: var(--text-primary);
-    max-width: 250px;
+    max-width: calc(var(--semester-width) * 0.7);
 }
 
 /* Wrapper for custom course dropdown */
 .input_container .input-wrapper {
+    max-width: calc(var(--semester-width) * 0.7);
     position: relative;
     flex: 1;
 }
