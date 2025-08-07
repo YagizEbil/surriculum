@@ -348,7 +348,7 @@ function SUrriculum(major_chosen_by_user) {
             board.insertBefore(newContainer, ghost);
             const style = getComputedStyle(newContainer);
             const width = newContainer.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);
-            board.scrollLeft += width;
+            board.scrollBy({ left: width, behavior: 'smooth' });
         }
     });
 
@@ -365,7 +365,7 @@ function SUrriculum(major_chosen_by_user) {
                 const style = getComputedStyle(newContainer);
                 const width = newContainer.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);
                 board.insertBefore(newContainer, ghost);
-                board.scrollLeft += width;
+                board.scrollBy({ left: width, behavior: 'smooth' });
             });
             board.appendChild(ghost);
         }
