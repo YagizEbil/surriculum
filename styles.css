@@ -705,6 +705,20 @@ html, body {
     .footer{
         font-size: 0.65rem;
     }
+
+    .graduation_modal,
+    .summary_modal {
+        width: 90vw;
+        padding: 16px;
+    }
+
+    .graduation_modal {
+        font-size: 1.25rem;
+    }
+
+    .summary_modal {
+        font-size: 1rem;
+    }
 }
 
 @media (max-aspect-ratio: 10/14) {
@@ -732,6 +746,20 @@ html, body {
     }
     .footer{
         font-size: 0.40rem;
+    }
+
+    .graduation_modal,
+    .summary_modal {
+        width: 90vw;
+        padding: 12px;
+    }
+
+    .graduation_modal {
+        font-size: 1.1rem;
+    }
+
+    .summary_modal {
+        font-size: 0.9rem;
     }
 }
 
@@ -1260,6 +1288,9 @@ html, body {
 
 .graduation_modal {
     width: 640px; /* Doubled the width */
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
     background: var(--bg-card);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
@@ -1275,6 +1306,9 @@ html, body {
 /* Updated summary_modal to be 50% bigger */
 .summary_modal {
     width: 360px; /* Increased by 50% */
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
