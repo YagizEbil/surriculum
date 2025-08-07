@@ -1208,7 +1208,7 @@ function SUrriculum(major_chosen_by_user) {
         }
 
         // Get from transcript:
-        function handleAcademicRecordsImport() {
+        async function handleAcademicRecordsImport() {
         // Prevent import when semesters already exist, mirroring the
         // behaviour of the "Add First Year Courses" button.
         const existing = document.querySelectorAll('.semester');
@@ -1221,47 +1221,59 @@ function SUrriculum(major_chosen_by_user) {
 
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            const reader = new FileReader();
+            let parsedData;
 
-            reader.onload = function(e) {
-                const htmlContent = e.target.result;
-
-                // Parse the HTML content
-                const parsedData = window.academicRecordsParser.parseAcademicRecords(htmlContent);
-
-                // Import courses to curriculum. The parser returns an object
-                // containing both statistics and a list of pending custom
-                // courses that need additional user input.
-                const importResult = window.academicRecordsParser.importParsedCourses(
-                    parsedData.courses,
-                    course_data,
-                    curriculum
-                );
-
-                const importStats = importResult.stats;
-                const pendingList = importResult.pendingCustomCourses || [];
-
-                // Show import results to user
-                let message = `Successfully imported ${importStats.importedCourses} of ${importStats.totalCourses} courses.`;
-
-                if (importStats.notFoundCourses.length > 0) {
-                    message += `\n\nThe following ${importStats.notFoundCourses.length} courses were not found in the current program and were not imported:\n${importStats.notFoundCourses.join(', ')}`;
+            try {
+                if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+                    let text = '';
+                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                        const page = await pdf.getPage(pageNum);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join('\n') + '\n';
+                    }
+                    parsedData = window.academicRecordsParser.parseAcademicRecordsPdf(text);
+                } else {
+                    const htmlContent = await file.text();
+                    parsedData = window.academicRecordsParser.parseAcademicRecords(htmlContent);
                 }
+            } catch (err) {
+                console.error(err);
+                alert('Failed to read academic records file.');
+                return;
+            }
 
-                alert(message);
+            // Import courses to curriculum. The parser returns an object
+            // containing both statistics and a list of pending custom
+            // courses that need additional user input.
+            const importResult = window.academicRecordsParser.importParsedCourses(
+                parsedData.courses,
+                course_data,
+                curriculum
+            );
 
-                // If there are pending custom courses, process them
-                if (pendingList.length > 0) {
-                    const queue = pendingList.slice();
-                    processPendingCustomCourses(queue);
-                }
-                const importDropdown = document.getElementById('importDropdown');
-                if (importDropdown) importDropdown.classList.remove('active');
-            };
+            const importStats = importResult.stats;
+            const pendingList = importResult.pendingCustomCourses || [];
 
-            reader.readAsText(file);
+            // Show import results to user
+            let message = `Successfully imported ${importStats.importedCourses} of ${importStats.totalCourses} courses.`;
+
+            if (importStats.notFoundCourses.length > 0) {
+                message += `\n\nThe following ${importStats.notFoundCourses.length} courses were not found in the current program and were not imported:\n${importStats.notFoundCourses.join(', ')}`;
+            }
+
+            alert(message);
+
+            // If there are pending custom courses, process them
+            if (pendingList.length > 0) {
+                const queue = pendingList.slice();
+                processPendingCustomCourses(queue);
+            }
+            const importDropdown = document.getElementById('importDropdown');
+            if (importDropdown) importDropdown.classList.remove('active');
         } else {
-            alert('Please select an Academic Records HTML file.');
+            alert('Please select an Academic Records HTML or PDF file.');
         }
     }
     document.getElementById('importAcademicRecords').onclick = handleAcademicRecordsImport;
