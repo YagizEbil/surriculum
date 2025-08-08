@@ -1143,6 +1143,10 @@ html, body {
     color: var(--text-muted);
 }
 
+.course_info .course_bs_credit {
+    color: var(--text-muted);
+}
+
 /* RIGHT COLUMN - Grade */
 .grade {
     background: var(--bg-card);

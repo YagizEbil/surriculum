@@ -274,6 +274,15 @@ function SUrriculum(major_chosen_by_user) {
         });
     }
 
+    const updateCourseDetailVisibility = () => {
+        const show = window.showCourseDetails;
+        document.querySelectorAll('.course_bs_credit').forEach(el => {
+            el.style.display = show ? '' : 'none';
+        });
+    };
+    document.addEventListener('courseDetailsToggleChanged', updateCourseDetailVisibility);
+    updateCourseDetailVisibility();
+
     let hideTaken = false;
     try { hideTaken = localStorage.getItem('hideTakenCourses') === 'true'; } catch (_) {}
     if (typeof window !== 'undefined') {
