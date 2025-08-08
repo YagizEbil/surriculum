@@ -47,17 +47,18 @@ function dynamic_click(e, curriculum, course_data)
         const options = getCoursesList(course_data);
 
         function formatOption(item) {
-            const base = item.code + ' ' + item.name;
+            const title = `<div class="course-option-title">${item.code} ${item.name}</div>`;
             if (window.showCourseDetails) {
                 const parts = [
-                    'Credits: ' + item.credit,
-                    'BS: ' + item.bs
+                    `Credits: ${item.credit}`,
+                    `BS: ${item.bs}`
                 ];
-                if (item.type) parts.push('Major: ' + item.type);
-                if (item.dmType) parts.push('DM: ' + item.dmType);
-                return base + ' [' + parts.join(', ') + ']';
+                if (item.type) parts.push(`Major: ${item.type}`);
+                if (item.dmType) parts.push(`DM: ${item.dmType}`);
+                const details = parts.map(p => `<div>${p}</div>`).join('');
+                return title + `<div class="course-option-details">${details}</div>`;
             }
-            return base;
+            return title;
         }
 
         function renderOptions(filter) {
@@ -69,7 +70,7 @@ function dynamic_click(e, curriculum, course_data)
                 opt.classList.add('course-option');
                 opt.dataset.code = data.code;
                 opt.dataset.name = data.name;
-                opt.textContent = formatOption(data);
+                opt.innerHTML = formatOption(data);
                 opt.addEventListener('mousedown', () => {
                     input.value = data.code + ' ' + data.name;
                     dropdown.style.display = 'none';
