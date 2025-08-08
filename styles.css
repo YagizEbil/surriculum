@@ -1283,6 +1283,23 @@ html, body {
     cursor: pointer;
 }
 
+.input_container .course-option-title {
+    font-weight: 600;
+}
+
+.input_container .course-option-details {
+    margin-top: 2px;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+}
+
+.input_container .course-option-details div {
+    white-space: nowrap;
+}
+
 .input_container .course-option:hover,
 .input_container .course-option.active {
     background: var(--bg-surface);
