@@ -12,12 +12,13 @@ The interface allows you to:
 
 - Select your major and an optional double major
 - Add semesters and drag courses from the catalog
-- Import your Academic Records Summary (HTML or PDF) to prefill taken courses
+- Import your Academic Records Summary (HTML or PDF) to prefill taken courses. Or alternatively import your YÖK Transcript PDF file.
 - Add custom courses manually
 - Check graduation status and view a summary of remaining requirements for each major
 - Toggle between light and dark themes or follow your system preference
 - Collapse the sidebar to maximize planning space
 - Insert new semesters and courses using "+ New Semester" and "+ Add course" ghosts
+- Show the course details in the Add Course dropdown list using the "Show Course Details" toggle
 - Hide courses you've already added using the "Hide Taken Courses" toggle
 
 Always verify graduation requirements yourself. For issues or suggestions, contact [bilal.gebenoglu@sabanciuniv.edu](mailto:bilal.gebenoglu@sabanciuniv.edu), or start a discussion/issue on the repository.
