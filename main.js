@@ -256,8 +256,13 @@ function SUrriculum(major_chosen_by_user) {
         window.curriculum = curriculum;
     }
     // Initialize course details toggle state and event
-    let showDetails = false;
-    try { showDetails = localStorage.getItem('showCourseDetails') === 'true'; } catch (_) {}
+    let showDetails = true;
+    try {
+        const stored = localStorage.getItem('showCourseDetails');
+        if (stored !== null) {
+            showDetails = stored === 'true';
+        }
+    } catch (_) {}
     if (typeof window !== 'undefined') {
         window.showCourseDetails = showDetails;
     }
@@ -283,8 +288,13 @@ function SUrriculum(major_chosen_by_user) {
     document.addEventListener('courseDetailsToggleChanged', updateCourseDetailVisibility);
     updateCourseDetailVisibility();
 
-    let hideTaken = false;
-    try { hideTaken = localStorage.getItem('hideTakenCourses') === 'true'; } catch (_) {}
+    let hideTaken = true;
+    try {
+        const stored = localStorage.getItem('hideTakenCourses');
+        if (stored !== null) {
+            hideTaken = stored === 'true';
+        }
+    } catch (_) {}
     if (typeof window !== 'undefined') {
         window.hideTakenCourses = hideTaken;
     }
