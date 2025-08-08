@@ -44,7 +44,7 @@ function dynamic_click(e, curriculum, course_data)
         dropdown.classList.add('course-dropdown');
 
         // Build array of course options for filtering
-        const options = getCoursesList(course_data);
+        let options = getCoursesList(course_data);
 
         function capitalizeFirst(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
@@ -118,6 +118,11 @@ function dynamic_click(e, curriculum, course_data)
         });
 
         document.addEventListener('courseDetailsToggleChanged', () => {
+            renderOptions(input.value);
+        });
+        document.addEventListener('hideTakenCoursesToggleChanged', () => {
+            options = getCoursesList(course_data);
+            datalist.innerHTML = getCoursesDataList(course_data);
             renderOptions(input.value);
         });
 
