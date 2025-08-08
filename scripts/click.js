@@ -46,16 +46,32 @@ function dynamic_click(e, curriculum, course_data)
         // Build array of course options for filtering
         const options = getCoursesList(course_data);
 
+        function formatOption(item) {
+            const base = item.code + ' ' + item.name;
+            if (window.showCourseDetails) {
+                const parts = [
+                    'Credits: ' + item.credit,
+                    'BS: ' + item.bs
+                ];
+                if (item.type) parts.push('Major: ' + item.type);
+                if (item.dmType) parts.push('DM: ' + item.dmType);
+                return base + ' [' + parts.join(', ') + ']';
+            }
+            return base;
+        }
+
         function renderOptions(filter) {
             dropdown.innerHTML = '';
             const normalized = filter ? filter.toUpperCase() : '';
-            const filtered = options.filter(o => o.toUpperCase().includes(normalized));
-            filtered.forEach(text => {
+            const filtered = options.filter(o => (o.code + ' ' + o.name).toUpperCase().includes(normalized));
+            filtered.forEach(data => {
                 const opt = document.createElement('div');
                 opt.classList.add('course-option');
-                opt.textContent = text;
+                opt.dataset.code = data.code;
+                opt.dataset.name = data.name;
+                opt.textContent = formatOption(data);
                 opt.addEventListener('mousedown', () => {
-                    input.value = text;
+                    input.value = data.code + ' ' + data.name;
                     dropdown.style.display = 'none';
                 });
                 dropdown.appendChild(opt);
@@ -90,10 +106,14 @@ function dynamic_click(e, curriculum, course_data)
                 evt.preventDefault();
             } else if (evt.key === 'Enter') {
                 if (activeIndex >= 0 && items[activeIndex]) {
-                    input.value = items[activeIndex].textContent;
+                    input.value = items[activeIndex].dataset.code + ' ' + items[activeIndex].dataset.name;
                 }
                 enter.click();
             }
+        });
+
+        document.addEventListener('courseDetailsToggleChanged', () => {
+            renderOptions(input.value);
         });
 
         let enter = document.createElement("div");

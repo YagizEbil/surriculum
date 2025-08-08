@@ -255,6 +255,24 @@ function SUrriculum(major_chosen_by_user) {
     if (typeof window !== 'undefined') {
         window.curriculum = curriculum;
     }
+    // Initialize course details toggle state and event
+    let showDetails = false;
+    try { showDetails = localStorage.getItem('showCourseDetails') === 'true'; } catch (_) {}
+    if (typeof window !== 'undefined') {
+        window.showCourseDetails = showDetails;
+    }
+    const detailsToggle = document.getElementById('courseDetailsToggle');
+    if (detailsToggle) {
+        detailsToggle.checked = showDetails;
+        detailsToggle.addEventListener('change', function(e) {
+            const enabled = e.target.checked;
+            if (typeof window !== 'undefined') {
+                window.showCourseDetails = enabled;
+            }
+            try { localStorage.setItem('showCourseDetails', enabled ? 'true' : 'false'); } catch (_) {}
+            document.dispatchEvent(new Event('courseDetailsToggleChanged'));
+        });
+    }
 
     //************************************************
 
