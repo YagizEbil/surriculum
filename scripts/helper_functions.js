@@ -201,20 +201,41 @@ function getCoursesDataList(course_data)
 // manually instead of relying on the browser's default datalist styling.
 function getCoursesList(course_data) {
     let combined = Array.isArray(course_data) ? course_data.slice() : [];
+    let mainSet = new Set(combined.map(c => c.Major + c.Code));
     try {
         const cur = (typeof window !== 'undefined') ? window.curriculum : null;
         if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
-            const mainSet = new Set(combined.map(c => c.Major + c.Code));
             cur.doubleMajorCourseData.forEach(dm => {
                 const key = dm.Major + dm.Code;
                 if (!mainSet.has(key)) {
+                    dm.__fromDoubleMajor = true;
                     combined.push(dm);
                 }
             });
         }
     } catch (_) {}
 
-    return combined.map(item => item['Major'] + item['Code'] + ' ' + item['Course_Name']);
+    return combined.map(item => {
+        const code = item.Major + item.Code;
+        const name = item.Course_Name;
+        let mainType = item.__fromDoubleMajor ? '' : (item.EL_Type || '');
+        let dmType = '';
+        try {
+            const cur = (typeof window !== 'undefined') ? window.curriculum : null;
+            if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
+                const dmEntry = cur.doubleMajorCourseData.find(dm => (dm.Major + dm.Code) === code);
+                if (dmEntry) dmType = dmEntry.EL_Type || '';
+            }
+        } catch (_) {}
+        return {
+            code: code,
+            name: name,
+            credit: item.SU_credit || '0',
+            bs: item.Basic_Science || '0',
+            type: mainType,
+            dmType: dmType
+        };
+    });
 }
 
 // Adjust semester totals by adding or subtracting the specified course's
