@@ -128,55 +128,73 @@ function parseAcademicRecords(htmlContent) {
  * @returns {Object} An object containing parsed course data
  */
 function parseYokTranscript(pdfText) {
-    const lines = pdfText.replace(/\r/g, '').split('\n');
-    const courseLineRegex = /^\*?\s*[A-Z]+\s*\d{3,}[A-Z0-9]*\b/;
-    const semesterLineRegex = /\((\d{4}-\d{4}) (Fall|Spring|Summer) Term\)/;
+    const lines = pdfText.replace(/\r/g, '').split('\n').map(l => l.trim());
+    const courseCodeRegex = /^\*?\s*[A-Z]+\s*\d{3,}[A-Z0-9]*\s*$/;
+    const semesterRegex = /\((\d{4}-\d{4}) (Fall|Spring|Summer) Term\)/;
     const result = { courses: [], notFoundCourses: [] };
     let currentSemester = 'Unknown Semester';
 
-    lines.forEach(line => {
-        const semMatch = line.match(semesterLineRegex);
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        const semMatch = line.match(semesterRegex);
         if (semMatch) {
             currentSemester = `${semMatch[2]} ${semMatch[1]}`;
-            return;
+            continue;
         }
 
-        if (!courseLineRegex.test(line)) {
-            return;
+        if (!courseCodeRegex.test(line)) {
+            continue;
         }
 
-        const match = line.match(/^\*?\s*([A-Z]+\s*\d{3,}[A-Z0-9]*)\s+(.*)$/);
-        if (!match) {
-            return;
-        }
+        let code = line.replace(/^\*/, '').replace(/\s+/g, '');
+        let j = i;
+        const next = () => {
+            j++;
+            while (j < lines.length && !lines[j]) {
+                j++;
+            }
+            return lines[j] || '';
+        };
 
-        let code = match[1].replace(/\s+/g, '');
-        const columns = match[2].split(/\s{2,}/).map(c => c.trim()).filter(Boolean);
-        if (columns.length < 8) {
-            return;
+        const turkishTitle = next();
+        let englishTitle = next();
+        if (englishTitle.startsWith('(') && englishTitle.endsWith(')')) {
+            englishTitle = englishTitle.slice(1, -1);
         }
+        next(); // course status - not used
+        next(); // language - not used
 
-        const title = columns[0];
-        const suCredits = parseFloat(columns[5]) || 0; // National credits
-        const ects = parseFloat(columns[6]) || 0;      // AKTS/ECTS credits
-        const grade = columns[7];
+        next(); // T hours
+        next(); // U hours
+        const suCredits = parseFloat(next()) || 0;
+        const ects = parseFloat(next()) || 0;
+
+        let token = next();
+        if (/^[0-9.]+$/.test(token)) {
+            token = next();
+        }
+        const grade = token;
+        next(); // comment - ignored
+
+        i = j;
 
         if (code === 'CS210') {
             code = 'DSA210';
         }
         if (code.includes('ELAE') || ['W', 'NA'].includes(grade)) {
-            return;
+            continue;
         }
 
         result.courses.push({
             code: code,
-            title: title,
+            title: englishTitle || turkishTitle,
             grade: grade === 'Registered' ? '' : grade,
             semester: currentSemester,
             suCredits: suCredits,
             ects: ects
         });
-    });
+    }
 
     return result;
 }
