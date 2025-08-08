@@ -46,15 +46,19 @@ function dynamic_click(e, curriculum, course_data)
         // Build array of course options for filtering
         const options = getCoursesList(course_data);
 
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
         function formatOption(item) {
             const title = `<div class="course-option-title">${item.code} ${item.name}</div>`;
             if (window.showCourseDetails) {
                 const parts = [
-                    `Credits: ${item.credit}`,
-                    `BS: ${item.bs}`
+                    `SU Credits: ${item.credit}`,
+                    `Basic Science: ${item.bs}`
                 ];
-                if (item.type) parts.push(`Major: ${item.type}`);
-                if (item.dmType) parts.push(`DM: ${item.dmType}`);
+                if (item.type) parts.push(`Major: ${capitalizeFirst(item.type)}`);
+                if (item.dmType) parts.push(`DM: ${capitalizeFirst(item.dmType)}`);
                 const details = parts.map(p => `<div>${p}</div>`).join('');
                 return title + `<div class="course-option-details">${details}</div>`;
             }

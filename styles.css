@@ -1291,9 +1291,9 @@ html, body {
     margin-top: 2px;
     font-size: 0.85em;
     color: var(--text-secondary);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 8px;
+    display: block;
+    flex-direction: colmun;
+    gap: 2px 0px;
 }
 
 .input_container .course-option-details div {
