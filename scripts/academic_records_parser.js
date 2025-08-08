@@ -130,7 +130,7 @@ function parseAcademicRecords(htmlContent) {
 function parseYokTranscript(pdfText) {
     const lines = pdfText.replace(/\r/g, '').split('\n').map(l => l.trim());
     const courseCodeRegex = /^\*?\s*[A-Z]+\s*\d{3,}[A-Z0-9]*\s*$/;
-    const semesterRegex = /\((\d{4}-\d{4}) (Fall|Spring|Summer) Term\)/;
+    const semesterRegex = /\((\d{4}-\d{4}) (Fall|Spring|Summer) (Term|School)\)/;
     const result = { courses: [], notFoundCourses: [] };
     let currentSemester = 'Unknown Semester';
 
@@ -139,7 +139,10 @@ function parseYokTranscript(pdfText) {
 
         const semMatch = line.match(semesterRegex);
         if (semMatch) {
-            currentSemester = `${semMatch[2]} ${semMatch[1]}`;
+            // semMatch[1]: year range, semMatch[2]: term, semMatch[3]: "Term" or "School"
+            const term = semMatch[2];
+            // Always use "Term" in the output
+            currentSemester = `${term} ${semMatch[1]}`;
             continue;
         }
 
@@ -148,6 +151,7 @@ function parseYokTranscript(pdfText) {
         }
 
         let code = line.replace(/^\*/, '').replace(/\s+/g, '');
+
         let j = i;
         const next = () => {
             j++;
@@ -174,9 +178,14 @@ function parseYokTranscript(pdfText) {
         if (/^[0-9.]+$/.test(token)) {
             token = next();
         }
-        const grade = token;
-        next(); // comment - ignored
+        let grade = token;
 
+        if(!token.includes('--')){
+            next(); // comment - ignored
+        }
+        else{
+            grade = '';
+        }
         i = j;
 
         if (code === 'CS210') {
@@ -189,7 +198,7 @@ function parseYokTranscript(pdfText) {
         result.courses.push({
             code: code,
             title: englishTitle || turkishTitle,
-            grade: grade === 'Registered' ? '' : grade,
+            grade: grade,
             semester: currentSemester,
             suCredits: suCredits,
             ects: ects
