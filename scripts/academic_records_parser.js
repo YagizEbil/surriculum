@@ -121,12 +121,77 @@ function parseAcademicRecords(htmlContent) {
     result.courses = Object.values(latestMap);
     return result;
 }
+
+/**
+ * Parses a YÖK (Higher Education Council) style transcript and extracts course information
+ * @param {string} pdfText - Text content extracted from the YÖK transcript PDF
+ * @returns {Object} An object containing parsed course data
+ */
+function parseYokTranscript(pdfText) {
+    const lines = pdfText.replace(/\r/g, '').split('\n');
+    const courseLineRegex = /^\*?\s*[A-Z]+\s*\d{3,}[A-Z0-9]*\b/;
+    const semesterLineRegex = /\((\d{4}-\d{4}) (Fall|Spring|Summer) Term\)/;
+    const result = { courses: [], notFoundCourses: [] };
+    let currentSemester = 'Unknown Semester';
+
+    lines.forEach(line => {
+        const semMatch = line.match(semesterLineRegex);
+        if (semMatch) {
+            currentSemester = `${semMatch[2]} ${semMatch[1]}`;
+            return;
+        }
+
+        if (!courseLineRegex.test(line)) {
+            return;
+        }
+
+        const match = line.match(/^\*?\s*([A-Z]+\s*\d{3,}[A-Z0-9]*)\s+(.*)$/);
+        if (!match) {
+            return;
+        }
+
+        let code = match[1].replace(/\s+/g, '');
+        const columns = match[2].split(/\s{2,}/).map(c => c.trim()).filter(Boolean);
+        if (columns.length < 8) {
+            return;
+        }
+
+        const title = columns[0];
+        const suCredits = parseFloat(columns[5]) || 0; // National credits
+        const ects = parseFloat(columns[6]) || 0;      // AKTS/ECTS credits
+        const grade = columns[7];
+
+        if (code === 'CS210') {
+            code = 'DSA210';
+        }
+        if (code.includes('ELAE') || ['W', 'NA'].includes(grade)) {
+            return;
+        }
+
+        result.courses.push({
+            code: code,
+            title: title,
+            grade: grade === 'Registered' ? '' : grade,
+            semester: currentSemester,
+            suCredits: suCredits,
+            ects: ects
+        });
+    });
+
+    return result;
+}
+
 /**
  * Parses text extracted from an Academic Records Summary PDF and extracts course information
  * @param {string} pdfText - Text content extracted from the PDF
  * @returns {Object} An object containing parsed course data
  */
 function parseAcademicRecordsPdf(pdfText) {
+    // Detect YÖK-style transcripts which use a completely different layout
+    if (pdfText.includes('NOT DÖKÜM BELGESİ')) {
+        return parseYokTranscript(pdfText);
+    }
+
     const lines = pdfText.replace(/\r/g, '').split('\n').map(l => l.trim()).filter(Boolean);
     const courseCodeRegex = /^[A-Z]+\s*\d{3,}[A-Z0-9]*$/;
     const semesterRegex = /^(Fall|Spring|Summer)\s+\d{4}-\d{4}$/;
