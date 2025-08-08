@@ -313,18 +313,18 @@ function SUrriculum(major_chosen_by_user) {
     document.addEventListener('mouseover', function(e){
         mouseover(e);
         if (e.target.classList.contains('btn'))
-        {e.target.style.backgroundColor = '#7a9dc9';}
+        {e.target.style.backgroundColor = '';}
         else if(e.target.parentNode.classList && e.target.parentNode.classList.contains('btn'))
-        {e.target.parentNode.style.backgroundColor = '#7a9dc9';}
+        {e.target.parentNode.style.backgroundColor = '';}
         else
         {
-            document.querySelectorAll('.btn').forEach( element => {element.style.backgroundColor = '#526e8f'});
+            document.querySelectorAll('.btn').forEach( element => {element.style.backgroundColor = ''});
         }
     })
     document.addEventListener('mouseout', function(e){
         mouseout(e);
         if (e.target.classList.contains('btn'))
-        {e.target.style.backgroundColor = '#526e8f';}
+        {e.target.style.backgroundColor = '';}
     })
 
     let dragged_item = null;

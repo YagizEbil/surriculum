@@ -40,6 +40,7 @@
     --accent: #10B981;
 
     --bg-main: #0F172A;
+    --test : #526e8f;
     --bg-card: #1E293B;
     --bg-surface: #334155;
     --bg-header: linear-gradient(135deg, #1E293B 0%, #334155 100%);
@@ -164,10 +165,9 @@ html, body {
     background: var(--primary-active);
     transform: translateY(0);
 }
-
 .btn-secondary {
     background: var(--bg-card);
-    color: white;
+    color: var(--text-secondary);
     border: 1px solid var(--border);
 }
 
@@ -1550,4 +1550,9 @@ input[type="text"], input[type="file"], select {
 input:focus, select:focus, button:focus {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+.deleteCustom, .resetLocal {
+    background-color: red !important;
+    color: white !important;
 }
