@@ -19,6 +19,7 @@ function mouseover(e)
     else if(e.target.classList.contains("delete_add_course") || e.target.classList.contains("delete_course"))
     {
         e.target.style.backgroundImage = "url('./assets/open.png')";
+        e.target.style.filter = "invert(18%) sepia(98%) saturate(7492%) hue-rotate(357deg) brightness(97%) contrast(119%)";
     }
     else if(e.target.classList.contains("enter"))
     {
@@ -51,6 +52,8 @@ function mouseout(e)
         // icon black after the first hover. Matching the default
         // `closedb.png` ensures the icon returns to its initial blue tint.
         e.target.style.backgroundImage = "url('./assets/closedb.png')";
+        e.target.style.filter = "";
+
     }
     else if(e.target.classList.contains("enter"))
     {

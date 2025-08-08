@@ -214,7 +214,7 @@ function createSemeter(aslastelement=true, courseList=[], curriculum, course_dat
             c_info.innerHTML += '<div class="course_credit">' +courseCredit+ '.0 credits </div>';
             const bsDiv = document.createElement('div');
             bsDiv.classList.add('course_bs_credit');
-            bsDiv.textContent = 'Basic Science: ' + (getInfo(courseCode, course_data)['Basic_Science'] || '0') + ' credits';
+            bsDiv.textContent = 'BS: ' + (getInfo(courseCode, course_data)['Basic_Science'] || '0') + ' credits';
             if (!window.showCourseDetails) {
                 bsDiv.style.display = 'none';
             }
