@@ -18,6 +18,7 @@ The interface allows you to:
 - Toggle between light and dark themes or follow your system preference
 - Collapse the sidebar to maximize planning space
 - Insert new semesters and courses using "+ New Semester" and "+ Add course" ghosts
+- Hide courses you've already added using the "Hide Taken Courses" toggle
 
 Always verify graduation requirements yourself. For issues or suggestions, contact [bilal.gebenoglu@sabanciuniv.edu](mailto:bilal.gebenoglu@sabanciuniv.edu), or start a discussion/issue on the repository.
 

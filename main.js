@@ -274,6 +274,24 @@ function SUrriculum(major_chosen_by_user) {
         });
     }
 
+    let hideTaken = false;
+    try { hideTaken = localStorage.getItem('hideTakenCourses') === 'true'; } catch (_) {}
+    if (typeof window !== 'undefined') {
+        window.hideTakenCourses = hideTaken;
+    }
+    const hideToggle = document.getElementById('hideTakenCoursesToggle');
+    if (hideToggle) {
+        hideToggle.checked = hideTaken;
+        hideToggle.addEventListener('change', function(e) {
+            const enabled = e.target.checked;
+            if (typeof window !== 'undefined') {
+                window.hideTakenCourses = enabled;
+            }
+            try { localStorage.setItem('hideTakenCourses', enabled ? 'true' : 'false'); } catch (_) {}
+            document.dispatchEvent(new Event('hideTakenCoursesToggleChanged'));
+        });
+    }
+
     //************************************************
 
     //Targetting dynamically created elements:

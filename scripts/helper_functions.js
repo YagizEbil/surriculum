@@ -179,8 +179,11 @@ function getCoursesDataList(course_data)
                 }
             });
         }
+        if (typeof window !== 'undefined' && window.hideTakenCourses && cur && typeof cur.hasCourse === 'function') {
+            combined = combined.filter(c => !cur.hasCourse(c.Major + c.Code));
+        }
     } catch (ex) {
-        // ignore any errors in DM detection
+        // ignore any errors in DM detection or filtering
     }
     // Build the option list HTML using the combined courses. Each option
     // displays the course code followed by the course name and uses the
@@ -212,6 +215,9 @@ function getCoursesList(course_data) {
                     combined.push(dm);
                 }
             });
+        }
+        if (typeof window !== 'undefined' && window.hideTakenCourses && cur && typeof cur.hasCourse === 'function') {
+            combined = combined.filter(c => !cur.hasCourse(c.Major + c.Code));
         }
     } catch (_) {}
 
