@@ -237,6 +237,13 @@ function dynamic_click(e, curriculum, course_data)
             c_info.innerHTML = '<div class="course_name">'+ info['Course_Name'] +'</div>';
             c_info.innerHTML += '<div class="course_type">'+ info['EL_Type'].toUpperCase() + '</div>';
             c_info.innerHTML += '<div class="course_credit">' + info['SU_credit']+ '.0 credits </div>';
+            const bsDiv = document.createElement('div');
+            bsDiv.classList.add('course_bs_credit');
+            bsDiv.textContent = 'Basic Science: ' + (info['Basic_Science'] || '0') + ' credits';
+            if (!window.showCourseDetails) {
+                bsDiv.style.display = 'none';
+            }
+            c_info.appendChild(bsDiv);
             let grade = document.createElement('div');
             grade.classList.add('grade');
             grade.innerHTML = 'Add grade';
