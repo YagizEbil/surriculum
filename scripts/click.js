@@ -57,8 +57,8 @@ function dynamic_click(e, curriculum, course_data)
                     `SU Credits: ${item.credit}`,
                     `Basic Science: ${item.bs}`
                 ];
-                if (item.type) parts.push(`Major: ${capitalizeFirst(item.type)}`);
-                if (item.dmType) parts.push(`DM: ${capitalizeFirst(item.dmType)}`);
+                if (item.type) parts.push(`Course Type: ${capitalizeFirst(item.type)}`);
+                if (item.dmType) parts.push(`CT for DM: ${capitalizeFirst(item.dmType)}`);
                 const details = parts.map(p => `<div>${p}</div>`).join('');
                 return title + `<div class="course-option-details">${details}</div>`;
             }
