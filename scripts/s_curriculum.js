@@ -825,6 +825,15 @@ function s_curriculum()
         let currentRequiredCredits = 0;
         let currentCoreCredits = 0;
         let currentAreaCredits = 0;
+        // Special-case: for IE majors, if both DSA201 and CS201 are taken,
+        // CS201 must always count towards core regardless of when it is
+        // taken. Record the condition once so it can be applied inside the
+        // allocation loop without repeated lookups.
+        const forceCSCore = (
+            this.major === 'IE' &&
+            this.hasCourse('CS201') &&
+            this.hasCourse('DSA201')
+        );
 
         // Iterate semesters in chronological order
         for (let i = 0; i < sortedSemesters.length; i++) {
@@ -987,7 +996,12 @@ function s_curriculum()
                 let effectiveType = staticType;
                 // Core, area and required types may be reallocated based on
                 // remaining credit needs. University types remain unchanged.
-                if (staticType === 'core') {
+                if (forceCSCore && course.code === 'CS201') {
+                    // Always allocate CS201 to core when the special IE
+                    // condition is met.
+                    effectiveType = 'core';
+                    currentCoreCredits += credit;
+                } else if (staticType === 'core') {
                     if (currentCoreCredits < reqCore) {
                         effectiveType = 'core';
                         currentCoreCredits += credit;
@@ -1149,6 +1163,15 @@ function s_curriculum()
         let currentDMRequired = 0;
         let currentDMCores = 0;
         let currentDMAreas = 0;
+        // For IE as a double major, ensure CS201 always counts as core when
+        // both CS201 and DSA201 are present. Capture the condition once here
+        // so the allocation loop can enforce it deterministically regardless
+        // of course order.
+        const dmForceCSCore = (
+            this.doubleMajor === 'IE' &&
+            this.hasCourse('CS201') &&
+            this.hasCourse('DSA201')
+        );
         // Reset per-semester DM totals.  In addition to core/area/free, we
         // maintain separate totals for required and university courses for
         // the double major so that summary and graduation checks can
@@ -1225,7 +1248,10 @@ function s_curriculum()
                     dmStaticType = (info['EL_Type'] || '').toLowerCase();
                     credit = parseInt(info['SU_credit'] || '0');
                     dmType = dmStaticType;
-                    if (dmStaticType === 'core') {
+                    if (dmForceCSCore && course.code === 'CS201') {
+                        dmType = 'core';
+                        currentDMCores += credit;
+                    } else if (dmStaticType === 'core') {
                         if (currentDMCores < dmCoreReq) {
                             dmType = 'core';
                             currentDMCores += credit;
