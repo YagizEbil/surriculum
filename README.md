@@ -17,6 +17,7 @@ The interface allows you to:
 - Check graduation status and view a summary of remaining requirements for each major
 - Toggle between light and dark themes or follow your system preference
 - Collapse the sidebar to maximize planning space
+- On touch devices, swipe from the left edge to open the sidebar
 - Insert new semesters and courses using "+ New Semester" and "+ Add course" ghosts
 - Show additional course details using the "Show Course Details" toggle
 - Hide courses you've already added from the "Add course" dropdown list using the "Hide Taken Courses" toggle

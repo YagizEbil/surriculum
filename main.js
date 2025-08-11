@@ -435,6 +435,37 @@ function SUrriculum(major_chosen_by_user) {
         });
     }
 
+    // Enable swipe gestures on touch devices to open/close the sidebar
+    if (sidebar) {
+        let touchStartX = null;
+        let touchStartY = null;
+
+        document.addEventListener('touchstart', function(e){
+            if (e.touches.length !== 1) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, {passive: true});
+
+        document.addEventListener('touchend', function(e){
+            if (touchStartX === null || touchStartY === null) return;
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0 && touchStartX < 30 && sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.remove('collapsed');
+                } else if (diffX < 0 && touchStartX < sidebar.offsetWidth && !sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.add('collapsed');
+                }
+            }
+
+            touchStartX = null;
+            touchStartY = null;
+        }, {passive: true});
+    }
+
     const auto_add = document.querySelector('.autoAdd');
     auto_add.addEventListener('click', function(){
         // Check if there are existing semesters
