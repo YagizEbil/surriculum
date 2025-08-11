@@ -757,15 +757,16 @@ function s_curriculum()
      * lists the most recent term first, so larger `termIndex` values represent
      * earlier semesters. This method therefore sorts semesters in descending
      * order of `termIndex` and then
-     * allocates course credits to core, area and free categories according to
-     * the major requirements. If the core requirement is filled, additional
-     * core courses count toward the area requirement. Once area is filled,
-     * additional core or area courses count as free electives. Courses with
-     * static types of "university" or "required" are not reallocated. After
-     * reallocation, the semester totals for core, area and free are updated
-     * accordingly and each course's `.effective_type` field is set. The
-     * displayed course type in the DOM (the `.course_type` element) is also
-     * updated to reflect the effective category.
+     * allocates course credits to required, core, area and free categories
+     * according to the major requirements. If the required requirement is
+     * filled, additional required courses count toward the core requirement.
+     * If the core requirement is then satisfied, overflow continues to the
+     * area requirement and finally to free electives. Courses with static
+     * type "university" are not reallocated. After reallocation, the semester
+     * totals for required, core, area and free are updated accordingly and
+     * each course's `.effective_type` field is set. The displayed course type
+     * in the DOM (the `.course_type` element) is also updated to reflect the
+     * effective category.
      *
      * @param {Array} course_data The full course data array for the current major.
      */
@@ -777,6 +778,7 @@ function s_curriculum()
         const req = getReq(this.major, this.entryTerm);
         const reqCore = req.core || 0;
         const reqArea = req.area || 0;
+        const reqRequired = req.required || 0;
 
         // Before performing any lookups, attempt to find the `getInfo` helper
         // function. In a browser environment `getInfo` is declared in
@@ -817,9 +819,10 @@ function s_curriculum()
             return idxB - idxA; // larger index = earlier term
         });
 
-        // Running counters for how many credits have been allocated to core and
-        // area so far. Once these exceed the requirements, we allocate
-        // additional courses to the next category (area or free).
+        // Running counters for how many credits have been allocated to required,
+        // core and area so far. Once these exceed their requirements, we
+        // allocate additional courses to the next category.
+        let currentRequiredCredits = 0;
         let currentCoreCredits = 0;
         let currentAreaCredits = 0;
 
@@ -982,8 +985,8 @@ function s_curriculum()
                 }
 
                 let effectiveType = staticType;
-                // Only core and area types are reallocated. Free types stay as
-                // free. Required and university types remain unchanged.
+                // Core, area and required types may be reallocated based on
+                // remaining credit needs. University types remain unchanged.
                 if (staticType === 'core') {
                     if (currentCoreCredits < reqCore) {
                         effectiveType = 'core';
@@ -1001,11 +1004,24 @@ function s_curriculum()
                     } else {
                         effectiveType = 'free';
                     }
+                } else if (staticType === 'required') {
+                    if (currentRequiredCredits < reqRequired) {
+                        effectiveType = 'required';
+                        currentRequiredCredits += credit;
+                    } else if (currentCoreCredits < reqCore) {
+                        effectiveType = 'core';
+                        currentCoreCredits += credit;
+                    } else if (currentAreaCredits < reqArea) {
+                        effectiveType = 'area';
+                        currentAreaCredits += credit;
+                    } else {
+                        effectiveType = 'free';
+                    }
                 } else if (staticType === 'free') {
                     effectiveType = 'free';
                 } else {
-                    // Types 'university' and 'required' (and any others)
-                    // remain unchanged and are not reallocated.
+                    // Types like 'university' remain unchanged and are not
+                    // reallocated.
                     effectiveType = staticType;
                 }
                 // Persist the effective type on the course object
@@ -1104,10 +1120,12 @@ function s_curriculum()
      * semesters for the selected double major. This mirrors
      * recalcEffectiveTypes() but uses the second major's requirements and
      * its own course catalog (provided via course_data_dm) to determine
-     * whether a course counts toward core, area, or free electives. The
-     * results are stored on each course object under the
+     * whether a course counts toward required, core, area, or free credits.
+     * Surplus required courses spill over to core, then area, then free.
+     * The results are stored on each course object under the
      * `.effective_type_dm` property, and per-semester totals are kept in
-     * `sem.totalCoreDM`, `sem.totalAreaDM` and `sem.totalFreeDM`.
+     * `sem.totalCoreDM`, `sem.totalAreaDM`, `sem.totalFreeDM` and
+     * `sem.totalRequiredDM`.
      *
      * If no double major is selected (this.doubleMajor is falsy), the
      * function returns immediately without making changes.
@@ -1116,16 +1134,19 @@ function s_curriculum()
      */
     this.recalcEffectiveTypesDouble = function(course_data_dm) {
         if (!this.doubleMajor) return;
-        // Determine requirement thresholds for the double major.  Core and
-        // area requirements are drawn from the second major's requirements.
+        // Determine requirement thresholds for the double major. Required,
+        // core and area requirements are drawn from the second major's
+        // requirements.
         const dmReq = getReq(this.doubleMajor, this.entryTermDM);
         const dmCoreReq = dmReq.core || 0;
         const dmAreaReq = dmReq.area || 0;
+        const dmReqRequired = dmReq.required || 0;
         // Acquire the getInfo helper.  If unavailable, skip processing.
         const getInfoFnDM = (typeof getInfo === 'function') ? getInfo :
             ((typeof window !== 'undefined' && typeof window.getInfo === 'function') ? window.getInfo : null);
         if (!getInfoFnDM) return;
         // Initialize running counters for DM allocations.
+        let currentDMRequired = 0;
         let currentDMCores = 0;
         let currentDMAreas = 0;
         // Reset per-semester DM totals.  In addition to core/area/free, we
@@ -1221,13 +1242,24 @@ function s_curriculum()
                         } else {
                             dmType = 'free';
                         }
+                    } else if (dmStaticType === 'required') {
+                        if (currentDMRequired < dmReqRequired) {
+                            dmType = 'required';
+                            currentDMRequired += credit;
+                        } else if (currentDMCores < dmCoreReq) {
+                            dmType = 'core';
+                            currentDMCores += credit;
+                        } else if (currentDMAreas < dmAreaReq) {
+                            dmType = 'area';
+                            currentDMAreas += credit;
+                        } else {
+                            dmType = 'free';
+                        }
                     } else if (dmStaticType === 'free') {
                         dmType = 'free';
-                    } else if (dmStaticType === 'required' || dmStaticType === 'university') {
-                        // For required and university courses in the DM catalog,
-                        // we preserve their static type and do not apply
-                        // reallocation.  We still accumulate DM credits below.
-                        dmType = dmStaticType;
+                    } else if (dmStaticType === 'university') {
+                        // University courses remain as is.
+                        dmType = 'university';
                     }
                 } else {
                     // Unknown course in the double major catalog: do not
