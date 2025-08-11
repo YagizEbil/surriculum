@@ -435,7 +435,7 @@ function dynamic_click(e, curriculum, course_data)
         optionsContainer.className = 'grade-dropdown-options';
 
         // Most common grades in order of frequency
-        const commonGrades = ['S', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'F'];
+        const commonGrades = ['S', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-','D', 'D+', 'F'];
 
         commonGrades.forEach(grade => {
             const gradeOption = document.createElement('div');
