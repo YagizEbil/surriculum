@@ -548,7 +548,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "No"
   },
   {
@@ -560,7 +560,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "FASS"
   },
   {
@@ -572,7 +572,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "No"
   },
   {
@@ -584,7 +584,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "FASS"
   },
   {
@@ -596,7 +596,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "FASS"
   },
   {
@@ -608,7 +608,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "No"
   },
   {
@@ -620,7 +620,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "No"
   },
   {
@@ -632,7 +632,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "No"
   },
   {
@@ -644,7 +644,7 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
-    "EL_Type": "extra_attribute",
+    "EL_Type": "core",
     "Faculty_Course": "No"
   },
   {
@@ -2520,6 +2520,18 @@
     "Faculty_Course": "No"
   },
   {
+    "Major": "CS",
+    "Code": "48011",
+    "Course_Name": "Special Topics in CS: Evolution and Biology for Artificial Intelligence",
+    "ECTS": "6",
+    "Engineering": 0,
+    "Basic_Science": 0,
+    "SU_credit": "3",
+    "Faculty": "FENS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
     "Major": "CULT",
     "Code": "201",
     "Course_Name": "Theory and Practice in Cultural Studies",
@@ -4206,6 +4218,18 @@
     "ECTS": "6",
     "Engineering": 6.0,
     "Basic_Science": 0.0,
+    "SU_credit": "3",
+    "Faculty": "FENS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
+    "Major": "ENS",
+    "Code": "311",
+    "Course_Name": "Numerical Analysis",
+    "ECTS": "6",
+    "Engineering": 0,
+    "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FENS",
     "EL_Type": "free",
@@ -6313,6 +6337,18 @@
   },
   {
     "Major": "IE",
+    "Code": "435",
+    "Course_Name": "Production Dynamics and Control",
+    "ECTS": "6",
+    "Engineering": 0,
+    "Basic_Science": 0,
+    "SU_credit": "3",
+    "Faculty": "FENS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
+    "Major": "IE",
     "Code": "436",
     "Course_Name": "Monte Carlo Methods in Finance",
     "ECTS": "6",
@@ -6486,6 +6522,18 @@
     "ECTS": "6",
     "Engineering": 2.0,
     "Basic_Science": 0.0,
+    "SU_credit": "3",
+    "Faculty": "FENS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
+    "Major": "IF",
+    "Code": "405",
+    "Course_Name": "Scientific Investigations into Artworks",
+    "ECTS": "6",
+    "Engineering": 0,
+    "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FENS",
     "EL_Type": "free",
@@ -7111,6 +7159,18 @@
     "Engineering": 0.0,
     "Basic_Science": 6.0,
     "SU_credit": "3",
+    "Faculty": "FENS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
+    "Major": "MATH",
+    "Code": "212",
+    "Course_Name": "Linear Algebra and Differential Equations",
+    "ECTS": "7",
+    "Engineering": 0,
+    "Basic_Science": 0,
+    "SU_credit": "4",
     "Faculty": "FENS",
     "EL_Type": "free",
     "Faculty_Course": "No"
@@ -7899,10 +7959,10 @@
     "Major": "ME",
     "Code": "425",
     "Course_Name": "Autonomous Mobile Robotics",
-    "ECTS": "6",
+    "ECTS": "7",
     "Engineering": 5.0,
     "Basic_Science": 1.0,
-    "SU_credit": "3",
+    "SU_credit": "4",
     "Faculty": "FENS",
     "EL_Type": "free",
     "Faculty_Course": "No"
@@ -8965,6 +9025,18 @@
   },
   {
     "Major": "OPIM",
+    "Code": "413",
+    "Course_Name": "AI in Business",
+    "ECTS": "6",
+    "Engineering": 0,
+    "Basic_Science": 0,
+    "SU_credit": "3",
+    "Faculty": "SBS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
+    "Major": "OPIM",
     "Code": "416",
     "Course_Name": "Quality Improvement with Six Sigma",
     "ECTS": "6",
@@ -9392,6 +9464,18 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
+    "Major": "PHYS",
+    "Code": "113",
+    "Course_Name": "Basic Concepts of Physics for Scientists and Engineers",
+    "ECTS": "6",
+    "Engineering": 0,
+    "Basic_Science": 0,
+    "SU_credit": "3",
+    "Faculty": "FENS",
     "EL_Type": "free",
     "Faculty_Course": "No"
   },
@@ -9999,7 +10083,7 @@
     "Major": "PSY",
     "Code": "310",
     "Course_Name": "Cognitive Processes",
-    "ECTS": "6",
+    "ECTS": "7",
     "Engineering": 0,
     "Basic_Science": 0,
     "SU_credit": "3",
@@ -10083,7 +10167,7 @@
     "Major": "PSY",
     "Code": "320",
     "Course_Name": "Developmental Psychology",
-    "ECTS": "6",
+    "ECTS": "7",
     "Engineering": 0,
     "Basic_Science": 0,
     "SU_credit": "3",
@@ -10131,7 +10215,7 @@
     "Major": "PSY",
     "Code": "340",
     "Course_Name": "Social Psychology",
-    "ECTS": "6",
+    "ECTS": "7",
     "Engineering": 0,
     "Basic_Science": 0,
     "SU_credit": "3",
@@ -10191,7 +10275,7 @@
     "Major": "PSY",
     "Code": "350",
     "Course_Name": "Introduction to Neuroscience",
-    "ECTS": "6",
+    "ECTS": "7",
     "Engineering": 0,
     "Basic_Science": 0,
     "SU_credit": "3",
@@ -11792,6 +11876,18 @@
     "Basic_Science": 0,
     "SU_credit": "3",
     "Faculty": "FASS",
+    "EL_Type": "free",
+    "Faculty_Course": "No"
+  },
+  {
+    "Major": "XM",
+    "Code": "490",
+    "Course_Name": "Project Course for External Students",
+    "ECTS": "6",
+    "Engineering": 0,
+    "Basic_Science": 0,
+    "SU_credit": "0",
+    "Faculty": "FENS",
     "EL_Type": "free",
     "Faculty_Course": "No"
   },

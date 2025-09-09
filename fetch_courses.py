@@ -186,11 +186,9 @@ def crawl_program(code, term):
 
         # Determine the category type based on the name attribute or title
         el_type = None
-        if name_attr.endswith('_CEL') or '_COR' in name_attr or '_CE1' in name_attr or '_C1' in name_attr:
+        if name_attr.endswith('_CEL') or '_COR' in name_attr or '_CE1' in name_attr or '_C1' in name_attr or name_attr.endswith('_CE2') or name_attr.endswith('_C2'):
             el_type = 'core'
-        elif name_attr.endswith('_CE2') or name_attr.endswith('_PHL') or name_attr.endswith('_C2') or '_MEL' in name_attr:
-            el_type = 'extra_attribute'
-        elif name_attr.endswith('_REQ'):
+        elif name_attr.endswith('_REQ') or name_attr.endswith('_MEL') or name_attr.endswith('_PHL'):
             el_type = 'required'
         elif name_attr.endswith('_AEL') or name_attr.endswith('_ARE'):
             el_type = 'area'
@@ -303,11 +301,9 @@ def crawl_program(code, term):
             if area_match:
                 area_code = area_match.group(1)
                 # Override el_type if we have a more specific area code from the URL
-                if '_CEL' in area_code or '_COR' in area_code or '_CE1' in area_code or '_C1' in area_code:
+                if '_CEL' in area_code or '_COR' in area_code or '_CE1' in area_code or '_C1' in area_code or '_CE2' in area_code or '_C2' in area_code:
                     el_type = 'core'
-                elif '_CE2' in area_code or '_PHL' in area_code or '_MEL' in area_code or '_C2' in area_code:
-                    el_type = 'extra_attribute'
-                elif '_REQ' in area_code:
+                elif '_REQ' in area_code or '_MEL' in area_code or '_PHL' in area_code:
                     el_type = 'required'
                 elif '_AEL' in area_code or '_ARE' in area_code:
                     el_type = 'area'
@@ -315,8 +311,6 @@ def crawl_program(code, term):
                     el_type = 'free'
                 elif 'UC_' in area_code:
                     el_type = 'university'
-                elif '_PHL' in area_code or '_MEL' in area_code:
-                    el_type = 'required'
                 else:
                     el_type = 'unknown'
             list_url = urljoin(BASE, link['href'])
