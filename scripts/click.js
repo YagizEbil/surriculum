@@ -68,7 +68,12 @@ function dynamic_click(e, curriculum, course_data)
         function renderOptions(filter) {
             dropdown.innerHTML = '';
             const normalized = filter ? filter.toUpperCase() : '';
-            const filtered = options.filter(o => (o.code + ' ' + o.name).toUpperCase().includes(normalized));
+            const normalizedNoSpace = normalized.replace(/\s+/g, '');
+            const filtered = options.filter(o => {
+                const codeName = (o.code + ' ' + o.name).toUpperCase();
+                const codeNameNoSpace = (o.code + o.name).toUpperCase().replace(/\s+/g, '');
+                return codeName.includes(normalized) || codeNameNoSpace.includes(normalizedNoSpace);
+            });
             filtered.forEach(data => {
                 const opt = document.createElement('div');
                 opt.classList.add('course-option');
@@ -154,7 +159,12 @@ function dynamic_click(e, curriculum, course_data)
         // in both the primary major and the double major. If a match is
         // found, we derive the code accordingly.
         let inputValue = e.target.parentNode.querySelector("input").value.trim();
-        let tentativeCode = inputValue.split(' ')[0].toUpperCase();
+        let tokens = inputValue.split(/\s+/);
+        let tentativeCode = tokens[0] || '';
+        if (tokens.length > 1 && /\d/.test(tokens[1])) {
+            tentativeCode += tokens[1];
+        }
+        tentativeCode = tentativeCode.toUpperCase();
         let courseCode = tentativeCode;
         let courseObj = new s_course(courseCode, '');
         // Helper to search course by name in course_data and DM data
