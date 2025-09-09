@@ -1,9 +1,10 @@
 //checks wheter the course exists:
 function isCourseValid(course, course_data)
 {
+    const code = course && course.code ? course.code.replace(/\s+/g, '') : '';
     // First check within the main major's course data
     for (let i = 0; i < course_data.length; i++) {
-        if (((course_data[i]['Major'] + course_data[i]['Code']) === course.code)) return true;
+        if (((course_data[i]['Major'] + course_data[i]['Code']) === code)) return true;
     }
     // If not found and a double major is active, check the double major's
     // course catalog for this course code. The global curriculum object
@@ -13,7 +14,7 @@ function isCourseValid(course, course_data)
         if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
             const dmList = cur.doubleMajorCourseData;
             for (let i = 0; i < dmList.length; i++) {
-                if (((dmList[i]['Major'] + dmList[i]['Code']) === course.code)) {
+                if (((dmList[i]['Major'] + dmList[i]['Code']) === code)) {
                     return true;
                 }
             }
@@ -27,9 +28,10 @@ function isCourseValid(course, course_data)
 //returns info's of the course:
 function getInfo(course, course_data)
 {
+    const code = (course || '').replace(/\s+/g, '');
     // First search within the primary course data
     for (let i = 0; i < course_data.length; i++) {
-        if ((course_data[i]['Major'] + course_data[i]['Code']) === course) return course_data[i];
+        if ((course_data[i]['Major'] + course_data[i]['Code']) === code) return course_data[i];
     }
     // If not found and a double major is active, search within the double
     // major's catalog so that course details (name, credits) can be
@@ -41,7 +43,7 @@ function getInfo(course, course_data)
         if (cur && cur.doubleMajor && Array.isArray(cur.doubleMajorCourseData)) {
             const dmList = cur.doubleMajorCourseData;
             for (let i = 0; i < dmList.length; i++) {
-                if (((dmList[i]['Major'] + dmList[i]['Code']) === course)) {
+                if (((dmList[i]['Major'] + dmList[i]['Code']) === code)) {
                     return dmList[i];
                 }
             }
